@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Spirobank Smart QOL App</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="patient_ages">
+        <item>5</item>
+        <item>9</item>
+        <item>40</item>
+    </string-array>
+</resources>
