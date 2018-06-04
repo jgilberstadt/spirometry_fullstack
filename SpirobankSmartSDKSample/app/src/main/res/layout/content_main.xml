@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.spirometry.spirobanksmartsdksample.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/patientid_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tvInfo"
+                android:layout_below="@+id/btnStopScan"
+                android:ems="10"
+                android:hint="Patient ID"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/btnStartScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:text="Start Scan"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btnStopScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/btnStartScan"
+                android:text="Stop Scan"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btnDirectConnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btnStopScan"
+                android:layout_toRightOf="@+id/btnStopScan"
+                android:text="D. Connect"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/labelAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="2dip"
+                android:layout_marginTop="2dip"
+                android:text="Patient Age" />
+
+            <Spinner
+                android:id="@+id/patientAge"
+                android:layout_width="wrap_content"
+                android:layout_height="20dip"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/labelAge"
+                android:entries="@array/patient_ages" />
+
+
+            <FrameLayout
+                android:id="@+id/frameLayoutList"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_alignStart="@+id/frameLayoutButton"
+                android:layout_below="@+id/btnStartScan"
+                android:layout_marginTop="73dp">
+
+                <ListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/btnStartScan"
+                    android:layout_gravity="left|top"
+                    android:scrollIndicators="right" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvInfo"
+                android:layout_width="210dp"
+                android:layout_height="100dp"
+                android:layout_alignTop="@+id/frameLayoutList"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/frameLayoutList"
+                android:scrollIndicators="right"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/frameLayoutButton"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_alignStart="@+id/frameLayoutButtonUpgrade"
+                android:layout_below="@+id/frameLayoutList"
+                android:layout_marginTop="41dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnStartFvc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FVC" />
+
+                <Button
+                    android:id="@+id/btnStartPefFev1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PEF FEV1" />
+
+                <Button
+                    android:id="@+id/btnStopTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Stop" />
+
+                <Button
+                    android:id="@+id/btnDisconnect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="Disconn." />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayoutTest"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/frameLayoutButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp">
+
+                <ImageView
+                    android:id="@+id/imgTargetBackground"
+                    android:layout_width="50dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="left|bottom"
+                    android:src="#c6fcc3" />
+
+                <ImageView
+                    android:id="@+id/imgTarget"
+                    android:layout_width="50dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="left|bottom"
+                    android:src="#70ea29" />
+
+                <TextView
+                    android:id="@+id/lblTarget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="18dp"
+                    android:text="T\nA\nR\nG\nE\nT"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tvTarget"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:text="1%"
+                    android:textAlignment="center"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imgActualBackground"
+                    android:layout_width="50dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="right|bottom"
+                    android:src="#fdd69b" />
+
+                <ImageView
+                    android:id="@+id/imgActual"
+                    android:layout_width="50dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="right|bottom"
+                    android:src="#fda015" />
+
+                <TextView
+                    android:id="@+id/lblActual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="14dp"
+                    android:text="A\nC\nT\nU\nA\nL"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tvActual"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:text="1%"
+                    android:textAlignment="center"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+
+
+            </FrameLayout>
+
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/frameLayoutTest"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/tvQualityMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_below="@+id/tvResult"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/frameLayoutButtonUpgrade"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/tvQualityMsg"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnUpgrade1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upgrade1"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btnUpgrade2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upgrade2"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+
+</RelativeLayout>
