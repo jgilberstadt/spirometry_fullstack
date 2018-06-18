@@ -21,6 +21,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
@@ -30,20 +34,15 @@ import com.spirometry.spirobanksmartsdk.Patient;
 import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Device currDevice;
 
     DeviceInfo discoveredDeviceInfo;
+
     Patient patient;
 
     ArrayAdapter<DeviceInfo> deviceInfoArray;
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         //set device manger callback
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
+
         //set list view for discovered devices
         listView = (ListView) findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -175,16 +176,25 @@ public class MainActivity extends AppCompatActivity {
 
         //set array for listView
         deviceInfoArray = new ArrayAdapter<DeviceInfo>(this, R.layout.list_item);
-        listView.setAdapter(deviceInfoArray);
+        listView.setAdapter(deviceInfoArray);//여기다가 프린트하는거 같아 ex) Start Scan
+
+
+        //peter: this will look for specific user's device, at our case, it is Z008182
+       deviceManager.startDiscovery(MainActivity.this);
+
+       /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
+        handleUpdateInfo.post(runUpdateInfo); */ // this is inside DeviceDiscovered method
+
 
         findViewById(R.id.btnStartScan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 infoList.add("Start Scan");
-                handleUpdateInfo.post(runUpdateInfo);
-                deviceInfoArray.clear();
+                //deviceManager.startDiscovery(MainActivity.this);// so this basically looks for the device to connect
 
-                deviceManager.startDiscovery(MainActivity.this);
+                deviceInfoArray.clear(); //이 어레이는 옛날에 나와있던 Z008182를 없애준다
+                handleUpdateInfo.post(runUpdateInfo); //여기서 업데이트 해주는거 같은데
+
             }
         });
 
@@ -358,8 +368,21 @@ public class MainActivity extends AppCompatActivity {
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            discoveredDeviceInfo = deviceInfo;
-            handleUpdateListScan.post(runUpdateListScan);
+          Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
+    //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
+    //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
+            if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+                //if you find the device, then send the bluetooth information over.
+                Log.d(TAG, "bro: " + deviceInfo);
+                discoveredDeviceInfo = deviceInfo;
+                handleUpdateListScan.post(runUpdateListScan);
+               /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
+                handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
+
+            }else{
+                Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
+                //deviceManager.startDiscovery(MainActivity.this);
+            }
         }
 
         @Override
@@ -369,6 +392,7 @@ public class MainActivity extends AppCompatActivity {
             infoList.add("devConnected");
             handleUpdateInfo.post(runUpdateInfo);
             if (dialogConnection != null) dialogConnection.dismiss();
+
         }
 
         @Override
@@ -549,9 +573,12 @@ public class MainActivity extends AppCompatActivity {
     Runnable runUpdateListScan = new Runnable() {
         @Override
         public void run() {
-            deviceInfoArray.add(discoveredDeviceInfo);
-        }
-    };
+
+            deviceInfoArray.add(discoveredDeviceInfo);// I probably don't need this
+            deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
+            handleUpdateInfo.post(runUpdateInfo);
+        } //+++
+    }; //여기에다가 listview를 에드하는듯 하다.
 
     Handler handleUpdateTest = new Handler();
     Runnable runUpdateTest = new Runnable() {
