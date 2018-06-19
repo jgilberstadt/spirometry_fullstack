@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ConnectingActivity" />
         <activity android:name=".TestingPageOne"></activity>
+        <activity android:name=".BlowActivity"></activity>
+
     </application>
 
 </manifest>
