@@ -230,7 +230,7 @@ public class ConnectingActivity extends AppCompatActivity{
     Runnable runUpdateInfo = new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(ConnectingActivity.this, TestingPageOne.class);
+            Intent intent = new Intent(ConnectingActivity.this, BlowActivity.class);
             ConnectingActivity.this.startActivity(intent);
            // tvConnecting.setText();
          //   tvConnecting.setText(success);
