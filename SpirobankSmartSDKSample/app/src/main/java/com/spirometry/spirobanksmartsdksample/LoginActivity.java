@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private MyParcelable mBundleData;
-
+    
     private long mLastClickTime = 0;
 
 
@@ -256,7 +256,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
     };
 
 
-    //This Call back need for new Android M runtime authorizzation
+    //This Call back need for new Android M runtime authorization
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -270,122 +270,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         }
     }
 
-  /* DeviceCallback deviceCallback = new DeviceCallback() {
-        @Override
-        public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
-            volume+=stepVolume;
-            //Log.d("FLOW ", String.valueOf(flow) + " " + volume + " " + isFirstPackage);
-            Log.d("flowUpdated ", String.valueOf(flow) + " " + String.valueOf(isFirstPackage));
-            predictedPercentageOfTarget = patient.predictedPercentageOfTargetWithFlow(flow, stepVolume, isFirstPackage);
-            actualPercentageOfTarget = patient.actualPercentageOfTargetWithFlow(flow, stepVolume, isFirstPackage);
-            handleUpdateTest.post(runUpdateTest);
-        }
-
-        @Override
-        public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
-            Log.d("Results PEF ", String.valueOf(resultsPefFev1.getPef_cLs() / (float) 100) + " L/s");
-            result = "PEF: " + String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100) + " L/m" +
-                    " | FEV1: " + String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100) + " L"+
-                    " \nPefTime: " + String.valueOf(resultsPefFev1.getPefTime_msec()) + " ms"+
-                    " | Evol: " + String.valueOf(resultsPefFev1.geteVol_mL() ) + " ml";
-            qualityRawCode= resultsPefFev1.getQualityCode();
-            qualityMsgCode = patient.getQualityMessage(resultsPefFev1);
-            handleUpdateResult.post(runUpdateResult);
-
-            String pef = String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100);
-            String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
-            String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
-            String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
-
-            upload_PefFev1(pef, fev1, peftime, evol);
-
-        }
-        @Override
-        public void resultsUpdated(ResultsFvc resultsFvc){
-            result = "PEF: " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100) + " L/m" +
-                    " | FEV1: " + String.valueOf(resultsFvc.getFev1_cL() / (float) 100) + " L"+
-                    " \nFVC: " + String.valueOf(resultsFvc.getFvc_cL() / (float) 100) + " L"+
-                    " | FEV1/FVC: " + String.valueOf(Math.round(resultsFvc.getFev1_Fvc_pcnt() * 100)/(float)100) + "%" +
-                    " \nFEV6: " + String.valueOf(resultsFvc.getFev6_cl() / (float) 100) + " L"+
-                    " | FEF2575: " + String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100) + " L/s";
-            qualityRawCode = resultsFvc.getQualityCode();
-            qualityMsgCode = patient.getQualityMessage(resultsFvc);
-            handleUpdateResult.post(runUpdateResult);
-
-            String pef = String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100);
-            String fev1 = String.valueOf(resultsFvc.getFev1_cL() / (float) 100);
-            String fvc = String.valueOf(resultsFvc.getFvc_cL() / (float) 100);
-            String fev1_fvc = String.valueOf(Math.round(resultsFvc.getFev1_Fvc_pcnt() * 100)/(float)100);
-            String fev6 = String.valueOf(resultsFvc.getFev6_cl() / (float) 100);
-            String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
-
-            upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
-
-        }
-
-        @Override
-        public void testRestarted(Device device) {
-            volume=0;
-            predictedPercentageOfTarget = (float) 1;
-            actualPercentageOfTarget = (float) 1;
-            handleUpdateTest.post(runUpdateTest);
-            Log.d("TEST RESTARTED","TRUE");
-        }
-
-        @Override
-        public void testStopped(Device device) {
-            volume=0;
-            predictedPercentageOfTarget = (float) 1;
-            actualPercentageOfTarget = (float) 1;
-            handleUpdateTest.post(runUpdateTest);
-            infoList.add("Test Stopped " + device.getDeviceInfo().getAdvertisementDataName());
-            handleUpdateInfo.post(runUpdateInfo);
-        }
-
-        @Override
-        public void softwareUpdateProgress(float progress, Device.UpdateStatus status, String error) {
-            strProgress = status.toString() + " " + Float.toString(progress) + "% " + error;
-            if (status!= Device.UpdateStatus.UpdateInProgress) {
-                strProgress += " sec.: " + (System.currentTimeMillis()-startUpdate)/1000;
-            }
-            handleSoftwareUpdateProgress.post(runSoftwareUpdateProgress);
-        }
-    }; */
-/*
-    Handler handleUpdateInfo = new Handler();
-    Runnable runUpdateInfo = new Runnable() {
-        @Override
-        public void run() {
-            String localInfo = "";
-            if (infoList.size()>0 ) {
-                localInfo = infoList.get(0);
-                infoList.remove(0);
-            }
-            if (localInfo.equals("devConnected")) {
-                localInfo = currDevice.getDeviceInfo().getAdvertisementDataName() + " Connected" + "\n" +
-                        "BT version " + currDevice.getBluetoothVersion() + "\n" +
-                        "SW version " + currDevice.getSoftwareVersion() + "\n" +
-                        "Battery " + currDevice.getBatteryLevel(getApplicationContext()) + "%" + "\n" +
-                        "Volume Step " + currDevice.getVolumeStep();
-                findViewById(R.id.btnStartFvc).setEnabled(true);
-                findViewById(R.id.btnStartPefFev1).setEnabled(true);
-            }
-            if (infoDisconnect.equals(""))
-                fullInfo = localInfo + "\n\n" + fullInfo;
-            else {
-                fullInfo = infoDisconnect + "\n\n" + fullInfo;
-                infoDisconnect = "";
-                findViewById(R.id.btnStartFvc).setEnabled(true);
-                findViewById(R.id.btnStartPefFev1).setEnabled(true);
-            }
-            if (localInfo.matches("Test Stopped.*")) {
-                findViewById(R.id.btnStartFvc).setEnabled(true);
-                findViewById(R.id.btnStartPefFev1).setEnabled(true);
-            }
-            ((TextView) findViewById(R.id.tvInfo)).setText(fullInfo);
-            findViewById(R.id.tvInfo).scrollTo(0, 0);
-        }
-    }; */
 
     Handler handleUpdateListScan = new Handler();
     Runnable runUpdateListScan = new Runnable() {
