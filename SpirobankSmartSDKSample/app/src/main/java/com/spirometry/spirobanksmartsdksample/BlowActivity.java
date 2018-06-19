@@ -26,11 +26,16 @@ import com.spirometry.spirobanksmartsdk.DeviceManager;
 import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class BlowActivity extends AppCompatActivity {
 
     DeviceManager deviceManager;
+    TextView blowDirection;
+    TextView blowMessage;
+    TextView numberCount;
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
@@ -52,6 +57,10 @@ public class BlowActivity extends AppCompatActivity {
 
         //get device manager instance
         deviceManager = DeviceManager.getInstance(this);
+
+        blowDirection = (TextView) findViewById(R.id.blowDirection);
+        blowMessage = (TextView) findViewById(R.id.blowMessage);
+        numberCount = (TextView) findViewById(R.id.numberCount);
 
         //set device manger callback
         // deviceManager.setDeviceManagerCallback(deviceManagerCallback);
