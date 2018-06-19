@@ -1,6 +1,7 @@
 package com.spirometry.spirobanksmartsdksample;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +33,13 @@ public class ConnectingActivity extends AppCompatActivity{
     TextView tvConnecting;
     ProgressBar progressBar;
     TextView bluetoothNotConnected;
+    TextView directionTextView;
     Button tryAgainButton;
+    DeviceInfo discoveredDeviceInfo;
+    final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    String localInfo = "";
+    int numberOfDisconnect = 0;
+    String fullInfo = "", result = "", infoDisconnect = "", strProgress ="";
 
 
     @Override
@@ -54,6 +61,7 @@ public class ConnectingActivity extends AppCompatActivity{
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bluetoothNotConnected = (TextView) findViewById(R.id.bluetoothNotConnected);
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
+        directionTextView = (TextView) findViewById(R.id.directionTextView);
 
         //get device manager istance
         deviceManager = DeviceManager.getInstance(this);
@@ -65,66 +73,94 @@ public class ConnectingActivity extends AppCompatActivity{
 
         arr = mBundleData.getDeviceInfo();
 
-         if(arr != null && !arr.isEmpty()) {
+        //deviceManager.startDiscovery(ConnectingActivity.this);
+
+        if(arr != null && !arr.isEmpty()) {
              selectedDeviceInfo = new DeviceInfo(arr.get(0), arr.get(1), arr.get(2), arr.get(3), arr.get(4));
              Log.d("deviceInfo", "Device Info1: " + selectedDeviceInfo.toString());
              progressBar.setVisibility(View.VISIBLE);
              tvConnecting.setVisibility(View.VISIBLE);
              bluetoothNotConnected.setVisibility(View.INVISIBLE);
              tryAgainButton.setVisibility(View.INVISIBLE);
-             Handler handler = new Handler();
-             handler.postDelayed(new Runnable() {
-                 @Override
-                 public void run() {
-             deviceManager.connect(getApplicationContext(), selectedDeviceInfo);
-           }
-         }, 3000);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    deviceManager.connect(getApplicationContext(), selectedDeviceInfo);
+                }
+            }, 3000);
             }else{
              Log.d(TAG,"There is no device info sent from the loginActivity, so it is an empty array");
-              tvConnecting.setVisibility(View.INVISIBLE);
+             progressBar.setVisibility(View.INVISIBLE);
+             tvConnecting.setVisibility(View.INVISIBLE);
              bluetoothNotConnected.setVisibility(View.VISIBLE);
              tryAgainButton.setVisibility(View.VISIBLE);
              Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
 
          }
 
+
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
-                deviceManager.startDiscovery(ConnectingActivity.this);
+                Log.d(TAG, "Start Discovery!");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
+                directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
+                deviceManager.startDiscovery(ConnectingActivity.this);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "no connection");
+                        deviceManager.stopDiscovery();
+                        if(localInfo.equals("connected")){
+                            Log.d(TAG, "the device is connect, nothing to show");
+                            }else {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            tvConnecting.setVisibility(View.INVISIBLE);
+                            bluetoothNotConnected.setVisibility(View.VISIBLE);
+                            tryAgainButton.setVisibility(View.VISIBLE);
+                            directionTextView.setVisibility(View.VISIBLE);
+                            if(numberOfDisconnect >=3){
+                                directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
+                                directionTextView.setTextColor(Color.parseColor("#0000FF"));
 
-                Log.d(TAG, "Start Discovery!");
-                //wait(100);
+                                directionTextView.setVisibility(View.VISIBLE);
+                            }
+                            numberOfDisconnect++;
+                            Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, 6000);
             }
         });
     }
 
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
-        public void deviceDiscovered(final DeviceInfo deviceInfo) {
+        public void deviceDiscovered(DeviceInfo deviceInfo) {
             Log.d(TAG, deviceInfo.getAddress());
                     //I did this so that you don't reconnect with different device.
                     if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
-                        Log.d(TAG, "Some sort of device is discovered");
-                        progressBar.setVisibility(View.INVISIBLE);
+                        discoveredDeviceInfo = deviceInfo;
+                        Log.d(TAG, "Your Specific Device Connected");
+                        progressBar.setVisibility(View.VISIBLE);
                         String success = "Success!";
                         tvConnecting.setText(success);
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
-                        deviceManager.connect(getApplicationContext(), deviceInfo);
+                        handleUpdateListScan.post(runUpdateListScan);
+
                     }
                     else{
-                        Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
                         progressBar.setVisibility(View.INVISIBLE);
                         tvConnecting.setVisibility(View.INVISIBLE);
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
                         tryAgainButton.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(), "Your Bluetooth Device is STILL Not Connected", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
+                        Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -132,23 +168,34 @@ public class ConnectingActivity extends AppCompatActivity{
         @Override
         public void deviceConnected(Device device) {
             currDevice = device;
-            String success = "Success";
-            tvConnecting.setText(success);
-            progressBar.setVisibility(View.GONE);
-            tvConnecting.setVisibility(View.GONE);
-            Log.d(TAG, "Device Connected");
+            localInfo = "connected";
             handleUpdateInfo.post(runUpdateInfo);
+            Log.d(TAG, "Device Connected");
+            //String finish = "Success";
+            //tvConnecting.setText(finish); // this was a bug I couldn't find, I still don't know about this logic
+
             //infoList.add("devConnected");
             //currDevice.setDeviceCallback(deviceCallback);
         }
         @Override
         public void deviceDisconnected(Device device) {
             Log.d(TAG, "deviceDisconnected");
+            progressBar.setVisibility(View.INVISIBLE);
+            tvConnecting.setVisibility(View.INVISIBLE);
+            tvConnecting.setVisibility(View.VISIBLE);
+            bluetoothNotConnected.setVisibility(View.VISIBLE);
+
+
         }
         @Override
         public void deviceConnectionFailed(DeviceInfo deviceInfo) {
             currDevice=null;
-            Log.d(TAG, "did it not work?: ");
+            Log.d(TAG, "did it not work?: we found the address for your device, but it can't connect" + currDevice);
+            tryAgainButton.setVisibility(View.VISIBLE);
+            bluetoothNotConnected.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            tvConnecting.setVisibility(View.INVISIBLE);
+
 
         }
         @Override
@@ -161,10 +208,23 @@ public class ConnectingActivity extends AppCompatActivity{
         }
         @Override
         public void accessCoarseLocationPermissionRequired(){
+            //Android M runtime authorizzation
+            infoDisconnect = "Access Coarse Location Permission Required";
+            //handleUpdateInfo.post(runUpdateInfo);
+
+            //For this request you need to implement callback
+            deviceManager.requestCoarseLocationPermission(ConnectingActivity.this,PERMISSION_REQUEST_COARSE_LOCATION);
         }
     };
 
-
+    Handler handleUpdateListScan = new Handler();
+    Runnable runUpdateListScan = new Runnable() {
+        @Override
+        public void run() {
+            deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
+            //handleUpdateInfo.post(runUpdateInfo);
+        } //+++
+    };
 
     Handler handleUpdateInfo = new Handler();
     Runnable runUpdateInfo = new Runnable() {
