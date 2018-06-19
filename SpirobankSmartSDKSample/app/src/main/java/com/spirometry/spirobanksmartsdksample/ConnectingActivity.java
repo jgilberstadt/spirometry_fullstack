@@ -81,8 +81,7 @@ public class ConnectingActivity extends AppCompatActivity{
          }, 3000);
             }else{
              Log.d(TAG,"There is no device info sent from the loginActivity, so it is an empty array");
-             progressBar.setVisibility(View.INVISIBLE);
-             tvConnecting.setVisibility(View.INVISIBLE);
+              tvConnecting.setVisibility(View.INVISIBLE);
              bluetoothNotConnected.setVisibility(View.VISIBLE);
              tryAgainButton.setVisibility(View.VISIBLE);
              Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();

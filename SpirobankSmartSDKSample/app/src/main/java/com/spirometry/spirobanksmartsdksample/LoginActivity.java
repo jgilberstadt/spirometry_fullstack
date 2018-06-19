@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
 
 
         //peter: this will look for specific user's device, at our case, it is Z008182
-        deviceManager.startDiscovery(LoginActivity.this);
+       // deviceManager.startDiscovery(LoginActivity.this);
 
         new CountDownTimer(7000,1000){
             @Override
@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                 spirometerImage.setVisibility(View.VISIBLE);
                 spiroCheck.setVisibility(View.VISIBLE);
                 spiroProgressBar.setVisibility(View.VISIBLE);
+                deviceManager.startDiscovery(LoginActivity.this);
             }
 
             @Override
@@ -152,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                     intent.putExtra("bundle-data", mBundleData);
                     //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);
                     LoginActivity.this.startActivity(intent);
-                    finish();
+                    //finish();
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_LONG).show();
