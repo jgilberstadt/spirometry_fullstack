@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         //peter: this will look for specific user's device, at our case, it is Z008182
         deviceManager.startDiscovery(LoginActivity.this);
 
+
         new CountDownTimer(7000,1000){
             @Override
             public void onTick(long millisUntilFinished){
@@ -101,12 +102,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                 spirometerImage.setVisibility(View.VISIBLE);
                 spiroCheck.setVisibility(View.VISIBLE);
                 spiroProgressBar.setVisibility(View.VISIBLE);
-            }
-
+                }
             @Override
             public void onFinish(){
                 //set the new Content of your activity
-                // LoginActivity.this.setContentView(R.layout.activity_login);
                 submitButton.setVisibility(View.VISIBLE);
                 etPassword.setVisibility(View.VISIBLE);
                 spirometerImage.setVisibility(View.GONE);
@@ -120,32 +119,30 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deviceManager.startDiscovery(LoginActivity.this);
-
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
                 if(truePassword.equals(etPassword.getText().toString())) {
 
                     // do stuff
                     Intent intent = new Intent(LoginActivity.this, ConnectingActivity.class);
+                    Log.d(TAG, "bundle-data" +mBundleData);
                     intent.putExtra("bundle-data", mBundleData);
                     //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);
                     LoginActivity.this.startActivity(intent);
-                    finish();
+                    deviceManager.stopDiscovery();
+
+
+                    //finish();
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_LONG).show();
+
                     //  Log.d(TAG, "TypedPassword" + typedPasswordOne);
                     // Log.d(TAG, "TruePassword" + stringTruePassword);
                 }
-                   }
-                }, 2000);
 
             }
         });
@@ -191,7 +188,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         @Override
         public void deviceConnected(Device device) {
             currDevice = device;
-           // currDevice.setDeviceCallback(deviceCallback);
+            Log.d(TAG, "Checkcheck" );
+
+            // currDevice.setDeviceCallback(deviceCallback);
             infoList.add("devConnected");
            // handleUpdateInfo.post(runUpdateInfo);
           //  if (dialogConnection != null) dialogConnection.dismiss();
