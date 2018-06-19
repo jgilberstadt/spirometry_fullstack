@@ -60,23 +60,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private MyParcelable mBundleData;
-    
+
     private long mLastClickTime = 0;
 
-
-   /* public boolean isValidPassword(final String patientPassword) {
-
-        Pattern patternCheck;
-        Matcher matcherCheck;
-
-        final String PATIENT_PASSWORD_PATTERN = "^(123456)$";
-
-        patternCheck = Pattern.compile(PATIENT_PASSWORD_PATTERN);
-        matcherCheck = patternCheck.matcher(patientPassword);
-
-        return matcherCheck.matches();
-
-    } */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +114,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                 spiroProgressBar.setVisibility(View.GONE);
             }
         }.start();
-
 
 
         //we want to create a login request, when the user actually clicks the login button, so onClickListener
@@ -281,58 +266,4 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         } //+++
     }; //여기에다가 listview를 에드하는듯 하다.
 
- /*   Handler handleUpdateTest = new Handler();
-    Runnable runUpdateTest = new Runnable() {
-        @Override
-        public void run() {
-            ((TextView) findViewById(R.id.tvTarget)).setText(String.valueOf(Math.round(predictedPercentageOfTarget))+"%");
-            findViewById(R.id.imgTarget).getLayoutParams().height = Math.round(200*(predictedPercentageOfTarget/(float)100)*getResources().getDisplayMetrics().density);
-            findViewById(R.id.imgTarget).requestLayout();
-            ((TextView) findViewById(R.id.tvActual)).setText(String.valueOf(Math.round(actualPercentageOfTarget))+"%");
-            findViewById(R.id.imgActual).getLayoutParams().height = Math.round(200*(actualPercentageOfTarget/(float)100)*getResources().getDisplayMetrics().density);
-            findViewById(R.id.imgActual).requestLayout();
-        }
-    };*/
-
- /*   Handler handleUpdateResult = new Handler();
-    Runnable runUpdateResult = new Runnable() {
-        @Override
-        public void run() {
-            String qualityMsgString = "";
-            switch (qualityMsgCode) {
-                case Patient.QualityMessageAvoidCoughing:
-                    qualityMsgString = "Avoid Coughing";
-                    break;
-                case Patient.QualityMessageBlowOutFaster:
-                    qualityMsgString = "Blow Out Faster";
-                    break;
-                case Patient.QualityMessageDontEsitate:
-                    qualityMsgString = "Don't Esitate";
-                    break;
-                case Patient.QualityMessageDontStartTooEarly:
-                    qualityMsgString = "Don't Start Too Early";
-                    break;
-                case Patient.QualityMessageGoodBlow:
-                    qualityMsgString = "Good Blow";
-                    break;
-                case Patient.QualityMessageBlowOutLonger:
-                    qualityMsgString = "Blow Out Longer";
-                    break;
-                case Patient.QualityMessageAbruptEnd:
-                    qualityMsgString = "Abrupt End";
-                    break;
-            }
-            ((TextView) findViewById(R.id.tvResult)).setText(result);
-            ((TextView) findViewById(R.id.tvQualityMsg)).setText(Integer.toHexString(qualityRawCode) + " " + qualityMsgString);
-        }
-    };*/
-
-  /*  Handler handleSoftwareUpdateProgress = new Handler();
-    Runnable runSoftwareUpdateProgress = new Runnable() {
-        @Override
-        public void run() {
-            ((TextView) findViewById(R.id.tvResult)).setText(strProgress);
-            ((TextView) findViewById(R.id.tvQualityMsg)).setText("");
-        }
-    }; */
 }
