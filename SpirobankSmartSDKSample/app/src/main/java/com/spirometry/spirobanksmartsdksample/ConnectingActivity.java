@@ -68,8 +68,18 @@ public class ConnectingActivity extends AppCompatActivity{
          if(arr != null && !arr.isEmpty()) {
              selectedDeviceInfo = new DeviceInfo(arr.get(0), arr.get(1), arr.get(2), arr.get(3), arr.get(4));
              Log.d("deviceInfo", "Device Info1: " + selectedDeviceInfo.toString());
+             progressBar.setVisibility(View.VISIBLE);
+             tvConnecting.setVisibility(View.VISIBLE);
+             bluetoothNotConnected.setVisibility(View.INVISIBLE);
+             tryAgainButton.setVisibility(View.INVISIBLE);
+             Handler handler = new Handler();
+             handler.postDelayed(new Runnable() {
+                 @Override
+                 public void run() {
              deviceManager.connect(getApplicationContext(), selectedDeviceInfo);
-            } else{
+           }
+         }, 3000);
+            }else{
              Log.d(TAG,"There is no device info sent from the loginActivity, so it is an empty array");
              progressBar.setVisibility(View.INVISIBLE);
              tvConnecting.setVisibility(View.INVISIBLE);
@@ -87,6 +97,7 @@ public class ConnectingActivity extends AppCompatActivity{
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
+
                 Log.d(TAG, "Start Discovery!");
                 //wait(100);
             }
@@ -96,14 +107,9 @@ public class ConnectingActivity extends AppCompatActivity{
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(final DeviceInfo deviceInfo) {
-            final DeviceInfo connectCorrectPatient = deviceInfo;
             Log.d(TAG, deviceInfo.getAddress());
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Do something after 100ms
-                    if(connectCorrectPatient.getAddress().matches("00:26:33:CD:28:F6")) {
+                    //I did this so that you don't reconnect with different device.
+                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                         Log.d(TAG, "Some sort of device is discovered");
                         progressBar.setVisibility(View.INVISIBLE);
                         String success = "Success!";
@@ -111,10 +117,10 @@ public class ConnectingActivity extends AppCompatActivity{
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
-                        deviceManager.connect(getApplicationContext(), connectCorrectPatient);
+                        deviceManager.connect(getApplicationContext(), deviceInfo);
                     }
                     else{
-                        Log.d(TAG, "Device Not Found: " + connectCorrectPatient.getAdvertisementDataName());
+                        Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
                         progressBar.setVisibility(View.INVISIBLE);
                         tvConnecting.setVisibility(View.INVISIBLE);
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
@@ -122,19 +128,17 @@ public class ConnectingActivity extends AppCompatActivity{
                         Toast.makeText(getApplicationContext(), "Your Bluetooth Device is STILL Not Connected", Toast.LENGTH_LONG).show();
                     }
                 }
-            }, 5000);
 
-        }
 
         @Override
         public void deviceConnected(Device device) {
             currDevice = device;
-            handleUpdateInfo.post(runUpdateInfo);
             String success = "Success";
             tvConnecting.setText(success);
             progressBar.setVisibility(View.GONE);
             tvConnecting.setVisibility(View.GONE);
             Log.d(TAG, "Device Connected");
+            handleUpdateInfo.post(runUpdateInfo);
             //infoList.add("devConnected");
             //currDevice.setDeviceCallback(deviceCallback);
         }

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +14,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spirometry.spirobanksmartsdk.Device;
@@ -19,6 +24,8 @@ import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +35,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
 
     Button submitButton;
     EditText etPassword;
+    ImageView spirometerImage;
+    TextView spiroCheck;
+    ProgressBar spiroProgressBar;
     String truePassword = "123456";
 
     String deviceInfoStringAddress;
@@ -51,6 +61,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private MyParcelable mBundleData;
 
+    private long mLastClickTime = 0;
+
+
    /* public boolean isValidPassword(final String patientPassword) {
 
         Pattern patternCheck;
@@ -73,13 +86,18 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //set screen always ON
+            //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         submitButton = (Button) findViewById(R.id.submitButton);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        spirometerImage = (ImageView) findViewById(R.id.spirometerImage);
+        int imageResource = getResources().getIdentifier("@drawable/spiro", null, this.getPackageName());
+        spirometerImage.setImageResource(imageResource);
+        spiroCheck = (TextView) findViewById(R.id.spiroCheck);
+        spiroProgressBar = (ProgressBar) findViewById(R.id.spiroProgressBar);
 
-        //get device manager istance
+        //get device manager instance
         deviceManager = DeviceManager.getInstance(this);
 
         //set device manger callback
@@ -89,29 +107,60 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         //peter: this will look for specific user's device, at our case, it is Z008182
         deviceManager.startDiscovery(LoginActivity.this);
 
+        new CountDownTimer(7000,1000){
+            @Override
+            public void onTick(long millisUntilFinished){
+                submitButton.setVisibility(View.INVISIBLE);
+                etPassword.setVisibility(View.INVISIBLE);
+                spirometerImage.setVisibility(View.VISIBLE);
+                spiroCheck.setVisibility(View.VISIBLE);
+                spiroProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinish(){
+                //set the new Content of your activity
+                // LoginActivity.this.setContentView(R.layout.activity_login);
+                submitButton.setVisibility(View.VISIBLE);
+                etPassword.setVisibility(View.VISIBLE);
+                spirometerImage.setVisibility(View.GONE);
+                spiroCheck.setVisibility(View.GONE);
+                spiroProgressBar.setVisibility(View.GONE);
+            }
+        }.start();
+
+
 
         //we want to create a login request, when the user actually clicks the login button, so onClickListener
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //int typedPassword = Integer.parseInt(etPassword.getText().toString());
+                deviceManager.startDiscovery(LoginActivity.this);
 
-               // if(isValidPassword(etPassword.getText().toString().trim())){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
                 if(truePassword.equals(etPassword.getText().toString())) {
 
+                    // do stuff
                     Intent intent = new Intent(LoginActivity.this, ConnectingActivity.class);
                     intent.putExtra("bundle-data", mBundleData);
                     //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);
-
-                    Log.d(TAG, "Oppa?: ");
                     LoginActivity.this.startActivity(intent);
+                    finish();
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_LONG).show();
                     //  Log.d(TAG, "TypedPassword" + typedPasswordOne);
                     // Log.d(TAG, "TruePassword" + stringTruePassword);
                 }
+                   }
+                }, 2000);
 
             }
         });
