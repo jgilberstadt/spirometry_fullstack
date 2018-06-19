@@ -68,4 +68,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/directionTextView"
+        android:layout_width="278dp"
+        android:layout_height="136dp"
+        android:text="Confirm Spirometer and has battery life. "
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="192dp" />
+
 </android.support.constraint.ConstraintLayout>
