@@ -60,6 +60,7 @@ public class BlowActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("HYUNRAE", "running oncreate");
 
         mBundleData = new MyParcelable();
 
@@ -75,12 +76,16 @@ public class BlowActivity extends AppCompatActivity {
         //set device manger callback
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
+        deviceManager.startDiscovery(BlowActivity.this);
+
     }
 
 
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
+            Log.d("HYUNRAE", "running");
+
             Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
             //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
             //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
@@ -185,31 +190,37 @@ public class BlowActivity extends AppCompatActivity {
     DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
-
+            Log.d("hyunrae", "a");
 
         }
 
         @Override
         public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
+            Log.d("hyunrae", "b");
 
         }
 
         @Override
         public void resultsUpdated(ResultsFvc resultsFvc) {
+            Log.d("hyunrae", "c");
 
         }
 
         @Override
         public void testRestarted(Device device) {
+            Log.d("hyunrae", "d");
+
         }
 
         @Override
         public void testStopped(Device device) {
+            Log.d("hyunrae", "e");
 
         }
 
         @Override
         public void softwareUpdateProgress(float progress, Device.UpdateStatus status, String error) {
+            Log.d("hyunrae", "f");
 
         }
     };

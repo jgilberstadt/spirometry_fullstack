@@ -73,8 +73,6 @@ public class ConnectingActivity extends AppCompatActivity{
 
         arr = mBundleData.getDeviceInfo();
 
-        //deviceManager.startDiscovery(ConnectingActivity.this);
-
         if(arr != null && !arr.isEmpty()) {
              selectedDeviceInfo = new DeviceInfo(arr.get(0), arr.get(1), arr.get(2), arr.get(3), arr.get(4));
              Log.d("deviceInfo", "Device Info1: " + selectedDeviceInfo.toString());
