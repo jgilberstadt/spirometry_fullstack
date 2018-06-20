@@ -26,11 +26,14 @@ import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
+import com.spirometry.spirobanksmartsdk.Patient;
 import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class BlowActivity extends AppCompatActivity {
 
@@ -39,6 +42,8 @@ public class BlowActivity extends AppCompatActivity {
     DeviceManager deviceManager;
 
     private MyParcelable mBundleData;
+
+    Patient patient;
 
     Context myContext;
     final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
@@ -49,6 +54,7 @@ public class BlowActivity extends AppCompatActivity {
     String deviceInfoStringSerialNumber;
     String deviceInfoStringAdvertisementDataName;
     ArrayList<String> deviceInfoArray = new ArrayList<>();
+    ArrayList<String> arr;
 
     ArrayList<String> infoList = new ArrayList<>();
     Device currDevice;
@@ -62,7 +68,8 @@ public class BlowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("HYUNRAE", "running oncreate");
 
-        mBundleData = new MyParcelable();
+        mBundleData = getIntent().getParcelableExtra("bundle-data");
+        arr = mBundleData.getDeviceInfo();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
@@ -76,7 +83,11 @@ public class BlowActivity extends AppCompatActivity {
         //set device manger callback
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
-        deviceManager.startDiscovery(BlowActivity.this);
+        currDevice = deviceManager.getDeviceConnected();
+
+        currDevice.setDeviceCallback(deviceCallback);
+
+        currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
 
     }
 
@@ -125,7 +136,6 @@ public class BlowActivity extends AppCompatActivity {
             currDevice = device;
             Log.d(TAG, "Checkcheck");
 
-            currDevice.setDeviceCallback(deviceCallback);
             infoList.add("devConnected");
             // handleUpdateInfo.post(runUpdateInfo);
             //  if (dialogConnection != null) dialogConnection.dismiss();
@@ -197,25 +207,49 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
             Log.d("hyunrae", "b");
+            Log.d("hyunrae", "one more test added");
+            numBlows++;
+            // here you want to change the number of blows displayed
+
+            //below is just test code for now
+//            int qualityMsgCode = patient.getQualityMessage(resultsPefFev1);
+//            if (qualityMsgCode == 4) {
+//                Log.d("hyunrae", String.valueOf(qualityMsgCode));
+//                Log.d("hyunrae", "GOOD BLOW");
+//            }
+
+            Log.d("hyunrae", String.valueOf(numBlows));
+            Log.d("hyunrae", String.valueOf(numBlows == 6));
+            if (numBlows < 6) {
+                currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+            } else {
+                Log.d("hyunrae", "do nothing");
+                currDevice.stopTest(getApplicationContext());
+                // move on
+            }
 
         }
 
         @Override
-        public void resultsUpdated(ResultsFvc resultsFvc) {
-            Log.d("hyunrae", "c");
+        public void resultsUpdated(ResultsFvc resultsFvc) { // NOT USED
 
         }
 
         @Override
         public void testRestarted(Device device) {
             Log.d("hyunrae", "d");
-
+            // here you want to display to the participant to blow again
         }
 
         @Override
         public void testStopped(Device device) {
-            Log.d("hyunrae", "e");
-
+            Log.d("hyunrae", "Test has been stopped");
+            // here you want to display to the participant that he or she probably didn't blow so the test stopped.
+            if (numBlows < 6) {
+                device.startTest(getApplicationContext(), Device.TestType.PefFev1);
+            } else {
+                Log.d("hyunrae", "test stopped and no more to do");
+            }
         }
 
         @Override
@@ -224,5 +258,6 @@ public class BlowActivity extends AppCompatActivity {
 
         }
     };
+
 
 }

@@ -595,9 +595,9 @@ public class MainActivity extends AppCompatActivity {
 
     Handler handleUpdateResult = new Handler();
     Runnable runUpdateResult = new Runnable() {
-        @Override
-        public void run() {
-            String qualityMsgString = "";
+                @Override
+                public void run() {
+                    String qualityMsgString = "";
             switch (qualityMsgCode) {
                 case Patient.QualityMessageAvoidCoughing:
                     qualityMsgString = "Avoid Coughing";
@@ -621,8 +621,6 @@ public class MainActivity extends AppCompatActivity {
                     qualityMsgString = "Abrupt End";
                     break;
             }
-            ((TextView) findViewById(R.id.tvResult)).setText(result);
-            ((TextView) findViewById(R.id.tvQualityMsg)).setText(Integer.toHexString(qualityRawCode) + " " + qualityMsgString);
         }
     };
 

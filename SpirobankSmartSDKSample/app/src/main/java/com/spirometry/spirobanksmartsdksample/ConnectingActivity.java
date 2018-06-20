@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ConnectingActivity extends AppCompatActivity{
 
     private MyParcelable mBundleData;
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = ConnectingActivity.class.getSimpleName();
     DeviceManager deviceManager;
     Device currDevice;
     ArrayList<String> arr;
@@ -138,7 +138,6 @@ public class ConnectingActivity extends AppCompatActivity{
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d(TAG, deviceInfo.getAddress());
                     //I did this so that you don't reconnect with different device.
                     if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                         discoveredDeviceInfo = deviceInfo;
@@ -229,6 +228,7 @@ public class ConnectingActivity extends AppCompatActivity{
         @Override
         public void run() {
             Intent intent = new Intent(ConnectingActivity.this, BlowActivity.class);
+            intent.putExtra("bundle-data", mBundleData);
             ConnectingActivity.this.startActivity(intent);
            // tvConnecting.setText();
          //   tvConnecting.setText(success);
