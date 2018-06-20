@@ -31,6 +31,8 @@ import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +42,9 @@ public class BlowActivity extends AppCompatActivity {
     private static final String TAG = BlowActivity.class.getSimpleName();
 
     DeviceManager deviceManager;
+    TextView blowDirection;
+    TextView blowMessage;
+    TextView numberCount;
 
     private MyParcelable mBundleData;
 
@@ -88,6 +93,10 @@ public class BlowActivity extends AppCompatActivity {
         currDevice.setDeviceCallback(deviceCallback);
 
         currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+
+        blowDirection = (TextView) findViewById(R.id.blowDirection);
+        blowMessage = (TextView) findViewById(R.id.blowMessage);
+        numberCount = (TextView) findViewById(R.id.numberCount);
 
     }
 

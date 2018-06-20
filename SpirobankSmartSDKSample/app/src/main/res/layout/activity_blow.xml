@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/blowDirection"
+        android:layout_width="522dp"
+        android:layout_height="163dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="84dp"
+        android:text="Please Blow into Spirometer"
+        android:textAlignment="center"
+        android:textSize="60sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/numberCount"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginStart="50dp"
+        android:text="1"
+        android:textAlignment="center"
+        android:textSize="120sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blowDirection" />
+
+    <TextView
+        android:id="@+id/numberOutOf"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="88dp"
+        android:text="6"
+        android:textAlignment="center"
+        android:textSize="120sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blowDirection" />
+
+    <TextView
+        android:id="@+id/blowMessage"
+        android:layout_width="486dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="56dp"
+        android:text="Message"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:layout_editor_absoluteX="57dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="205dp"
+        android:layout_height="202dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blowDirection"
+        app:srcCompat="@drawable/diag" />
 
 </android.support.constraint.ConstraintLayout>
