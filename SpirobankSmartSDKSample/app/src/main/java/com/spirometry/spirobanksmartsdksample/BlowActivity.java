@@ -68,10 +68,6 @@ public class BlowActivity extends AppCompatActivity {
         Log.d("HYUNRAE", "running oncreate");
 
         mBundleData = new MyParcelable();
-        
-        blowDirection = (TextView) findViewById(R.id.blowDirection);
-        blowMessage = (TextView) findViewById(R.id.blowMessage);
-        numberCount = (TextView) findViewById(R.id.numberCount);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
@@ -86,6 +82,10 @@ public class BlowActivity extends AppCompatActivity {
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
         deviceManager.startDiscovery(BlowActivity.this);
+
+        blowDirection = (TextView) findViewById(R.id.blowDirection);
+        blowMessage = (TextView) findViewById(R.id.blowMessage);
+        numberCount = (TextView) findViewById(R.id.numberCount);
 
     }
 
