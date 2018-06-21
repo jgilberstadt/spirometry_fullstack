@@ -45,6 +45,11 @@ public class BlowActivity extends AppCompatActivity {
     TextView blowDirection;
     TextView blowMessage;
     TextView numberCount;
+    ProgressBar loadingBlow;
+    ImageView imageView;
+    TextView numberOutOf;
+    Button buttonReBlow;
+    TextView postingResult;
 
     private MyParcelable mBundleData;
 
@@ -68,6 +73,7 @@ public class BlowActivity extends AppCompatActivity {
     DeviceInfo discoveredDeviceInfo;
 
     private int numBlows = 0;
+    private int messageNumber = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,18 +94,37 @@ public class BlowActivity extends AppCompatActivity {
         //set device manger callback
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
+        //currDevice is already connected device from the previous Intent
         currDevice = deviceManager.getDeviceConnected();
 
+        //Having callbacks: startTest() results to return
         currDevice.setDeviceCallback(deviceCallback);
 
         currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+        if(numBlows > 6) {
+            currDevice.stopTest(getApplicationContext());
+        }
 
         blowDirection = (TextView) findViewById(R.id.blowDirection);
         blowMessage = (TextView) findViewById(R.id.blowMessage);
         numberCount = (TextView) findViewById(R.id.numberCount);
+        loadingBlow = (ProgressBar) findViewById(R.id.loadingBlow);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        numberOutOf = (TextView) findViewById(R.id.numberOutOf);
+        buttonReBlow = (Button) findViewById(R.id.buttonReBlow);
+        postingResult = (TextView) findViewById(R.id.postingResult);
+
+        findViewById(R.id.buttonReBlow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                buttonReBlow.setVisibility(View.INVISIBLE);
+                blowDirection.setVisibility(View.VISIBLE);
+
+            }
+        });
 
     }
-
 
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
@@ -119,7 +144,6 @@ public class BlowActivity extends AppCompatActivity {
                 deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
                 deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName();
 
-
                 handleUpdateListScan.post(runUpdateListScan);// I need this in next activity to connect
                 // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
                 deviceInfoArray.add(deviceInfoStringAddress);
@@ -128,17 +152,16 @@ public class BlowActivity extends AppCompatActivity {
                 deviceInfoArray.add(deviceInfoStringSerialNumber);
                 deviceInfoArray.add(deviceInfoStringAdvertisementDataName);
 
-
                 mBundleData.setDeviceInfoArray(deviceInfoArray);
                 Log.d("deviceInfo", "Hello: " + discoveredDeviceInfo.toString());
                /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
                 handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
-
             } else {
                 Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
-                //deviceManager.startDiscovery(MainActivity.this);
             }
         }
+
+
 
         @Override
         public void deviceConnected(Device device) {
@@ -178,7 +201,6 @@ public class BlowActivity extends AppCompatActivity {
             infoDisconnect = "Bluetooth Is Powered OFF";
             // handleUpdateInfo.post(runUpdateInfo);
             //  if (dialogConnection != null) dialogConnection.dismiss();
-
             deviceManager.turnOnBluetooth(myContext);
         }
 
@@ -191,26 +213,21 @@ public class BlowActivity extends AppCompatActivity {
             //For this request you need to implement callback
             deviceManager.requestCoarseLocationPermission(BlowActivity.this, PERMISSION_REQUEST_COARSE_LOCATION);
         }
-
-
     };
 
     Handler handleUpdateListScan = new Handler();
     Runnable runUpdateListScan = new Runnable() {
         @Override
         public void run() {
-
-            //   deviceInfoArray.add(discoveredDeviceInfo); // I need this for sure
             deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
-            //  handleUpdateInfo.post(runUpdateInfo);
-        } //+++
+        }
     };
 
     DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
             Log.d("hyunrae", "a");
-
+            handlerVisibilityChange.post(runVisibilityChange);
         }
 
         @Override
@@ -218,52 +235,115 @@ public class BlowActivity extends AppCompatActivity {
             Log.d("hyunrae", "b");
             Log.d("hyunrae", "one more test added");
             numBlows++;
-            // here you want to change the number of blows displayed
-
-            //below is just test code for now
-//            int qualityMsgCode = patient.getQualityMessage(resultsPefFev1);
-//            if (qualityMsgCode == 4) {
-//                Log.d("hyunrae", String.valueOf(qualityMsgCode));
-//                Log.d("hyunrae", "GOOD BLOW");
-//            }
+            messageNumber--;
+            handlerTextViewNumberChange.post(runTextViewNumberChange);
 
             Log.d("hyunrae", String.valueOf(numBlows));
             Log.d("hyunrae", String.valueOf(numBlows == 6));
-            if (numBlows < 6) {
-                currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
-            } else {
-                Log.d("hyunrae", "do nothing");
-                currDevice.stopTest(getApplicationContext());
-                // move on
-            }
-
         }
 
         @Override
         public void resultsUpdated(ResultsFvc resultsFvc) { // NOT USED
-
         }
 
         @Override
         public void testRestarted(Device device) {
-            Log.d("hyunrae", "d");
-            // here you want to display to the participant to blow again
+            Log.d("hyunrae", "dddd");
+            if(numBlows >= 6){
+                Log.d(TAG, "numBlows =6");
+                currDevice.stopTest(getApplicationContext());
+                handlerPostingResult.post(runPostingResult);
+                handlerVisibilityChange.post(runVisibilityChange);
+            }else {
+                handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
+            }
         }
 
         @Override
         public void testStopped(Device device) {
             Log.d("hyunrae", "Test has been stopped");
             // here you want to display to the participant that he or she probably didn't blow so the test stopped.
-            if (numBlows < 6) {
-                device.startTest(getApplicationContext(), Device.TestType.PefFev1);
-            } else {
+            if (numBlows >=6) {
+                handlerVisibilityChange.post(runVisibilityChange);
+                handlerPostingResult.post(runPostingResult);
+                currDevice.stopTest(getApplicationContext());
+                handleIntentToTestComplete.post(runIntentToTestComplete);
                 Log.d("hyunrae", "test stopped and no more to do");
+                // here you want to display to the participant to blow again
+            }else {
+                handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
+                handlerButton.post(runButton);
+
             }
         }
 
         @Override
         public void softwareUpdateProgress(float progress, Device.UpdateStatus status, String error) {
             Log.d("hyunrae", "f");
+        }
+    };
+    Handler handlerTextViewNumberChange = new Handler();
+    Runnable runTextViewNumberChange = new Runnable() {
+        @Override
+        public void run() {
+            blowMessage.setText("You Have " + messageNumber + " Blows Left");
+            numberCount.setText("" + numBlows);
+        } //+++
+    };
+
+    Handler handlerVisibilityChange = new Handler();
+    Runnable runVisibilityChange = new Runnable() {
+        @Override
+        public void run() {
+            loadingBlow.setVisibility(View.VISIBLE);
+            blowDirection.setVisibility(View.INVISIBLE);
+            blowMessage.setVisibility(View.INVISIBLE);
+            numberCount.setVisibility(View.INVISIBLE);
+            numberOutOf.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+        } //+++
+    };
+
+    Handler handlerVisibilityChangeTwo = new Handler();
+    Runnable runVisibilityChangeTwo = new Runnable() {
+        @Override
+        public void run() {
+            loadingBlow.setVisibility(View.INVISIBLE);
+            blowDirection.setVisibility(View.VISIBLE);
+            blowMessage.setVisibility(View.VISIBLE);
+            numberCount.setVisibility(View.VISIBLE);
+            numberOutOf.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+        } //+++
+    };
+
+    Handler handleIntentToTestComplete = new Handler();
+    Runnable runIntentToTestComplete= new Runnable() {
+        @Override
+        public void run() {
+            Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
+            //intent.putExtra("bundle-data", mBundleData);
+            BlowActivity.this.startActivity(intent);
+            finish();
+            // tvConnecting.setText();
+            //   tvConnecting.setText(success);
+        }
+    };
+
+    Handler handlerButton = new Handler();
+    Runnable runButton= new Runnable() {
+        @Override
+        public void run() {
+            buttonReBlow.setVisibility(View.VISIBLE);
+            blowDirection.setVisibility(View.INVISIBLE);
+        }
+    };
+
+    Handler handlerPostingResult = new Handler();
+    Runnable runPostingResult= new Runnable() {
+        @Override
+        public void run() {
+            postingResult.setVisibility(View.VISIBLE);
 
         }
     };

@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         //set screen always ON
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         myContext = this;
 
         setContentView(R.layout.activity_main);
+
+
         // Get patient id
         EditText pidText= (EditText) findViewById(R.id.patientid_text);
         patient_id = pidText.getText().toString();
@@ -166,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 dialogConnection.setCancelable(false);
                 dialogConnection.setMessage("Connecting...");
                 dialogConnection.show();
-
                 deviceManager.connect(getApplicationContext(), deviceInfoArray.getItem(position));
             }
         });
@@ -507,7 +509,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void testRestarted(Device device) {
+            Log.d(TAG, "a restart");
             volume=0;
+            currDevice.stopTest(getApplicationContext());
             predictedPercentageOfTarget = (float) 1;
             actualPercentageOfTarget = (float) 1;
             handleUpdateTest.post(runUpdateTest);
@@ -517,6 +521,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void testStopped(Device device) {
             volume=0;
+            Log.d(TAG, "a stopped");
+            currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
             predictedPercentageOfTarget = (float) 1;
             actualPercentageOfTarget = (float) 1;
             handleUpdateTest.post(runUpdateTest);
@@ -601,24 +607,37 @@ public class MainActivity extends AppCompatActivity {
             switch (qualityMsgCode) {
                 case Patient.QualityMessageAvoidCoughing:
                     qualityMsgString = "Avoid Coughing";
+                    Log.d(TAG, "aaaa");
                     break;
                 case Patient.QualityMessageBlowOutFaster:
                     qualityMsgString = "Blow Out Faster";
+                    Log.d(TAG, "bbbb");
+
                     break;
                 case Patient.QualityMessageDontEsitate:
                     qualityMsgString = "Don't Esitate";
+                    Log.d(TAG, "cccc");
+
                     break;
                 case Patient.QualityMessageDontStartTooEarly:
                     qualityMsgString = "Don't Start Too Early";
+                    Log.d(TAG, "dddd");
+
                     break;
                 case Patient.QualityMessageGoodBlow:
                     qualityMsgString = "Good Blow";
+                    Log.d(TAG, "eeee");
+
                     break;
                 case Patient.QualityMessageBlowOutLonger:
                     qualityMsgString = "Blow Out Longer";
+                    Log.d(TAG, "ffff");
+
                     break;
                 case Patient.QualityMessageAbruptEnd:
                     qualityMsgString = "Abrupt End";
+                    Log.d(TAG, "gggg");
+
                     break;
             }
         }

@@ -93,44 +93,20 @@ public class ConnectingActivity extends AppCompatActivity{
              bluetoothNotConnected.setVisibility(View.VISIBLE);
              tryAgainButton.setVisibility(View.VISIBLE);
              Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
-
          }
-
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
+                deviceManager.disconnect();
                 Log.d(TAG, "Start Discovery!");
+                deviceManager.startDiscovery(ConnectingActivity.this);
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
-                deviceManager.startDiscovery(ConnectingActivity.this);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "no connection");
-                        deviceManager.stopDiscovery();
-                        if(localInfo.equals("connected")){
-                            Log.d(TAG, "the device is connect, nothing to show");
-                            }else {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            tvConnecting.setVisibility(View.INVISIBLE);
-                            bluetoothNotConnected.setVisibility(View.VISIBLE);
-                            tryAgainButton.setVisibility(View.VISIBLE);
-                            directionTextView.setVisibility(View.VISIBLE);
-                            if(numberOfDisconnect >=3){
-                                directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
-                                directionTextView.setTextColor(Color.parseColor("#0000FF"));
-
-                                directionTextView.setVisibility(View.VISIBLE);
-                            }
-                            numberOfDisconnect++;
-                            Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, 6000);
+                handlerWait.post(runWait);
             }
         });
     }
@@ -138,9 +114,11 @@ public class ConnectingActivity extends AppCompatActivity{
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
+            Log.d(TAG, "Some sort of device connected");
                     //I did this so that you don't reconnect with different device.
                     if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                         discoveredDeviceInfo = deviceInfo;
+                        handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
                         progressBar.setVisibility(View.VISIBLE);
                         String success = "Success!";
@@ -148,7 +126,6 @@ public class ConnectingActivity extends AppCompatActivity{
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
-                        handleUpdateListScan.post(runUpdateListScan);
 
                     }
                     else{
@@ -230,8 +207,40 @@ public class ConnectingActivity extends AppCompatActivity{
             Intent intent = new Intent(ConnectingActivity.this, BlowActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             ConnectingActivity.this.startActivity(intent);
-           // tvConnecting.setText();
+            finish();
+            // tvConnecting.setText();
          //   tvConnecting.setText(success);
+        }
+    };
+    Handler handlerWait = new Handler();
+    Runnable runWait = new Runnable() {
+        @Override
+        public void run() {
+    new Handler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "no connection");
+            deviceManager.stopDiscovery();
+            if(localInfo.equals("connected")){
+                Log.d(TAG, "the device is connect, nothing to show");
+                handleUpdateInfo.post(runUpdateInfo);
+            }else {
+                progressBar.setVisibility(View.INVISIBLE);
+                tvConnecting.setVisibility(View.INVISIBLE);
+                bluetoothNotConnected.setVisibility(View.VISIBLE);
+                tryAgainButton.setVisibility(View.VISIBLE);
+                directionTextView.setVisibility(View.VISIBLE);
+                if(numberOfDisconnect >=3){
+                    directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
+                    directionTextView.setTextColor(Color.parseColor("#0000FF"));
+
+                    directionTextView.setVisibility(View.VISIBLE);
+                }
+                numberOfDisconnect++;
+                Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }, 9000);
         }
     };
 

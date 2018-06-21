@@ -132,6 +132,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                     intent.putExtra("bundle-data", mBundleData);
                     //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);
                     LoginActivity.this.startActivity(intent);
+                    finish();
                     deviceManager.stopDiscovery();
 
 
