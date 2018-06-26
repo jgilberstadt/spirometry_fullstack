@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 ageSpinner.setSelection(2);
                 patient = new Patient(calendar.getTime(), 180, 80, Patient.GENDER_MALE, Patient.ETHNICITY_CAUCASIAN);
             }
-
         });
 
 
@@ -318,7 +317,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         final String version2 = "2.6";
         ((TextView)findViewById(R.id.btnUpgrade2)).setText("Update device To " + version2);
         findViewById(R.id.btnUpgrade2).setOnClickListener(new View.OnClickListener() {
@@ -354,7 +352,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception ex){}
 
         this.setTitle(getString(R.string.app_name) + " " + version);
-
     }
 
 
@@ -380,7 +377,6 @@ public class MainActivity extends AppCompatActivity {
                 handleUpdateListScan.post(runUpdateListScan);
                /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
                 handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
-
             }else{
                 Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
                 //deviceManager.startDiscovery(MainActivity.this);
@@ -661,8 +657,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Instance Response: " + response.toString());
                 try {
                     JSONObject jObj = new JSONObject(response);
-
-
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
@@ -678,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
-            @Override
+          /*  @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to response url
                 Map<String, String> params = new HashMap<String, String>();
@@ -688,9 +682,8 @@ public class MainActivity extends AppCompatActivity {
                 params.put("peftime", peftime);
                 params.put("evol", evol);
 
-
                 return params;
-            }
+            } */
 
         };
 
@@ -737,7 +730,6 @@ public class MainActivity extends AppCompatActivity {
                 params.put("fev1_fvc", fev1_fvc);
                 params.put("fev6", fev6);
                 params.put("fef2575", fef2575);
-
 
                 return params;
             }

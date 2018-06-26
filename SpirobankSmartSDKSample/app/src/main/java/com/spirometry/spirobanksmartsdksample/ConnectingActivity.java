@@ -116,7 +116,7 @@ public class ConnectingActivity extends AppCompatActivity{
         public void deviceDiscovered(DeviceInfo deviceInfo) {
             Log.d(TAG, "Some sort of device connected");
                     //I did this so that you don't reconnect with different device.
-                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                         discoveredDeviceInfo = deviceInfo;
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
@@ -133,8 +133,9 @@ public class ConnectingActivity extends AppCompatActivity{
                         tvConnecting.setVisibility(View.INVISIBLE);
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
                         tryAgainButton.setVisibility(View.VISIBLE);
-                        Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
-                        Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
+                        //Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
+                        Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
+                     //   Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -153,6 +154,8 @@ public class ConnectingActivity extends AppCompatActivity{
         }
         @Override
         public void deviceDisconnected(Device device) {
+            currDevice = null;
+            deviceManager.startDiscovery(ConnectingActivity.this);
             Log.d(TAG, "deviceDisconnected");
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);

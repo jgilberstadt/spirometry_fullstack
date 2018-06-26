@@ -1,13 +1,18 @@
 package com.spirometry.spirobanksmartsdksample;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +35,7 @@ import org.w3c.dom.Text;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
-public class LoginActivity extends AppCompatActivity implements Serializable  {
+public class LoginActivity extends AppCompatActivity implements Serializable {
 
     Button submitButton;
     EditText etPassword;
@@ -62,17 +66,46 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
     private MyParcelable mBundleData;
 
     private long mLastClickTime = 0;
-
+    private Dialog warningDialog;
+    private Dialog datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       // datePicker = new Dialog(this);
+      //  datePicker.setContentView(R.layout.warning_popup);
 
+        if(isConnectedViaWifi()){
+            Toast.makeText(this,"The Internet is Connected",Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this,"your internet is not connected bro",Toast.LENGTH_LONG).show();
+            buildDialog(LoginActivity.this).show();
+        }
+         /*   // dialog for ther eis no internet connection
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.warning_popup);
+            dialog.setTitle("Title...");
+            // set the custom dialog components - text, image and button
+            TextView text = (TextView) dialog.findViewById(R.id.txt_dia);
+            text.setText("The Internet is Not Connected");
+            Button yesBtn = (Button) dialog.findViewById(R.id.btn_yes);
+            Button noBtn = (Button) dialog.findViewById(R.id.btn_no);
+            // if button is clicked, close the custom dialog
+            yesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        } */
         mBundleData = new MyParcelable();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-            //set screen always ON
+        //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         submitButton = (Button) findViewById(R.id.submitButton);
@@ -89,10 +122,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         //set device manger callback
         deviceManager.setDeviceManagerCallback(deviceManagerCallback);
 
-
         //peter: this will look for specific user's device, at our case, it is Z008182
         deviceManager.startDiscovery(LoginActivity.this);
-
 
         new CountDownTimer(7000,1000){
             @Override
@@ -125,7 +156,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                 mLastClickTime = SystemClock.elapsedRealtime();
 
                 if(truePassword.equals(etPassword.getText().toString())) {
-
                     // do stuff
                     Intent intent = new Intent(LoginActivity.this, ConnectingActivity.class);
                     Log.d(TAG, "bundle-data" +mBundleData);
@@ -134,8 +164,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                     LoginActivity.this.startActivity(intent);
                     finish();
                     deviceManager.stopDiscovery();
-
-
                     //finish();
 
                 }else{
@@ -144,7 +172,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
                     //  Log.d(TAG, "TypedPassword" + typedPasswordOne);
                     // Log.d(TAG, "TruePassword" + stringTruePassword);
                 }
-
             }
         });
     }
@@ -155,25 +182,23 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
             Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
             //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
             //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-            if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+            if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 //if you find the device, then send the bluetooth information over.
                 Log.d(TAG, "When HardCode Device Matches: " + deviceInfo);
                 discoveredDeviceInfo = deviceInfo;
-               deviceInfoStringAddress = discoveredDeviceInfo.getAddress();
+                deviceInfoStringAddress = discoveredDeviceInfo.getAddress();
                 deviceInfoStringName = discoveredDeviceInfo.getName();
                 deviceInfoStringProtocol = discoveredDeviceInfo.getProtocol();
                 deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
                 deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName();
 
-
                 handleUpdateListScan.post(runUpdateListScan);// I need this in next activity to connect
                // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
-               deviceInfoArray.add(deviceInfoStringAddress);
+                deviceInfoArray.add(deviceInfoStringAddress);
                 deviceInfoArray.add(deviceInfoStringName);
                 deviceInfoArray.add(deviceInfoStringProtocol);
                 deviceInfoArray.add(deviceInfoStringSerialNumber);
                 deviceInfoArray.add(deviceInfoStringAdvertisementDataName);
-
 
                 mBundleData.setDeviceInfoArray(deviceInfoArray);
                 Log.d("deviceInfo", "Hello: " +discoveredDeviceInfo.toString());
@@ -239,7 +264,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         }
     };
 
-
     //This Call back need for new Android M runtime authorization
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -254,6 +278,12 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
         }
     }
 
+    // check whether WiFi is connected
+    private boolean isConnectedViaWifi() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi.isConnected();
+    }
 
     Handler handleUpdateListScan = new Handler();
     Runnable runUpdateListScan = new Runnable() {
@@ -265,5 +295,23 @@ public class LoginActivity extends AppCompatActivity implements Serializable  {
           //  handleUpdateInfo.post(runUpdateInfo);
         } //+++
     }; //여기에다가 listview를 에드하는듯 하다.
+
+    public AlertDialog.Builder buildDialog(Context c) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Wi-Fi Connection");
+        builder.setMessage("You need to Connect to Wi-Fi to Start Spirometer Test");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        return builder;
+
+    }
+
+
 
 }

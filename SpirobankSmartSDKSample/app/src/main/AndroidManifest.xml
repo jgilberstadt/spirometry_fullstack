@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spirometry.spirobanksmartsdksample">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,9 +16,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,8 @@
         <activity android:name=".ConnectingActivity" />
         <activity android:name=".TestingPageOne" />
         <activity android:name=".BlowActivity" />
-        <activity android:name=".TestCompleteActivity"></activity>
+        <activity android:name=".TestCompleteActivity" />
+        <activity android:name=".warning_popup"></activity>
     </application>
 
 </manifest>

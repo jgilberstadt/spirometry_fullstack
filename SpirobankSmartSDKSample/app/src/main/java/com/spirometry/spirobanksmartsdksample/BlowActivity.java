@@ -21,6 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
@@ -31,15 +35,30 @@ import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlowActivity extends AppCompatActivity {
 
+    String[][] blowDataStore = new String[6][4]; //6 data storing 4 String Values; +-
+
+   /* ArrayList<Patientsss> PatientBlowInfo = new ArrayList<>();
+    String pef;
+    String fev1;
+    String peftime;
+    String evol; */
+
+  //  Patientsss patientResults = new Patientsss(pef, fev1, peftime, evol); // something I can add in the arraylist
+
     private static final String TAG = BlowActivity.class.getSimpleName();
+    int whileLoop = 0;
 
     DeviceManager deviceManager;
     TextView blowDirection;
@@ -51,6 +70,7 @@ public class BlowActivity extends AppCompatActivity {
     Button buttonReBlow;
     TextView postingResult;
 
+    //This is a MyParcelable object that contains data / objects to be passed between activities
     private MyParcelable mBundleData;
 
     Patient patient;
@@ -75,10 +95,10 @@ public class BlowActivity extends AppCompatActivity {
     private int numBlows = 0;
     private int messageNumber = 6;
 
+    private String patient_id = "000000";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("HYUNRAE", "running oncreate");
-
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         arr = mBundleData.getDeviceInfo();
 
@@ -120,17 +140,13 @@ public class BlowActivity extends AppCompatActivity {
                 currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
                 buttonReBlow.setVisibility(View.INVISIBLE);
                 blowDirection.setVisibility(View.VISIBLE);
-
             }
         });
-
     }
 
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d("HYUNRAE", "running");
-
             Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
             //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
             //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
@@ -161,22 +177,21 @@ public class BlowActivity extends AppCompatActivity {
             }
         }
 
-
-
         @Override
         public void deviceConnected(Device device) {
             currDevice = device;
             Log.d(TAG, "Checkcheck");
-
             infoList.add("devConnected");
+            deviceManager.stopDiscovery();
+            currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
             // handleUpdateInfo.post(runUpdateInfo);
             //  if (dialogConnection != null) dialogConnection.dismiss();
-
         }
 
         @Override
         public void deviceDisconnected(Device device) {
             infoDisconnect = "Disconnected \n" + device.getDeviceInfo().getAdvertisementDataName();
+            deviceManager.startDiscovery(BlowActivity.this);
             currDevice = null;
             //  handleUpdateInfo.post(runUpdateInfo);
         }
@@ -206,7 +221,7 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void accessCoarseLocationPermissionRequired() {
-            //Android M runtime authorizzation
+            //Android M runtime authorization
             infoDisconnect = "Access Coarse Location Permission Required";
             //handleUpdateInfo.post(runUpdateInfo);
 
@@ -232,14 +247,84 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
-            Log.d("hyunrae", "b");
-            Log.d("hyunrae", "one more test added");
             numBlows++;
             messageNumber--;
+            int overallNumBlows = numBlows -1;
+
+            Log.d("hyunrae", "b");
+            Log.d("hyunrae", "one more test added");
+            String pef = String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100);
+            String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
+            String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
+            String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
+
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
-            Log.d("hyunrae", String.valueOf(numBlows));
-            Log.d("hyunrae", String.valueOf(numBlows == 6));
+            String [] resultArray = {pef, fev1, peftime, evol};
+            Log.d("overallNumBlows",  "" + overallNumBlows);
+            Log.d("resultArray",  "" + resultArray[0]);
+            Log.d("resultArray",  "" + resultArray[1]);
+            Log.d("resultArray",  "" + resultArray[2]);
+            Log.d("resultArray",  "" + resultArray[3]);
+
+
+            mBundleData.setBlowDataArray(overallNumBlows, resultArray);
+            Log.d("PETER", mBundleData.getBlowDataArray()[0][0]);
+
+
+/*
+            // String [][] multi = new String[6][4]; //6 data storing 4 String Values; +-
+            if(numBlows == 1) {
+                blowDataStore[0][0] = pef;
+                blowDataStore[0][1] = fev1;
+                blowDataStore[0][2] = peftime;
+                blowDataStore[0][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+
+            }
+            else if(numBlows == 2){
+                blowDataStore[1][0] = pef;
+                blowDataStore[1][1] = fev1;
+                blowDataStore[1][2] = peftime;
+                blowDataStore[1][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+            }
+            else if(numBlows == 3){
+                blowDataStore[2][0] = pef;
+                blowDataStore[2][1] = fev1;
+                blowDataStore[2][2] = peftime;
+                blowDataStore[2][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+            }
+            else if(numBlows == 4){
+                blowDataStore[3][0] = pef;
+                blowDataStore[3][1] = fev1;
+                blowDataStore[3][2] = peftime;
+                blowDataStore[3][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+            }
+            else if(numBlows == 5){
+                blowDataStore[4][0] = pef;
+                blowDataStore[4][1] = fev1;
+                blowDataStore[4][2] = peftime;
+                blowDataStore[4][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+            }
+            else if(numBlows == 6){
+                blowDataStore[5][0] = pef;
+                blowDataStore[5][1] = fev1;
+                blowDataStore[5][2] = peftime;
+                blowDataStore[5][3] = evol;
+                //mBundleData.setBlowDataArray(blowDataStore);
+            }  //+- */
+
+          //  mBundleData.setBlowDataArray(blowDataStore);
+
+            //patientResults = new Patientsss(pef, fev1, peftime, evol); // something I can add in the arraylist
+
+            //PatientBlowInfo.add(patientResults); //add each time I repeadt resultsUpdated
+
+        //    upload_PefFev1(pef, fev1, peftime, evol);
         }
 
         @Override
@@ -252,7 +337,7 @@ public class BlowActivity extends AppCompatActivity {
             if(numBlows >= 6){
                 Log.d(TAG, "numBlows =6");
                 currDevice.stopTest(getApplicationContext());
-                handlerPostingResult.post(runPostingResult);
+                handlerPostingResult2.post(runPostingResult2);
                 handlerVisibilityChange.post(runVisibilityChange);
             }else {
                 handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
@@ -264,6 +349,7 @@ public class BlowActivity extends AppCompatActivity {
             Log.d("hyunrae", "Test has been stopped");
             // here you want to display to the participant that he or she probably didn't blow so the test stopped.
             if (numBlows >=6) {
+       /*         mBundleData.setBlowDataArray(blowDataStore); */ //+-
                 handlerVisibilityChange.post(runVisibilityChange);
                 handlerPostingResult.post(runPostingResult);
                 currDevice.stopTest(getApplicationContext());
@@ -273,7 +359,6 @@ public class BlowActivity extends AppCompatActivity {
             }else {
                 handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
                 handlerButton.post(runButton);
-
             }
         }
 
@@ -301,7 +386,7 @@ public class BlowActivity extends AppCompatActivity {
             numberCount.setVisibility(View.INVISIBLE);
             numberOutOf.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.INVISIBLE);
-        } //+++
+        }
     };
 
     Handler handlerVisibilityChangeTwo = new Handler();
@@ -322,7 +407,7 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void run() {
             Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
-            //intent.putExtra("bundle-data", mBundleData);
+            intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);
             finish();
             // tvConnecting.setText();
@@ -344,9 +429,76 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void run() {
             postingResult.setVisibility(View.VISIBLE);
+        }
+    };
+
+    Handler handlerPostingResult2 = new Handler();
+    Runnable runPostingResult2= new Runnable() {
+        @Override
+        public void run() {
+         /*   for(int i =0; i<6; i++){
+                upload_PefFev1(PatientBlowInfo);
+            } */
+            postingResult.setVisibility(View.VISIBLE);
 
         }
     };
 
+   void upload_PefFev1(final String pef, final String fev1, final String peftime, final String evol) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_response";
+        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_PEFFEV1_UPLOAD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Instance Response: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+
+
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to response url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("patient_id", patient_id);
+                params.put("pef", pef);
+                params.put("fev1", fev1);
+                params.put("peftime", peftime);
+                params.put("evol", evol);
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
 }
+
+ /* class Patientsss {
+    String pef;
+    String fev1;
+    String peftime;
+    String evol;
+    Patientsss(String pef, String fev1, String peftime, String evol){
+        this.pef = pef;
+        this.fev1 = fev1;
+        this.peftime = peftime;
+        this.evol = evol;
+    }
+} */
+
+
