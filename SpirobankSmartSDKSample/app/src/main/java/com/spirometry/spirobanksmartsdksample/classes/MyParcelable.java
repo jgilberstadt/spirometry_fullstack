@@ -9,31 +9,31 @@ public class MyParcelable implements Parcelable {
     private int mData;
     //private DeviceInfo discoveredDeviceInfo;
     private ArrayList DeviceInfoArray;
+    private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
+
+
     public int describeContents() {
         return 0;
     }
 
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
-        out.writeList(DeviceInfoArray);
-    }
-
-   /* public void setDeviceInfo(DeviceInfo d){
-        discoveredDeviceInfo = d;
-    }
-
-    public DeviceInfo getDeviceInfo(){
-        return discoveredDeviceInfo;
-    } */
-
-
     public void setDeviceInfoArray(ArrayList arr){
         DeviceInfoArray = arr;
     }
-
     public ArrayList getDeviceInfo(){
         return DeviceInfoArray;
     }
+
+    public void setSurveyAnswers(int index, int value) { surveyAnswers[index] = value; }
+    public int getSurveyAnswers(int index) { return surveyAnswers[index]; }
+
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(mData);
+        out.writeList(DeviceInfoArray);
+        out.writeIntArray(surveyAnswers);
+    }
+
+
     public static final Creator<MyParcelable> CREATOR
             = new Creator<MyParcelable>() {
         public MyParcelable createFromParcel(Parcel in) {

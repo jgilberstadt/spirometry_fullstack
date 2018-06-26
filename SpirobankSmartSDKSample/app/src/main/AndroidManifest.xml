@@ -17,15 +17,28 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".ConnectingActivity" />
+        <activity android:name=".TestingPageOne"></activity>
+        <activity android:name=".BlowActivity"></activity>
+        <activity android:name=".Q1Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".ConnectingActivity" />
-        <activity android:name=".TestingPageOne"></activity>
-        <activity android:name=".BlowActivity"></activity>
+
+        <activity android:name=".Q2Activity"></activity>
+        <activity android:name=".Q3Activity"></activity>
+        <activity android:name=".Q4Activity"></activity>
+
 
     </application>
 

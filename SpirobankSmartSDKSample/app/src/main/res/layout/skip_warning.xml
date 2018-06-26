@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/custom_popup_background"
+    android:orientation="vertical"
+    android:padding="10sp">
+
+    <TextView
+        android:id="@+id/fixed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10sp"
+        android:text="Warning:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="44sp"
+        />
+    <TextView
+        android:id="@+id/txt_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:text="Are you sure you want to skip the question?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+
+        >
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="50dp"
+            android:clickable="true"
+            android:text="NO"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:clickable="true"
+            android:text="YES"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#000000"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

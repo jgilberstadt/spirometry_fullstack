@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="checkbox_active">#05eeff</color>
+    <color name="checkbox_inactive">#ffffff</color>
+    <color name="question_background">#d2d2e0</color>
 </resources>

@@ -6,4 +6,12 @@
         <item>9</item>
         <item>40</item>
     </string-array>
+
+    <string name="q1">A NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea? Yes or No \n\ni. If yes, check each symptom that is NEW:</string>
+
+    <string name="q2">2. A NEW cough, or cough now producing sputum/mucus, new wheezing or new shortness of breath? Yes or No \n\ni. If yes, check each symptom that is NEW: </string>
+
+    <string name="q3">3. NEW generalized weakness, lightheadedness or dizziness? Yes or No \n\ni. If yes, check each symptom that is NEW:</string>
+
+    <string name="q4">4. NEW shortness of breath at rest, on exertion or when lying flat, new shortness of breath that awakens you from sleep or new swelling in your feet or legs? Yes or No \n\ni. If yes, check each symptom that is NEW:</string>
 </resources>
