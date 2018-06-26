@@ -100,12 +100,12 @@ public class ConnectingActivity extends AppCompatActivity{
             public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
                 deviceManager.disconnect();
                 Log.d(TAG, "Start Discovery!");
-                deviceManager.startDiscovery(ConnectingActivity.this);
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
+                deviceManager.startDiscovery(ConnectingActivity.this);
                 handlerWait.post(runWait);
             }
         });
@@ -120,20 +120,20 @@ public class ConnectingActivity extends AppCompatActivity{
                         discoveredDeviceInfo = deviceInfo;
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
-                        progressBar.setVisibility(View.VISIBLE);
                         String success = "Success!";
                         tvConnecting.setText(success);
+                        progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
 
                     }
                     else{
-                        progressBar.setVisibility(View.INVISIBLE);
-                        tvConnecting.setVisibility(View.INVISIBLE);
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
                         tryAgainButton.setVisibility(View.VISIBLE);
-                        //Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        tvConnecting.setVisibility(View.INVISIBLE);
+                        Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
                         Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
                      //   Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
                     }
