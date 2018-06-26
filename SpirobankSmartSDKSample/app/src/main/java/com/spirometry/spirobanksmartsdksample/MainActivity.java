@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         //set screen always ON
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         myContext = this;
 
         setContentView(R.layout.activity_main);
+
+
         // Get patient id
         EditText pidText= (EditText) findViewById(R.id.patientid_text);
         patient_id = pidText.getText().toString();
@@ -126,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 ageSpinner.setSelection(2);
                 patient = new Patient(calendar.getTime(), 180, 80, Patient.GENDER_MALE, Patient.ETHNICITY_CAUCASIAN);
             }
-
         });
 
 
@@ -166,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
                 dialogConnection.setCancelable(false);
                 dialogConnection.setMessage("Connecting...");
                 dialogConnection.show();
-
                 deviceManager.connect(getApplicationContext(), deviceInfoArray.getItem(position));
             }
         });
@@ -316,7 +317,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         final String version2 = "2.6";
         ((TextView)findViewById(R.id.btnUpgrade2)).setText("Update device To " + version2);
         findViewById(R.id.btnUpgrade2).setOnClickListener(new View.OnClickListener() {
@@ -352,7 +352,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception ex){}
 
         this.setTitle(getString(R.string.app_name) + " " + version);
-
     }
 
 
@@ -378,7 +377,6 @@ public class MainActivity extends AppCompatActivity {
                 handleUpdateListScan.post(runUpdateListScan);
                /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
                 handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
-
             }else{
                 Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
                 //deviceManager.startDiscovery(MainActivity.this);
@@ -507,7 +505,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void testRestarted(Device device) {
+            Log.d(TAG, "a restart");
             volume=0;
+            currDevice.stopTest(getApplicationContext());
             predictedPercentageOfTarget = (float) 1;
             actualPercentageOfTarget = (float) 1;
             handleUpdateTest.post(runUpdateTest);
@@ -517,6 +517,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void testStopped(Device device) {
             volume=0;
+            Log.d(TAG, "a stopped");
+            currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
             predictedPercentageOfTarget = (float) 1;
             actualPercentageOfTarget = (float) 1;
             handleUpdateTest.post(runUpdateTest);
@@ -601,24 +603,37 @@ public class MainActivity extends AppCompatActivity {
             switch (qualityMsgCode) {
                 case Patient.QualityMessageAvoidCoughing:
                     qualityMsgString = "Avoid Coughing";
+                    Log.d(TAG, "aaaa");
                     break;
                 case Patient.QualityMessageBlowOutFaster:
                     qualityMsgString = "Blow Out Faster";
+                    Log.d(TAG, "bbbb");
+
                     break;
                 case Patient.QualityMessageDontEsitate:
                     qualityMsgString = "Don't Esitate";
+                    Log.d(TAG, "cccc");
+
                     break;
                 case Patient.QualityMessageDontStartTooEarly:
                     qualityMsgString = "Don't Start Too Early";
+                    Log.d(TAG, "dddd");
+
                     break;
                 case Patient.QualityMessageGoodBlow:
                     qualityMsgString = "Good Blow";
+                    Log.d(TAG, "eeee");
+
                     break;
                 case Patient.QualityMessageBlowOutLonger:
                     qualityMsgString = "Blow Out Longer";
+                    Log.d(TAG, "ffff");
+
                     break;
                 case Patient.QualityMessageAbruptEnd:
                     qualityMsgString = "Abrupt End";
+                    Log.d(TAG, "gggg");
+
                     break;
             }
         }
@@ -642,8 +657,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Instance Response: " + response.toString());
                 try {
                     JSONObject jObj = new JSONObject(response);
-
-
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
@@ -659,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
-            @Override
+          /*  @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to response url
                 Map<String, String> params = new HashMap<String, String>();
@@ -669,9 +682,8 @@ public class MainActivity extends AppCompatActivity {
                 params.put("peftime", peftime);
                 params.put("evol", evol);
 
-
                 return params;
-            }
+            } */
 
         };
 
@@ -718,7 +730,6 @@ public class MainActivity extends AppCompatActivity {
                 params.put("fev1_fvc", fev1_fvc);
                 params.put("fev6", fev6);
                 params.put("fef2575", fef2575);
-
 
                 return params;
             }

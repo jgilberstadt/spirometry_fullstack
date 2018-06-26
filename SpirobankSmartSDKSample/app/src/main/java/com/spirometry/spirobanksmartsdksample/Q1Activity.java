@@ -41,6 +41,9 @@ public class Q1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_q1);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
+        if (mBundleData == null) {
+            mBundleData = new MyParcelable();
+        }
 
 
         //for keeping the device awake on this activity
@@ -53,8 +56,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup5 = (RadioGroup) findViewById(R.id.q5_rg);
         radioGroup6 = (RadioGroup) findViewById(R.id.q6_rg);
         radioGroup7 = (RadioGroup) findViewById(R.id.q7_rg);
-
-        Log.d("Hyunrae", Integer.toString(radioGroup1.getHeight()));
 
 
         final ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
@@ -75,7 +76,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("HYUNRAE",  Integer.toString(findViewById(R.id.q1_layout).getHeight() ));
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -87,7 +87,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup3.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("HYUNRAE",  Integer.toString(radioGroup4.getBottom()));
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -99,8 +98,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup4.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("HYUNRAE",  Integer.toString(radioGroup5.getBottom()));
-
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -112,8 +109,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup5.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("HYUNRAE",  Integer.toString(radioGroup6.getBottom()));
-
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -125,8 +120,6 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup6.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d("HYUNRAE",  Integer.toString(radioGroup7.getBottom()));
-
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -159,7 +152,7 @@ public class Q1Activity extends AppCompatActivity {
                 mBundleData.setSurveyAnswers(i, -1);
             } else {
                 RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
-                if (radioButton.getText().toString() == "Yes") {
+                if (radioButton.getText().toString().equals("Yes")) {
                     mBundleData.setSurveyAnswers(i, 1);
                 } else {
                     mBundleData.setSurveyAnswers(i, 0);
@@ -183,7 +176,7 @@ public class Q1Activity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-
+            dialog.show();
             yesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -192,8 +185,12 @@ public class Q1Activity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        } else {
+            Intent intent = new Intent(Q1Activity.this, Q2Activity.class);
+            intent.putExtra("bundle-data", mBundleData);
+            startActivity(intent);
         }
-        }
+    }
 
     public void onClickBack (View v) {
         final Dialog dialog = new Dialog(this);
@@ -203,6 +200,7 @@ public class Q1Activity extends AppCompatActivity {
         TextView text = (TextView) dialog.findViewById(R.id.txt_dia);
         text.setText("You are at the beginning of the questionnaire");
         Button yesBtn = (Button) dialog.findViewById(R.id.btn_yes);
+        dialog.show();
 
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,8 +208,6 @@ public class Q1Activity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-
     }
 
 

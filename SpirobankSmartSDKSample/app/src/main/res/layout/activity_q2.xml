@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include
-            android:id="@+id/window_navigation"
-            layout="@layout/window_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
-            android:id="@+id/Q1text"
+            android:id="@+id/Q2text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:background="@color/question_background"
             android:gravity="left"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:padding="20dp"
             android:text="@string/q2"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="18sp" />
+            android:textSize="36sp" />
 
         <ScrollView
             android:id="@+id/answersSV"
             android:layout_width="match_parent"
-            android:background="#92efa9"
-            android:layout_below="@+id/Q1text"
+            android:layout_height="800dp"
             android:layout_above="@+id/window_navigation"
-            >
+            android:layout_below="@+id/Q2text"
+            android:background="#92efa9">
 
             <LinearLayout
                 android:id="@+id/LinRadio"
@@ -46,7 +46,7 @@
                 <LinearLayout
                     android:id="@+id/q1_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_checkbox_background"
                     android:orientation="vertical">
@@ -56,18 +56,18 @@
                     <!--android:layout_marginRight="8dp">-->
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="25sp"
+                        android:padding="20dp"
                         android:text="Cough"
-                        />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="40dp" />
 
                     <RadioGroup
                         android:id="@+id/q1_rg"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
@@ -75,31 +75,34 @@
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c11"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="Yes"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
 
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c12"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="No"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
                     </RadioGroup>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/q2_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_checkbox_background"
                     android:orientation="vertical">
@@ -109,18 +112,18 @@
                     <!--android:layout_marginRight="8dp">-->
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="20sp"
+                        android:padding="20dp"
                         android:text="Cough now producing sputum/mucus"
-                        />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="40dp" />
 
                     <RadioGroup
                         android:id="@+id/q2_rg"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
@@ -128,31 +131,33 @@
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c21"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="Yes"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
 
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c22"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="No"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
                     </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/q3_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_checkbox_background"
                     android:orientation="vertical">
@@ -162,18 +167,18 @@
                     <!--android:layout_marginRight="8dp">-->
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:padding="20dp"
+                        android:text="New Wheezing"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="25sp"
-                        android:text="New wheezing"
-                        />
+                        android:textSize="40dp" />
 
                     <RadioGroup
                         android:id="@+id/q3_rg"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
@@ -181,32 +186,33 @@
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c31"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="Yes"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
 
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c32"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="No"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
                     </RadioGroup>
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/q4_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_checkbox_background"
                     android:orientation="vertical">
@@ -216,18 +222,18 @@
                     <!--android:layout_marginRight="8dp">-->
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="25sp"
+                        android:padding="20dp"
                         android:text="New shortness of breath"
-                        />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textSize="40dp" />
 
                     <RadioGroup
                         android:id="@+id/q4_rg"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
@@ -235,24 +241,26 @@
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c41"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="Yes"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
 
                         <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
                             android:id="@+id/c42"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/custom_checkbox_background"
                             android:button="@null"
                             android:gravity="center"
+                            android:padding="20dp"
                             android:text="No"
-                            android:textSize="25sp" />
+                            android:textSize="40dp" />
                     </RadioGroup>
                 </LinearLayout>
 
@@ -261,6 +269,17 @@
 
         </ScrollView>
 
+        <include
+            android:id="@+id/window_navigation"
+            layout="@layout/window_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp" />
+
+
     </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

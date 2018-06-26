@@ -45,30 +45,6 @@ public class Q3Activity extends AppCompatActivity {
         radioGroup2 = (RadioGroup) findViewById(R.id.q2_rg);
         radioGroup3 = (RadioGroup) findViewById(R.id.q3_rg);
 
-        final ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
-        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                answersSV.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) radioGroup2.getBottom()).setDuration(2000).start();
-                    }
-                });
-            }
-        });
-        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                answersSV.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) radioGroup3.getBottom()).setDuration(2000).start();
-                    }
-                });
-            }
-        });
-
     }
 
     public void onClickNext (View v){
@@ -85,7 +61,7 @@ public class Q3Activity extends AppCompatActivity {
                 mBundleData.setSurveyAnswers(11 + i, -1);
             } else {
                 RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
-                if (radioButton.getText().toString() == "Yes") {
+                if (radioButton.getText().toString().equals("Yes")) {
                     mBundleData.setSurveyAnswers(11 + i, 1);
                 } else {
                     mBundleData.setSurveyAnswers(11 + i, 0);
@@ -109,7 +85,7 @@ public class Q3Activity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-
+            dialog.show();
             yesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,6 +94,10 @@ public class Q3Activity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        } else {
+            Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
+            intent.putExtra("bundle-data", mBundleData);
+            startActivity(intent);
         }
     }
 
@@ -135,7 +115,7 @@ public class Q3Activity extends AppCompatActivity {
                 mBundleData.setSurveyAnswers(11 + i, -1);
             } else {
                 RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
-                if (radioButton.getText().toString() == "Yes") {
+                if (radioButton.getText().toString().equals("Yes")) {
                     mBundleData.setSurveyAnswers(11 + i, 1);
                 } else {
                     mBundleData.setSurveyAnswers(11 + i, 0);
@@ -159,15 +139,20 @@ public class Q3Activity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
+            dialog.show();
 
             yesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
+                    Intent intent = new Intent(Q3Activity.this, Q2Activity.class);
                     intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);
                 }
             });
+        } else {
+            Intent intent = new Intent(Q3Activity.this, Q2Activity.class);
+            intent.putExtra("bundle-data", mBundleData);
+            startActivity(intent);
         }
 
 
