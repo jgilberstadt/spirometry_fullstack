@@ -318,13 +318,6 @@ public class BlowActivity extends AppCompatActivity {
                 //mBundleData.setBlowDataArray(blowDataStore);
             }  //+- */
 
-          //  mBundleData.setBlowDataArray(blowDataStore);
-
-            //patientResults = new Patientsss(pef, fev1, peftime, evol); // something I can add in the arraylist
-
-            //PatientBlowInfo.add(patientResults); //add each time I repeadt resultsUpdated
-
-        //    upload_PefFev1(pef, fev1, peftime, evol);
         }
 
         @Override

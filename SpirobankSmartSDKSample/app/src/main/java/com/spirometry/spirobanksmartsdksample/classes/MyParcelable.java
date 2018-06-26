@@ -11,8 +11,9 @@ public class MyParcelable implements Parcelable {
     private int mData;
     //private DeviceInfo discoveredDeviceInfo;
     private ArrayList DeviceInfoArray;
+    private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
     private String[][] blowDeviceResultArray;
-    //private int numberOfArrays;
+
     public int describeContents() {
         return 0;
     }
@@ -27,20 +28,19 @@ public class MyParcelable implements Parcelable {
             }
         }
 
+        for (int i = 0; i < 19; i++) {
+            out.writeInt(surveyAnswers[i]);
+        }
+
     }
-
-   /* public void setDeviceInfo(DeviceInfo d){
-        discoveredDeviceInfo = d;
-    }
-
-    public DeviceInfo getDeviceInfo(){
-        return discoveredDeviceInfo;
-    } */
-
 
     public void setDeviceInfoArray(ArrayList arr){
         DeviceInfoArray = arr;
     }
+
+    public void setSurveyAnswers(int index, int value) { surveyAnswers[index] = value; }
+    public int getSurveyAnswers(int index) { return surveyAnswers[index]; }
+
 
    public void setBlowDataArray(int index, String[] blowPoints){
         Log.d("PETER", blowPoints[0]);
@@ -79,12 +79,10 @@ public class MyParcelable implements Parcelable {
             }
         }
 
-     //  blowDeviceResultArray = in.readStringArray();
-//       for (int i =0; i < 6; i++) {
-//           in.readStringArray(blowDeviceResultArray[i]);
-//       }
-
-
+        surveyAnswers = new int[19];
+        for (int i = 0; i < 19; i++) {
+            surveyAnswers[i] = in.readInt();
+        }
     }
 
     public MyParcelable(){
@@ -93,6 +91,11 @@ public class MyParcelable implements Parcelable {
             for (int j = 0; j < 4; j++) {
                 blowDeviceResultArray[i][j] = "";
             }
+        }
+
+        surveyAnswers = new int[19];
+        for (int i = 0; i < 19; i++) {
+            surveyAnswers[i] = -1;  // default to unanswered
         }
     }
 }
