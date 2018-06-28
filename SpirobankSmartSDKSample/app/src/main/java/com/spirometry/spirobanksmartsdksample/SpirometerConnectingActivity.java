@@ -120,20 +120,20 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                         discoveredDeviceInfo = deviceInfo;
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
-                        progressBar.setVisibility(View.VISIBLE);
                         String success = "Success!";
                         tvConnecting.setText(success);
+                        progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
 
                     }
                     else{
-                        progressBar.setVisibility(View.INVISIBLE);
-                        tvConnecting.setVisibility(View.INVISIBLE);
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
                         tryAgainButton.setVisibility(View.VISIBLE);
-                        //Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        tvConnecting.setVisibility(View.INVISIBLE);
+                        Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
                         Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
                      //   Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
                     }
