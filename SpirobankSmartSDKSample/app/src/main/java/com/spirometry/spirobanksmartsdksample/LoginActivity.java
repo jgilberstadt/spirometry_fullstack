@@ -31,8 +31,6 @@ import com.spirometry.spirobanksmartsdk.DeviceManager;
 import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
-import org.w3c.dom.Text;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -160,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
                 if(truePassword.equals(etPassword.getText().toString())) {
                     // do stuff
-                    Intent intent = new Intent(LoginActivity.this, ConnectingActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, SpirometerConnectingActivity.class);
                     Log.d(TAG, "bundle-data" +mBundleData);
                     intent.putExtra("bundle-data", mBundleData);
                     //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);

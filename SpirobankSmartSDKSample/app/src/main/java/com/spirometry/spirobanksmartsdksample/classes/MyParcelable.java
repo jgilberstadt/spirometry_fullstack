@@ -13,6 +13,7 @@ public class MyParcelable implements Parcelable {
     private ArrayList DeviceInfoArray;
     private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
     private String[][] blowDeviceResultArray;
+    private int[] questionStates;
 
     public int describeContents() {
         return 0;
@@ -32,6 +33,10 @@ public class MyParcelable implements Parcelable {
             out.writeInt(surveyAnswers[i]);
         }
 
+        for (int i = 0; i < 4; i++) {
+            out.writeInt(questionStates[i]);
+        }
+
     }
 
     public void setDeviceInfoArray(ArrayList arr){
@@ -41,10 +46,10 @@ public class MyParcelable implements Parcelable {
     public void setSurveyAnswers(int index, int value) { surveyAnswers[index] = value; }
     public int getSurveyAnswers(int index) { return surveyAnswers[index]; }
 
+    public void setQuestionStates(int index, int value) { questionStates[index] = value; }
+    public int getQuestionStates(int index) { return questionStates[index]; }
 
    public void setBlowDataArray(int index, String[] blowPoints){
-        Log.d("PETER", blowPoints[0]);
-       //Log.d("setBlowDataArray",  "" + blowDeviceResultArray);
        blowDeviceResultArray[index] = blowPoints;
     }
 
@@ -83,6 +88,11 @@ public class MyParcelable implements Parcelable {
         for (int i = 0; i < 19; i++) {
             surveyAnswers[i] = in.readInt();
         }
+
+        questionStates = new int[4];
+        for (int i = 0; i < 4; i++) {
+            questionStates[i] = in.readInt();
+        }
     }
 
     public MyParcelable(){
@@ -96,6 +106,11 @@ public class MyParcelable implements Parcelable {
         surveyAnswers = new int[19];
         for (int i = 0; i < 19; i++) {
             surveyAnswers[i] = -1;  // default to unanswered
+        }
+
+        questionStates = new int[4];
+        for (int i = 0; i < 4; i++) {
+            questionStates[i] = -1;
         }
     }
 }
