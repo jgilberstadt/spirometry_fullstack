@@ -21,10 +21,10 @@ import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
 import java.util.ArrayList;
 
-public class ConnectingActivity extends AppCompatActivity{
+public class SpirometerConnectingActivity extends AppCompatActivity{
 
     private MyParcelable mBundleData;
-    private static final String TAG = ConnectingActivity.class.getSimpleName();
+    private static final String TAG = SpirometerConnectingActivity.class.getSimpleName();
     DeviceManager deviceManager;
     Device currDevice;
     ArrayList<String> arr;
@@ -52,7 +52,7 @@ public class ConnectingActivity extends AppCompatActivity{
         }, 4000); */
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connecting);
+        setContentView(R.layout.activity_spirometer_connecting);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -100,7 +100,7 @@ public class ConnectingActivity extends AppCompatActivity{
             public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
                 deviceManager.disconnect();
                 Log.d(TAG, "Start Discovery!");
-                deviceManager.startDiscovery(ConnectingActivity.this);
+                deviceManager.startDiscovery(SpirometerConnectingActivity.this);
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
@@ -155,7 +155,7 @@ public class ConnectingActivity extends AppCompatActivity{
         @Override
         public void deviceDisconnected(Device device) {
             currDevice = null;
-            deviceManager.startDiscovery(ConnectingActivity.this);
+            deviceManager.startDiscovery(SpirometerConnectingActivity.this);
             Log.d(TAG, "deviceDisconnected");
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
@@ -190,7 +190,7 @@ public class ConnectingActivity extends AppCompatActivity{
             //handleUpdateInfo.post(runUpdateInfo);
 
             //For this request you need to implement callback
-            deviceManager.requestCoarseLocationPermission(ConnectingActivity.this,PERMISSION_REQUEST_COARSE_LOCATION);
+            deviceManager.requestCoarseLocationPermission(SpirometerConnectingActivity.this,PERMISSION_REQUEST_COARSE_LOCATION);
         }
     };
 
@@ -207,9 +207,9 @@ public class ConnectingActivity extends AppCompatActivity{
     Runnable runUpdateInfo = new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(ConnectingActivity.this, BlowActivity.class);
+            Intent intent = new Intent(SpirometerConnectingActivity.this, BlowActivity.class);
             intent.putExtra("bundle-data", mBundleData);
-            ConnectingActivity.this.startActivity(intent);
+            SpirometerConnectingActivity.this.startActivity(intent);
             finish();
             // tvConnecting.setText();
          //   tvConnecting.setText(success);

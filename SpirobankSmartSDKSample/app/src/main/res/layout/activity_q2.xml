@@ -29,13 +29,54 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="36sp" />
 
+        <LinearLayout
+            android:id="@+id/initialRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/window_navigation"
+            android:layout_below="@+id/Q2text"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/initialRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="480dp"
+                android:layout_marginTop="150dp"
+                android:orientation="vertical">
+
+                <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                    android:id="@+id/c1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_checkbox_background"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="Yes"
+                    android:textSize="36sp" />
+
+                <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                    android:id="@+id/c2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_checkbox_background"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="No"
+                    android:textSize="36sp" />
+
+            </RadioGroup>
+        </LinearLayout>
+
         <ScrollView
             android:id="@+id/answersSV"
             android:layout_width="match_parent"
             android:layout_height="800dp"
             android:layout_above="@+id/window_navigation"
             android:layout_below="@+id/Q2text"
-            android:background="#92efa9">
+            android:background="#92efa9"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/LinRadio"
