@@ -16,28 +16,25 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".LoginActivity">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".ConnectingActivity" />
-        <activity android:name=".TestingPageOne"></activity>
-        <activity android:name=".BlowActivity"></activity>
-        <activity android:name=".Q1Activity">
+        <activity android:name=".TestingPageOne" />
+        <activity android:name=".BlowActivity" />
+        <activity android:name=".Q1Activity" />
+        <activity android:name=".Q2Activity" />
+        <activity android:name=".Q3Activity" />
+        <activity android:name=".Q4Activity" />
+        <activity android:name=".TestCompleteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+    <receiver android:name=".AlarmNotificationReciever">
 
-        <activity android:name=".Q2Activity"></activity>
-        <activity android:name=".Q3Activity"></activity>
-        <activity android:name=".Q4Activity"></activity>
-
-        <activity android:name=".TestCompleteActivity" />
-
+    </receiver>
     </application>
 
 </manifest>
