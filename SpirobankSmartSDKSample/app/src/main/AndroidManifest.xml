@@ -25,7 +25,7 @@
         <activity android:name=".BlowActivity"></activity>
 
         <activity android:name=".Q1Activity"></activity>
-        <activity android:name=".QuestionnaireInstructionActivity">
+        <activity android:name=".QuestionnaireInstructionActivity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />
