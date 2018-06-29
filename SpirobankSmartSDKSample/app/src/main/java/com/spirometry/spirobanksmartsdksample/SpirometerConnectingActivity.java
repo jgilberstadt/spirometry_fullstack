@@ -126,7 +126,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
-
                     }
                     else{
                         bluetoothNotConnected.setVisibility(View.VISIBLE);

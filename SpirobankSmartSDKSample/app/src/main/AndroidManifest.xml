@@ -24,7 +24,8 @@
         <activity android:name=".TestingPageOne"></activity>
         <activity android:name=".BlowActivity"></activity>
 
-        <activity android:name=".Q1Activity">
+        <activity android:name=".Q1Activity"></activity>
+        <activity android:name=".QuestionnaireInstructionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

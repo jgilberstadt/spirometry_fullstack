@@ -16,6 +16,8 @@ import android.view.WindowManager;
 
 import com.spirometry.spirobanksmartsdksample.classes.MyParcelable;
 
+import java.util.Random;
+
 
 public class PulseActivity extends AppCompatActivity {
 
@@ -30,8 +32,25 @@ public class PulseActivity extends AppCompatActivity {
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        mBundleData = getIntent().getParcelableExtra("bundle-data");
 
+        Random r = new Random();
+        int subRandom = r.nextInt(5);
+        int finalRandom = r.nextInt(subRandom);
 
+        Boolean administerSurvey = finalRandom == 0;
+
+        if (administerSurvey) {
+            // administer survey
+
+        } else {
+            // skip survey
+
+        }
+
+        Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
+        intent.putExtra("bundle-data", mBundleData);
+        startActivity(intent);
     }
 
 }
