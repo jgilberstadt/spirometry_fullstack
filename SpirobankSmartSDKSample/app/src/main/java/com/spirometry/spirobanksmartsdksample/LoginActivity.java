@@ -1,6 +1,7 @@
 package com.spirometry.spirobanksmartsdksample;
 
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     String fullInfo = "", result = "", infoDisconnect = "", strProgress ="";
     Context myContext;
     final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+
+   // NotificationManager notificationmanager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
     DeviceManager deviceManager;
     DeviceInfo discoveredDeviceInfo;
