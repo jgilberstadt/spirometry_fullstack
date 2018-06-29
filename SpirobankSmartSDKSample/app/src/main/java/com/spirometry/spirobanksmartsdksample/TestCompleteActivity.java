@@ -120,6 +120,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                             dialog.show();
                 Log.d(TAG, "When Clicked Ok");
 
+
             }
         });
 
@@ -168,7 +169,12 @@ public class TestCompleteActivity extends AppCompatActivity {
                         int pmHours =13;
 
                         if(selectedHour <13) {
-                            timeRepresent.setText(selectedHour + ":" + selectedMinute + " " + am);
+                           // timeRepresent.setText(selectedHour + ":" + selectedMinute + " " + am);
+                            if(selectedMinute <10){
+                                timeRepresent.setText(selectedHour + ":" + "0"+ selectedMinute + " " + am);
+                            }else {
+                                timeRepresent.setText(selectedHour + ":" + selectedMinute + " " + am);
+                            }
                         }else{
                             if(selectedHour == 13){
                                 pmHours =1;
@@ -201,6 +207,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                                 timeRepresent.setText(pmHours + ":" + selectedMinute + " " + pm);
                             }
                         }
+
                         finalDate.set(year, month, dayOfMonth, selectedHour,selectedMinute);
                         Log.d(TAG, "onTimeSet: " + selectedHour + selectedMinute);
                     }
@@ -247,6 +254,9 @@ public class TestCompleteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startAlarm(true);
+                Intent intent = new Intent(TestCompleteActivity.this, FinalPageActivity.class);
+                //intent.putExtra("bundle-data", mBundleData);
+                TestCompleteActivity.this.startActivity(intent);
             }
         });
     }
