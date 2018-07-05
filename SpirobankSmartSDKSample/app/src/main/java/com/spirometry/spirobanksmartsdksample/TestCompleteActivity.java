@@ -36,7 +36,6 @@ public class TestCompleteActivity extends AppCompatActivity {
     String[][] arraya; //6 data storing 4 String Values; +-
     private MyParcelable mBundleData;
     private static final String TAG = BlowActivity.class.getSimpleName();
-    TextView testingComplete;
     TextView nextAppointment;
     TextView changeAppointment;
     TextView dateRepresent;
@@ -59,18 +58,17 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         mBundleData = getIntent().getParcelableExtra("bundle-data"); // we don't need to get an array, we just need to get the whole thing which is just
 
-        testingComplete = (TextView) findViewById(R.id.testingComplete);
         nextAppointment = (TextView) findViewById(R.id.nextAppointment);
         dateRepresent = (TextView) findViewById(R.id.dateRepresent);
         timeRepresent = (TextView) findViewById(R.id.timeRepresent);
         dateButton = (Button) findViewById(R.id.dateButton);
         changeAppointment = (TextView) findViewById(R.id.changeAppointment);
 
-        nextAppointment.setVisibility(View.INVISIBLE);
-        dateButton.setVisibility(View.INVISIBLE);
-        dateRepresent.setVisibility(View.INVISIBLE);
-        timeRepresent.setVisibility(View.INVISIBLE);
-        changeAppointment.setVisibility(View.INVISIBLE);
+   /*     nextAppointment.setVisibility(View.VISIBLE);
+        dateButton.setVisibility(View.VISIBLE);
+        dateRepresent.setVisibility(View.VISIBLE);
+        timeRepresent.setVisibility(View.VISIBLE);
+        changeAppointment.setVisibility(View.VISIBLE); */
 
         //Get current date time with Calendar()
         Calendar weekAddedCal = Calendar.getInstance();
@@ -217,7 +215,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             }
         };
 
-        new Handler().postDelayed(new Runnable() {
+    /*    new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 nextAppointment.setVisibility(View.VISIBLE);
@@ -227,7 +225,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 timeRepresent.setVisibility(View.VISIBLE);
                 testingComplete.setVisibility(View.GONE);
             }
-        }, 4000);
+        }, 4000); */
 
 /*        arraya = mBundleData.getBlowDataArray();
 
@@ -236,8 +234,6 @@ public class TestCompleteActivity extends AppCompatActivity {
         Log.d(TAG, "result blow3" + arraya[1][2]);
         Log.d(TAG, "result blow4" + arraya[2][1]);
         Log.d(TAG, "result blow5" + arraya[3][3]);  */
-
-
 
       // This is notificaiton design ++need this
      /*   NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(TestCompleteActivity.this )
@@ -257,6 +253,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 Intent intent = new Intent(TestCompleteActivity.this, FinalPageActivity.class);
                 //intent.putExtra("bundle-data", mBundleData);
                 TestCompleteActivity.this.startActivity(intent);
+                finish();
             }
         });
     }

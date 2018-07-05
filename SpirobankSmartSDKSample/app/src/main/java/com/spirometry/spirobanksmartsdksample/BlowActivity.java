@@ -267,56 +267,9 @@ public class BlowActivity extends AppCompatActivity {
             Log.d("resultArray",  "" + resultArray[2]);
             Log.d("resultArray",  "" + resultArray[3]);
 
-
             mBundleData.setBlowDataArray(overallNumBlows, resultArray);
             Log.d("PETER", mBundleData.getBlowDataArray()[0][0]);
 
-
-/*
-            // String [][] multi = new String[6][4]; //6 data storing 4 String Values; +-
-            if(numBlows == 1) {
-                blowDataStore[0][0] = pef;
-                blowDataStore[0][1] = fev1;
-                blowDataStore[0][2] = peftime;
-                blowDataStore[0][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-
-            }
-            else if(numBlows == 2){
-                blowDataStore[1][0] = pef;
-                blowDataStore[1][1] = fev1;
-                blowDataStore[1][2] = peftime;
-                blowDataStore[1][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-            }
-            else if(numBlows == 3){
-                blowDataStore[2][0] = pef;
-                blowDataStore[2][1] = fev1;
-                blowDataStore[2][2] = peftime;
-                blowDataStore[2][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-            }
-            else if(numBlows == 4){
-                blowDataStore[3][0] = pef;
-                blowDataStore[3][1] = fev1;
-                blowDataStore[3][2] = peftime;
-                blowDataStore[3][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-            }
-            else if(numBlows == 5){
-                blowDataStore[4][0] = pef;
-                blowDataStore[4][1] = fev1;
-                blowDataStore[4][2] = peftime;
-                blowDataStore[4][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-            }
-            else if(numBlows == 6){
-                blowDataStore[5][0] = pef;
-                blowDataStore[5][1] = fev1;
-                blowDataStore[5][2] = peftime;
-                blowDataStore[5][3] = evol;
-                //mBundleData.setBlowDataArray(blowDataStore);
-            }  //+- */
 
         }
 
@@ -330,8 +283,9 @@ public class BlowActivity extends AppCompatActivity {
             if(numBlows >= 6){
                 Log.d(TAG, "numBlows =6");
                 currDevice.stopTest(getApplicationContext());
-                handlerPostingResult2.post(runPostingResult2);
-                handlerVisibilityChange.post(runVisibilityChange);
+             //   handlerPostingResult2.post(runPostingResult2);
+              //  handlerVisibilityChange.post(runVisibilityChange);
+                handleIntentToTestComplete.post(runIntentToTestComplete);
             }else {
                 handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
             }
@@ -343,10 +297,8 @@ public class BlowActivity extends AppCompatActivity {
             // here you want to display to the participant that he or she probably didn't blow so the test stopped.
             if (numBlows >=6) {
        /*         mBundleData.setBlowDataArray(blowDataStore); */ //+-
-                handlerVisibilityChange.post(runVisibilityChange);
-                handlerPostingResult.post(runPostingResult);
-                currDevice.stopTest(getApplicationContext());
-                handleIntentToTestComplete.post(runIntentToTestComplete);
+            //    handlerVisibilityChange.post(runVisibilityChange);
+             //   handlerPostingResult.post(runPostingResult);
                 Log.d("hyunrae", "test stopped and no more to do");
                 // here you want to display to the participant to blow again
             }else {
@@ -399,7 +351,7 @@ public class BlowActivity extends AppCompatActivity {
     Runnable runIntentToTestComplete= new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
+            Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
             intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);
             finish();
@@ -429,9 +381,6 @@ public class BlowActivity extends AppCompatActivity {
     Runnable runPostingResult2= new Runnable() {
         @Override
         public void run() {
-         /*   for(int i =0; i<6; i++){
-                upload_PefFev1(PatientBlowInfo);
-            } */
             postingResult.setVisibility(View.VISIBLE);
 
         }

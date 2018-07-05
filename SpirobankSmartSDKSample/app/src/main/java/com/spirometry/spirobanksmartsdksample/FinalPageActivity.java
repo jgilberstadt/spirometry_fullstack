@@ -26,6 +26,6 @@ public class FinalPageActivity extends AppCompatActivity {
                 System.exit(0);
 
             }
-        }, 10000);
+        }, 6000);
     }
 }
