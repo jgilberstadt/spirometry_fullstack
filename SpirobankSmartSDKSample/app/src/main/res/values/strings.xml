@@ -7,6 +7,15 @@
         <item>40</item>
     </string-array>
 
+
+    <string name="login_message">Welcome to the Home Spirometry study. Please enter the password to proceed. </string>
+
+    <string name="incorrect_password">If you do not remember the password, please contact (911) 911-9111 for the correct password</string>
+
+    <string name="spirometer_not_connected" >The spirometer is not connected.\n\nPlease make sure that the spirometer has sufficient battery and is turned on. </string>
+
+    <string name="enable_bluetooth"> Please enable bluetooth on the tablet to connect to the spirometer and proceed with the test</string>
+
     <string name="questionnaire_instruction">Please complete a short survey.\n\nYou will be asked whether you have any new symptoms. \n\nWhen given a single YES or NO option whether you have any of the listed symptoms, you will be presented with a YES OR NO option for each of the symptoms. Please select YES or NO for each of the symptoms. </string>
 
     <string name="q1">1. A NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea? Yes or No</string>

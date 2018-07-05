@@ -13,14 +13,23 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
+
+        <include
+            layout="@layout/window_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/Q4text"
+            />
 
         <TextView
             android:id="@+id/Q4text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="91dp"
             android:layout_weight="1"
             android:background="@color/question_background"
             android:gravity="left"
@@ -41,7 +50,6 @@
                 android:id="@+id/initialRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
-                android:layout_marginTop="150dp"
                 android:orientation="vertical">
 
                 <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
