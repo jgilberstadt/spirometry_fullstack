@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
             String pef = String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100);
             String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
-            String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
+            String  evol = String.valueOf(resultsPefFev1.geteVol_mL() );
 
             upload_PefFev1(pef, fev1, peftime, evol);
 
@@ -672,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
-          /*  @Override
+            @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to response url
                 Map<String, String> params = new HashMap<String, String>();
@@ -683,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("evol", evol);
 
                 return params;
-            } */
+            }
 
         };
 

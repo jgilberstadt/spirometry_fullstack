@@ -9,11 +9,11 @@
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="348dp"
-        android:layout_height="147dp"
+        android:layout_height="80dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="216dp"
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="textPassword"
@@ -29,11 +29,12 @@
         android:layout_height="133dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="28dp"
         android:text="Submit"
         android:textSize="60sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
@@ -75,5 +76,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spiroCheck" />
+
+    <TextView
+        android:id="@+id/contactHospital"
+        android:layout_width="432dp"
+        android:layout_height="163dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Please Contact         911) 911-9111 for Correct Password"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
 
 </android.support.constraint.ConstraintLayout>

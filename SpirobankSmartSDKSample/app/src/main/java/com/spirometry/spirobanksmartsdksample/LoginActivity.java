@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     EditText etPassword;
     ImageView spirometerImage;
     TextView spiroCheck;
+    TextView contactHospital;
     ProgressBar spiroProgressBar;
     String truePassword = "123456";
 
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     private long mLastClickTime = 0;
     private Dialog warningDialog;
     private Dialog datePicker;
+    int correctPasswordCheck = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         spirometerImage.setImageResource(imageResource);
         spiroCheck = (TextView) findViewById(R.id.spiroCheck);
         spiroProgressBar = (ProgressBar) findViewById(R.id.spiroProgressBar);
+        contactHospital = (TextView) findViewById(R.id.contactHospital);
 
         //get device manager instance
         deviceManager = DeviceManager.getInstance(this);
@@ -125,6 +128,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
         //peter: this will look for specific user's device, at our case, it is Z008182
         deviceManager.startDiscovery(LoginActivity.this);
+
+        contactHospital.setVisibility(View.INVISIBLE);
 
         new CountDownTimer(7000,1000){
             @Override
@@ -169,7 +174,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_LONG).show();
-
+                    correctPasswordCheck++;
+                    if(correctPasswordCheck >=4){
+                        contactHospital.setVisibility(View.VISIBLE);
+                    }
                     //  Log.d(TAG, "TypedPassword" + typedPasswordOne);
                     // Log.d(TAG, "TruePassword" + stringTruePassword);
                 }

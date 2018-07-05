@@ -100,12 +100,12 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
                 deviceManager.disconnect();
                 Log.d(TAG, "Start Discovery!");
-                deviceManager.startDiscovery(SpirometerConnectingActivity.this);
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 bluetoothNotConnected.setVisibility(View.INVISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
+                deviceManager.startDiscovery(SpirometerConnectingActivity.this);
                 handlerWait.post(runWait);
             }
         });
@@ -118,14 +118,15 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                     //I did this so that you don't reconnect with different device.
                     if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                         discoveredDeviceInfo = deviceInfo;
-                        handleUpdateListScan.post(runUpdateListScan);
-                        Log.d(TAG, "Your Specific Device Connected");
                         String success = "Success!";
                         tvConnecting.setText(success);
                         progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
                         bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
+                        handleUpdateListScan.post(runUpdateListScan);
+                        Log.d(TAG, "Your Specific Device Connected");
+
                     }
                     else{
                         bluetoothNotConnected.setVisibility(View.VISIBLE);
