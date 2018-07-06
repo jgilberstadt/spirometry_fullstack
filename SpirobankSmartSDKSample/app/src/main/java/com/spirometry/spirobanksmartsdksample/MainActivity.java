@@ -241,7 +241,10 @@ public class MainActivity extends AppCompatActivity {
 
                     volume=0;
                     //EndOfTestTimeOUT from 15 to 120 sec - Default = 15 sec
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+                    Log.d(TAG, "1 fvc: ");
                     currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                    Log.d(TAG, "1 pefFev1: ");
                     findViewById(R.id.btnStartFvc).setEnabled(false);
                     findViewById(R.id.btnStartPefFev1).setEnabled(false);
 
@@ -258,7 +261,12 @@ public class MainActivity extends AppCompatActivity {
 
                     volume=0;
                     //EndOfTestTimeOUT from 15 to 120 sec - Default = 15 sec
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)80);
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+                    Log.d(TAG, "1 fvc: ");
+                    currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                    Log.d(TAG, "1 pefFev1: ");
+
+                    //    currDevice.startTest;
                     findViewById(R.id.btnStartFvc).setEnabled(false);
                     findViewById(R.id.btnStartPefFev1).setEnabled(false);
                 }
@@ -370,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
           Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
     //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
     //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-            if(deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+            if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 //if you find the device, then send the bluetooth information over.
                 Log.d(TAG, "bro: " + deviceInfo);
                 discoveredDeviceInfo = deviceInfo;
@@ -477,7 +485,9 @@ public class MainActivity extends AppCompatActivity {
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
             String  evol = String.valueOf(resultsPefFev1.geteVol_mL() );
 
-            upload_PefFev1(pef, fev1, peftime, evol);
+            Log.d(TAG, "resultsUpdated for peffev1: " + pef + fev1);
+
+          //  upload_PefFev1(pef, fev1, peftime, evol);
 
         }
         @Override
@@ -499,7 +509,9 @@ public class MainActivity extends AppCompatActivity {
             String fev6 = String.valueOf(resultsFvc.getFev6_cl() / (float) 100);
             String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
 
-            upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
+            Log.d(TAG, "resultsUpdated for fvc: " + pef + fvc);
+
+         //   upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
 
         }
 
