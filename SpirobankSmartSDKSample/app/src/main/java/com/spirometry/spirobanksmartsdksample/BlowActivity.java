@@ -452,7 +452,6 @@ public class BlowActivity extends AppCompatActivity {
 
 }
 
-<<<<<<< HEAD
 
 
  /* class Patientsss {
@@ -467,7 +466,4 @@ public class BlowActivity extends AppCompatActivity {
         this.evol = evol;
     }
 } */
-
-=======
->>>>>>> 919e0fc91f50487b530bc46e8c66599d0242062b
 
