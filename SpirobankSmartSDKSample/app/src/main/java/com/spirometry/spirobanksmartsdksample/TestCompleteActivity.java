@@ -42,7 +42,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_complete);
 
-        mBundleData = getIntent().getParcelableExtra("bundle-data"); // we don't need to get an array, we just need to get the whole thing which is just
+        mBundleData = getIntent().getParcelableExtra("bundle-data");
 
         nextAppointment = (TextView) findViewById(R.id.nextAppointment);
         dateRepresent = (TextView) findViewById(R.id.dateRepresent);
@@ -102,7 +102,12 @@ public class TestCompleteActivity extends AppCompatActivity {
                         } else {
                             AM_PM = "PM";
                         }
-                        timeRepresent.setText(hours[timePicker.getCurrentHour()] + ":" + timePicker.getCurrentMinute() + " " + AM_PM);
+                        int minute = timePicker.getCurrentMinute();
+                        String minuteString;
+                        if (minute < 10) {
+                            minuteString = "0" + minute;
+                        } else { minuteString = Integer.toString(minute); }
+                        timeRepresent.setText(hours[timePicker.getCurrentHour()] + ":" + minuteString + " " + AM_PM);
                         finalDate.clear();
                         finalDate.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
                         dialog.dismiss();
