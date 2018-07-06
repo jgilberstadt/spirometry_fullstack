@@ -6,15 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".SpirometerConnectingActivity">
 
+    <include
+        layout="@layout/window_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
     <TextView
         android:id="@+id/tvConnecting"
-        android:layout_width="424dp"
+        android:layout_width="match_parent"
         android:layout_height="105dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="300dp"
         android:text="Connecting"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="80sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,11 +46,11 @@
 
     <Button
         android:id="@+id/tryAgainButton"
-        android:layout_width="270dp"
-        android:layout_height="105dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_marginBottom="220dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         android:text="Re-Connect"
         android:textSize="40sp"
         android:visibility="invisible"
@@ -51,33 +59,21 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/bluetoothNotConnected"
-        android:layout_width="373dp"
-        android:layout_height="176dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="140dp"
-        android:text="Bluetooth Not Connected"
-        android:textAlignment="center"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/directionTextView"
-        android:layout_width="349dp"
-        android:layout_height="174dp"
-        android:layout_marginBottom="280dp"
-        android:text="Confirm Spirometer and has battery life. "
+        android:layout_width="match_parent"
+        android:layout_height="338dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/spirometer_not_connected"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

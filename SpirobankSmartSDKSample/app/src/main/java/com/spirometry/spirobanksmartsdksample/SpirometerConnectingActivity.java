@@ -1,5 +1,6 @@
 package com.spirometry.spirobanksmartsdksample;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
     //ArrayList<String> infoList = new ArrayList<>();
     TextView tvConnecting;
     ProgressBar progressBar;
-    TextView bluetoothNotConnected;
     TextView directionTextView;
     Button tryAgainButton;
     DeviceInfo discoveredDeviceInfo;
@@ -40,16 +40,11 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
     String localInfo = "";
     int numberOfDisconnect = 0;
     String fullInfo = "", result = "", infoDisconnect = "", strProgress ="";
-
+    BluetoothAdapter bluetoothadapter;
+    Intent bluetoothIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-    /*    new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            }
-        }, 4000); */
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spirometer_connecting);
@@ -59,7 +54,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
         tvConnecting = (TextView) findViewById(R.id.tvConnecting);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        bluetoothNotConnected = (TextView) findViewById(R.id.bluetoothNotConnected);
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
         directionTextView = (TextView) findViewById(R.id.directionTextView);
 
@@ -73,40 +67,75 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
         arr = mBundleData.getDeviceInfo();
 
-        if(arr != null && !arr.isEmpty()) {
-             selectedDeviceInfo = new DeviceInfo(arr.get(0), arr.get(1), arr.get(2), arr.get(3), arr.get(4));
-             Log.d("deviceInfo", "Device Info1: " + selectedDeviceInfo.toString());
-             progressBar.setVisibility(View.VISIBLE);
-             tvConnecting.setVisibility(View.VISIBLE);
-             bluetoothNotConnected.setVisibility(View.INVISIBLE);
-             tryAgainButton.setVisibility(View.INVISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    deviceManager.connect(getApplicationContext(), selectedDeviceInfo);
-                }
-            }, 3000);
-            }else{
-             Log.d(TAG,"There is no device info sent from the loginActivity, so it is an empty array");
-             progressBar.setVisibility(View.INVISIBLE);
-             tvConnecting.setVisibility(View.INVISIBLE);
-             bluetoothNotConnected.setVisibility(View.VISIBLE);
-             tryAgainButton.setVisibility(View.VISIBLE);
-             Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
-         }
+        bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (!bluetoothadapter.isEnabled()) {
+            bluetoothEnableRequest();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        tvConnecting.setVisibility(View.VISIBLE);
+        tryAgainButton.setVisibility(View.INVISIBLE);
+        deviceManager.startDiscovery(SpirometerConnectingActivity.this);
+        handlerWait.post(runWait);
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {//버튼 클릭했을떄 동작하는 코드를 여기에 넣는다.
+            public void onClick(View v) {
+                if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+                    bluetoothEnableRequest();
+                    return;
+                }
                 deviceManager.disconnect();
                 Log.d(TAG, "Start Discovery!");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
-                bluetoothNotConnected.setVisibility(View.INVISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
                 deviceManager.startDiscovery(SpirometerConnectingActivity.this);
                 handlerWait.post(runWait);
+            }
+        });
+    }
+
+    public void bluetoothEnableRequest() {
+        tvConnecting.setVisibility(View.INVISIBLE);
+        directionTextView.setText(R.string.enable_bluetooth);
+        directionTextView.setVisibility(View.VISIBLE);
+        tryAgainButton.setText("Enable Bluetooth");
+        tryAgainButton.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(bluetoothIntent, 1);
+                deviceManager.disconnect();
+                Log.d(TAG, "Start Discovery!");
+                progressBar.setVisibility(View.VISIBLE);
+                tvConnecting.setVisibility(View.VISIBLE);
+                directionTextView.setVisibility(View.INVISIBLE);
+                tryAgainButton.setVisibility(View.INVISIBLE);
+                deviceManager.startDiscovery(SpirometerConnectingActivity.this);
+                handlerWait.post(runWait);
+                tryAgainButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+                            bluetoothEnableRequest();
+                            return;
+                        }
+                        deviceManager.disconnect();
+                        Log.d(TAG, "Start Discovery!");
+                        progressBar.setVisibility(View.VISIBLE);
+                        tvConnecting.setVisibility(View.VISIBLE);
+                        directionTextView.setVisibility(View.INVISIBLE);
+                        tryAgainButton.setVisibility(View.INVISIBLE);
+                        deviceManager.startDiscovery(SpirometerConnectingActivity.this);
+                        handlerWait.post(runWait);
+                    }
+                });
             }
         });
     }
@@ -122,21 +151,12 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                         tvConnecting.setText(success);
                         progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
-                        bluetoothNotConnected.setVisibility(View.INVISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
 
                     }
-                    else{
-                        bluetoothNotConnected.setVisibility(View.VISIBLE);
-                        tryAgainButton.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        tvConnecting.setVisibility(View.INVISIBLE);
-                        Log.d(TAG, "Connection Worked, but this is not your spiro device" + deviceInfo.getAdvertisementDataName());
-                        Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
-                     //   Toast.makeText(getApplicationContext(), "Connection Worked, but this is not your spiro device", Toast.LENGTH_LONG).show();
-                    }
+
                 }
 
 
@@ -146,11 +166,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             localInfo = "connected";
             handleUpdateInfo.post(runUpdateInfo);
             Log.d(TAG, "Device Connected");
-            //String finish = "Success";
-            //tvConnecting.setText(finish); // this was a bug I couldn't find, I still don't know about this logic
 
-            //infoList.add("devConnected");
-            //currDevice.setDeviceCallback(deviceCallback);
         }
         @Override
         public void deviceDisconnected(Device device) {
@@ -160,8 +176,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.VISIBLE);
-            bluetoothNotConnected.setVisibility(View.VISIBLE);
-
 
         }
         @Override
@@ -169,7 +183,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             currDevice=null;
             Log.d(TAG, "did it not work?: we found the address for your device, but it can't connect" + currDevice);
             tryAgainButton.setVisibility(View.VISIBLE);
-            bluetoothNotConnected.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
 
@@ -215,6 +228,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
          //   tvConnecting.setText(success);
         }
     };
+
     Handler handlerWait = new Handler();
     Runnable runWait = new Runnable() {
         @Override
@@ -228,11 +242,12 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 Log.d(TAG, "the device is connect, nothing to show");
                 handleUpdateInfo.post(runUpdateInfo);
             }else {
-                progressBar.setVisibility(View.INVISIBLE);
                 tvConnecting.setVisibility(View.INVISIBLE);
-                bluetoothNotConnected.setVisibility(View.VISIBLE);
+                tryAgainButton.setText("RE-CONNECT");
                 tryAgainButton.setVisibility(View.VISIBLE);
+                directionTextView.setText(R.string.spirometer_not_connected);
                 directionTextView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
                 if(numberOfDisconnect >=3){
                     directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
                     directionTextView.setTextColor(Color.parseColor("#0000FF"));
@@ -243,7 +258,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
             }
         }
-    }, 9000);
+    }, 5000);
         }
     };
 

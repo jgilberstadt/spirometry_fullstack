@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -74,35 +76,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       // datePicker = new Dialog(this);
-      //  datePicker.setContentView(R.layout.warning_popup);
 
-        if(isConnectedViaWifi()){
-            Toast.makeText(this,"The Internet is Connected",Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(this,"your internet is not connected bro",Toast.LENGTH_LONG).show();
-            buildDialog(LoginActivity.this).show();
-        }
-         /*   // dialog for ther eis no internet connection
-            final Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.warning_popup);
-            dialog.setTitle("Title...");
-            // set the custom dialog components - text, image and button
-            TextView text = (TextView) dialog.findViewById(R.id.txt_dia);
-            text.setText("The Internet is Not Connected");
-            Button yesBtn = (Button) dialog.findViewById(R.id.btn_yes);
-            Button noBtn = (Button) dialog.findViewById(R.id.btn_no);
-            // if button is clicked, close the custom dialog
-            yesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
-        } */
         mBundleData = new MyParcelable();
 
         super.onCreate(savedInstanceState);
@@ -120,45 +94,38 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         spiroProgressBar = (ProgressBar) findViewById(R.id.spiroProgressBar);
         contactHospital = (TextView) findViewById(R.id.contactHospital);
 
-        //get device manager instance
-        deviceManager = DeviceManager.getInstance(this);
-
-        //set device manger callback
-        deviceManager.setDeviceManagerCallback(deviceManagerCallback);
-
-        //peter: this will look for specific user's device, at our case, it is Z008182
-        deviceManager.startDiscovery(LoginActivity.this);
-
         contactHospital.setVisibility(View.INVISIBLE);
 
-        new CountDownTimer(7000,1000){
-            @Override
-            public void onTick(long millisUntilFinished){
-                submitButton.setVisibility(View.INVISIBLE);
-                etPassword.setVisibility(View.INVISIBLE);
-                spirometerImage.setVisibility(View.VISIBLE);
-                spiroCheck.setVisibility(View.VISIBLE);
-                spiroProgressBar.setVisibility(View.VISIBLE);
-                }
-            @Override
-            public void onFinish(){
-                //set the new Content of your activity
-                submitButton.setVisibility(View.VISIBLE);
-                etPassword.setVisibility(View.VISIBLE);
-                spirometerImage.setVisibility(View.GONE);
-                spiroCheck.setVisibility(View.GONE);
-                spiroProgressBar.setVisibility(View.GONE);
-            }
-        }.start();
+//        new CountDownTimer(7000,1000){
+//            @Override
+//            public void onTick(long millisUntilFinished){
+//                submitButton.setVisibility(View.INVISIBLE);
+//                etPassword.setVisibility(View.INVISIBLE);
+//                spirometerImage.setVisibility(View.VISIBLE);
+//                spiroCheck.setVisibility(View.VISIBLE);
+//                //spiroProgressBar.setVisibility(View.VISIBLE);
+//                }
+//            @Override
+//            public void onFinish(){
+//                //set the new Content of your activity
+//                submitButton.setVisibility(View.VISIBLE);
+//                etPassword.setVisibility(View.VISIBLE);
+//                spirometerImage.setVisibility(View.GONE);
+//                //spiroCheck.setVisibility(View.GONE);
+//                //spiroProgressBar.setVisibility(View.GONE);
+//            }
+//        }.start();
 
 
         //we want to create a login request, when the user actually clicks the login button, so onClickListener
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+                if (!isConnectedViaWifi()) {
+                    buildDialog(LoginActivity.this).show();
                     return;
                 }
+
                 mLastClickTime = SystemClock.elapsedRealtime();
 
                 if(truePassword.equals(etPassword.getText().toString())) {
@@ -166,132 +133,42 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                     Intent intent = new Intent(LoginActivity.this, SpirometerConnectingActivity.class);
                     Log.d(TAG, "bundle-data" +mBundleData);
                     intent.putExtra("bundle-data", mBundleData);
-                    //intent.putExtra("BlueTooth Connect Info", (Parcelable) discoveredDeviceInfo);
-                    LoginActivity.this.startActivity(intent);
-                    finish();
-                    deviceManager.stopDiscovery();
-                    //finish();
-
+                    startActivity(intent);
                 }else{
-                    Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
                     correctPasswordCheck++;
                     if(correctPasswordCheck >=4){
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
                         contactHospital.setVisibility(View.VISIBLE);
                     }
-                    //  Log.d(TAG, "TypedPassword" + typedPasswordOne);
-                    // Log.d(TAG, "TruePassword" + stringTruePassword);
+
                 }
             }
         });
     }
 
-    DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
-        @Override
-        public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
-            //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
-            //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-            if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
-                //if you find the device, then send the bluetooth information over.
-                Log.d(TAG, "When HardCode Device Matches: " + deviceInfo);
-                discoveredDeviceInfo = deviceInfo;
-                deviceInfoStringAddress = discoveredDeviceInfo.getAddress();
-                deviceInfoStringName = discoveredDeviceInfo.getName();
-                deviceInfoStringProtocol = discoveredDeviceInfo.getProtocol();
-                deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
-                deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName();
-
-                handleUpdateListScan.post(runUpdateListScan);// I need this in next activity to connect
-               // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
-                deviceInfoArray.add(deviceInfoStringAddress);
-                deviceInfoArray.add(deviceInfoStringName);
-                deviceInfoArray.add(deviceInfoStringProtocol);
-                deviceInfoArray.add(deviceInfoStringSerialNumber);
-                deviceInfoArray.add(deviceInfoStringAdvertisementDataName);
-
-                mBundleData.setDeviceInfoArray(deviceInfoArray);
-                Log.d("deviceInfo", "Hello: " +discoveredDeviceInfo.toString());
-               /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
-                handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
-
-            }else{
-                Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
-                //deviceManager.startDiscovery(MainActivity.this);
-            }
-        }
-
-        @Override
-        public void deviceConnected(Device device) {
-            currDevice = device;
-            Log.d(TAG, "Checkcheck" );
-
-            // currDevice.setDeviceCallback(deviceCallback);
-            infoList.add("devConnected");
-           // handleUpdateInfo.post(runUpdateInfo);
-          //  if (dialogConnection != null) dialogConnection.dismiss();
-
-        }
-
-        @Override
-        public void deviceDisconnected(Device device) {
-            infoDisconnect = "Disconnected \n" + device.getDeviceInfo().getAdvertisementDataName();
-            currDevice=null;
-          //  handleUpdateInfo.post(runUpdateInfo);
-        }
-
-        @Override
-        public void deviceConnectionFailed(DeviceInfo deviceInfo) {
-            currDevice=null;
-            infoDisconnect = deviceInfo.getAdvertisementDataName() + " Connection Fail";
-          //  handleUpdateInfo.post(runUpdateInfo);
-          //  if (dialogConnection != null) dialogConnection.dismiss();
-        }
-
-        @Override
-        public void bluetoothLowEnergieIsNotSupported() {
-            infoDisconnect = "Bluetooth Low Energie Is Not Supported";
-          //  handleUpdateInfo.post(runUpdateInfo);
-         //   if (dialogConnection != null) dialogConnection.dismiss();
-        }
-
-        @Override
-        public void bluetoothIsPoweredOFF() {
-            infoDisconnect = "Bluetooth Is Powered OFF";
-           // handleUpdateInfo.post(runUpdateInfo);
-          //  if (dialogConnection != null) dialogConnection.dismiss();
-
-            deviceManager.turnOnBluetooth(myContext);
-        }
-        @Override
-        public void accessCoarseLocationPermissionRequired(){
-            //Android M runtime authorizzation
-            infoDisconnect = "Access Coarse Location Permission Required";
-            //handleUpdateInfo.post(runUpdateInfo);
-
-            //For this request you need to implement callback
-            deviceManager.requestCoarseLocationPermission(LoginActivity.this,PERMISSION_REQUEST_COARSE_LOCATION);
-        }
-    };
-
-    //This Call back need for new Android M runtime authorization
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_COARSE_LOCATION: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    deviceManager.startDiscovery(this);
-                } else {
-                    Snackbar.make(findViewById(R.id.main_layout), "Can't scan without Location authorization on Android M", Snackbar.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
+//    //This Call back need for new Android M runtime authorization
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case PERMISSION_REQUEST_COARSE_LOCATION: {
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    deviceManager.startDiscovery(this);
+//                } else {
+//                    Snackbar.make(findViewById(R.id.main_layout), "Can't scan without Location authorization on Android M", Snackbar.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//    }
 
     // check whether WiFi is connected
     private boolean isConnectedViaWifi() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return mWifi.isConnected();
+        NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return mWifi.isConnected() || mobile.isConnected();
     }
 
     Handler handleUpdateListScan = new Handler();
@@ -303,18 +180,19 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
             deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
           //  handleUpdateInfo.post(runUpdateInfo);
         } //+++
-    }; //여기에다가 listview를 에드하는듯 하다.
+    };
 
     public AlertDialog.Builder buildDialog(Context c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Wi-Fi Connection");
-        builder.setMessage("You need to Connect to Wi-Fi to Start Spirometer Test");
+        builder.setTitle("Not Connected");
+        builder.setMessage("You need to connect to Wi-Fi or turn on cellular data to proceed");
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                Intent settingsIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                startActivity(settingsIntent);
             }
         });
         return builder;
