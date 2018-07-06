@@ -20,7 +20,7 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".QuestionnaireInstructionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,14 +30,14 @@
         <activity android:name=".SpirometerConnectingActivity" />
         <activity android:name=".BlowActivity" />
         <activity android:name=".Q1Activity" />
-        <activity android:name=".QuestionnaireInstructionActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />
         <activity android:name=".TestCompleteActivity"></activity>
         <activity android:name=".PulseConnectingActivity" />
         <activity android:name=".PulseActivity" />
-
+        <activity android:name=".HelpActivity" />
         <receiver android:name=".AlarmNotificationReciever" />
 
         <activity android:name=".FinalPageActivity"></activity>

@@ -428,7 +428,15 @@ public class BlowActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(BlowActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
 }
+
+
 
  /* class Patientsss {
     String pef;

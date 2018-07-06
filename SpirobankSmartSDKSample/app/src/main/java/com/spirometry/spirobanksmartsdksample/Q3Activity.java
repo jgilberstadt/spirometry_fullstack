@@ -256,6 +256,10 @@ public class Q3Activity extends AppCompatActivity {
 
     }
 
-
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(Q3Activity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 
 }

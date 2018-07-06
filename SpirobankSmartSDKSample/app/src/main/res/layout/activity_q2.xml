@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="91dp"
+            android:layout_marginTop="84dp"
             android:layout_weight="1"
             android:background="@color/question_background"
             android:gravity="left"
@@ -50,7 +50,7 @@
                 android:id="@+id/initialRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:orientation="vertical">
 
                 <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton

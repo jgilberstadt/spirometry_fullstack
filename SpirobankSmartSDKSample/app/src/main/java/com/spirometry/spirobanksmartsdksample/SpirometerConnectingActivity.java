@@ -262,5 +262,10 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
         }
     };
 
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(SpirometerConnectingActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 
 }

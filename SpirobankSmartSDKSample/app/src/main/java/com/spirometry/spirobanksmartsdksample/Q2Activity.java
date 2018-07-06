@@ -301,6 +301,10 @@ public class Q2Activity extends AppCompatActivity {
         }
     }
 
-
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(Q2Activity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 
 }

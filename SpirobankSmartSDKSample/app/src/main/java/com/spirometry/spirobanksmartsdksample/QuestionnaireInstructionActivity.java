@@ -35,4 +35,10 @@ public class QuestionnaireInstructionActivity  extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(QuestionnaireInstructionActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
 }
