@@ -93,7 +93,9 @@ public class BlowActivity extends AppCompatActivity {
     DeviceInfo discoveredDeviceInfo;
 
     private int numBlows = 0;
+    private int numBlowsFvc = 0;
     private int messageNumber = 6;
+    private int messageNumberFvc = 6;
 
     private String patient_id = "000000";
 
@@ -121,6 +123,7 @@ public class BlowActivity extends AppCompatActivity {
         currDevice.setDeviceCallback(deviceCallback);
 
         currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+        currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
         if(numBlows > 6) {
             currDevice.stopTest(getApplicationContext());
         }
@@ -138,6 +141,7 @@ public class BlowActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
                 buttonReBlow.setVisibility(View.INVISIBLE);
                 blowDirection.setVisibility(View.VISIBLE);
             }
@@ -160,7 +164,7 @@ public class BlowActivity extends AppCompatActivity {
                 deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
                 deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName();
 
-                handleUpdateListScan.post(runUpdateListScan);// I need this in next activity to connect
+                handleUpdateListScan.post(runUpdateListScan); // I need this in next activity to connect
                 // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
                 deviceInfoArray.add(deviceInfoStringAddress);
                 deviceInfoArray.add(deviceInfoStringName);
@@ -257,6 +261,8 @@ public class BlowActivity extends AppCompatActivity {
             String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
             String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
+            //String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
+
 
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
@@ -275,6 +281,16 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void resultsUpdated(ResultsFvc resultsFvc) { // NOT USED
+            numBlowsFvc++;
+            messageNumberFvc--;
+            int overallNumBlowsFvc = numBlowsFvc -1;
+
+            String pef = String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100);
+            String fev1 = String.valueOf(resultsFvc.getFev1_cL() / (float) 100);
+            String fvc = String.valueOf(resultsFvc.getFvc_cL() / (float) 100);
+            String fev1_fvc = String.valueOf(Math.round(resultsFvc.getFev1_Fvc_pcnt() * 100)/(float)100);
+            String fev6 = String.valueOf(resultsFvc.getFev6_cl() / (float) 100);
+            String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
         }
 
         @Override
@@ -429,18 +445,5 @@ public class BlowActivity extends AppCompatActivity {
     }
 
 }
-
- /* class Patientsss {
-    String pef;
-    String fev1;
-    String peftime;
-    String evol;
-    Patientsss(String pef, String fev1, String peftime, String evol){
-        this.pef = pef;
-        this.fev1 = fev1;
-        this.peftime = peftime;
-        this.evol = evol;
-    }
-} */
 
 
