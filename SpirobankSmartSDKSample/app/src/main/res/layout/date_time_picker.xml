@@ -23,22 +23,27 @@
 
     <Button
         android:id="@+id/cancelBtn"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="254dp"
-        android:text="Cancel" />
+        android:layout_below="@+id/timePicker"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="95dp"
+        android:background="@android:color/transparent"
+        android:text="Cancel"
+        android:textColor="@android:color/holo_blue_dark" />
 
     <Button
         android:id="@+id/confirmBtn"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/cancelBtn"
-        android:layout_marginEnd="16dp"
-        android:text="Confirm" />
+        android:layout_below="@+id/timePicker"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="95dp"
+        android:background="@android:color/transparent"
+        android:text="Confirm"
+        android:textColor="@android:color/holo_blue_dark" />
 
 
 </RelativeLayout>
