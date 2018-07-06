@@ -19,7 +19,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".TestCompleteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +35,7 @@
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />
-        <activity android:name=".TestCompleteActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".PulseConnectingActivity" />
         <activity android:name=".PulseActivity" />
         <activity android:name=".HelpActivity" />

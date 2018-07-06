@@ -6,40 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".TestCompleteActivity">
 
+    <include
+        layout="@layout/window_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        />
+
     <TextView
         android:id="@+id/nextAppointment"
-        android:layout_width="568dp"
-        android:layout_height="199dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:text="Your Next Appointment is "
+        android:layout_marginTop="128dp"
+        android:text="@string/test_complete"
         android:textAlignment="center"
-        android:textSize="80sp"
+        android:textColor="@android:color/black"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/dateButton"
-        android:layout_width="213dp"
+        android:layout_width="250dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:text="Confirm Appointment"
+        android:layout_marginTop="168dp"
+        android:text="CONFIRM"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.919"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeRepresent" />
+
+    <Button
+        android:id="@+id/changeAppointment"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="172dp"
+        android:text="CHANGE"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeRepresent" />
 
     <TextView
         android:id="@+id/dateRepresent"
-        android:layout_width="509dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:textAlignment="center"
         android:textColor="#40e0d0"
         android:textSize="70sp"
@@ -48,23 +73,9 @@
         app:layout_constraintTop_toBottomOf="@+id/nextAppointment" />
 
     <TextView
-        android:id="@+id/changeAppointment"
-        android:layout_width="664dp"
-        android:layout_height="94dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:hint="Change Appointment?"
-        android:textAlignment="center"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateButton" />
-
-    <TextView
         android:id="@+id/timeRepresent"
-        android:layout_width="509dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:textAlignment="center"
