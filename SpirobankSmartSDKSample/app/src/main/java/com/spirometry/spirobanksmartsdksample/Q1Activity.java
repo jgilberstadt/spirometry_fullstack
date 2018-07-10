@@ -173,10 +173,7 @@ public class Q1Activity extends AppCompatActivity {
 
     public void onClickNext (View v){
         if (questionState == 0) {
-            Log.d("Hyunrae", "SHIT");
             if (initialRadioGroup.getCheckedRadioButtonId() == -1) {
-                Log.d("Hyunrae", "SHIT1");
-
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.skip_warning);
                 dialog.setTitle("Title...");
@@ -312,6 +309,10 @@ public class Q1Activity extends AppCompatActivity {
         });
     }
 
-
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(Q1Activity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 
 }

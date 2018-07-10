@@ -28,4 +28,18 @@
 
     <string name="ifYes"> Check each symptom that is NEW: </string>
 
+    <string name="test_complete">Thank you. \n\nYour next appointment is scheduled for:</string>
+    
+    
+    <string name="LoginActivity"> LoginActivity help page. Come back and fill this out </string>
+    <string name="SpirometerConnectingActivity"> SpirometerConnectingActivity help page. Come back and fill this out </string>
+    <string name="BlowActivity"> BlowActivity help page. Come back and fill this out </string>
+    <string name="QuestionnaireInstructionActivity"> QuestionnaireInstructionActivity help page. Come back and fill this out </string>
+    <string name="TestCompleteActivity"> TestCompleteActivity help page. Come back and fill this out </string>
+    <string name="Q1Activity"> Q1Activity help page. Come back and fill this out </string>
+    <string name="Q2Activity"> Q2Activity help page. Come back and fill this out </string>
+    <string name="Q3Activity"> Q3Activity help page. Come back and fill this out </string>
+    <string name="Q4Activity"> Q4Activity help page. Come back and fill this out </string>
+
+
 </resources>

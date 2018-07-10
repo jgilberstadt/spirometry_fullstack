@@ -29,14 +29,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="91dp"
+            android:layout_marginTop="84dp"
             android:layout_weight="1"
             android:background="@color/question_background"
             android:gravity="left"
             android:padding="20dp"
             android:text="@string/q4"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="36sp" />
+            android:textSize="32sp" />
 
         <LinearLayout
             android:id="@+id/initialRadio"
@@ -50,6 +50,7 @@
                 android:id="@+id/initialRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
                 <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton

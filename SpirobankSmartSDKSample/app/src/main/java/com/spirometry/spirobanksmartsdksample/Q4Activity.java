@@ -310,5 +310,9 @@ public class Q4Activity extends AppCompatActivity {
     }
 
 
-
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(Q4Activity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 }

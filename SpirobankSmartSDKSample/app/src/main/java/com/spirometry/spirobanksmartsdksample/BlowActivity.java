@@ -427,6 +427,26 @@ public class BlowActivity extends AppCompatActivity {
             }, 1000);        }
     };
 
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(BlowActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
 }
 
+
+
+ /* class Patientsss {
+    String pef;
+    String fev1;
+    String peftime;
+    String evol;
+    Patientsss(String pef, String fev1, String peftime, String evol){
+        this.pef = pef;
+        this.fev1 = fev1;
+        this.peftime = peftime;
+        this.evol = evol;
+    }
+} */
 

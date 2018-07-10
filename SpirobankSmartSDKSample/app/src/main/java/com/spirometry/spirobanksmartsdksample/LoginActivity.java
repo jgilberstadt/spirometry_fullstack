@@ -199,6 +199,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
     }
 
-
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(LoginActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
 
 }

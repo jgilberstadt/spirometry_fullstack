@@ -8,16 +8,17 @@
 
     <TextView
         android:id="@+id/finalText"
-        android:layout_width="349dp"
-        android:layout_height="121dp"
+        android:layout_width="459dp"
+        android:layout_height="263dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="156dp"
         android:text="You are Finished"
         android:textAlignment="center"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +41,8 @@
         android:id="@+id/imageView2"
         android:layout_width="133dp"
         android:layout_height="113dp"
-        tools:layout_editor_absoluteX="334dp"
-        tools:layout_editor_absoluteY="568dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="642dp" />
 
 </android.support.constraint.ConstraintLayout>

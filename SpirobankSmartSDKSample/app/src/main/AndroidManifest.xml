@@ -27,17 +27,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TestCompleteActivity">
+
+        </activity>
+
+        <activity android:name=".QuestionnaireInstructionActivity">
+
+        </activity>
         <activity android:name=".SpirometerConnectingActivity" />
         <activity android:name=".BlowActivity" />
         <activity android:name=".Q1Activity" />
-        <activity android:name=".QuestionnaireInstructionActivity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />
-        <activity android:name=".TestCompleteActivity"></activity>
         <activity android:name=".PulseConnectingActivity" />
         <activity android:name=".PulseActivity" />
-
+        <activity android:name=".HelpActivity" />
         <receiver android:name=".AlarmNotificationReciever" />
 
         <activity android:name=".FinalPageActivity"></activity>
