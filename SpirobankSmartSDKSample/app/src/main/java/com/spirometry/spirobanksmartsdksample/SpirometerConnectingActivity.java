@@ -74,11 +74,11 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             return;
         }
 
+        deviceManager.startDiscovery(SpirometerConnectingActivity.this);
         progressBar.setVisibility(View.VISIBLE);
         tvConnecting.setVisibility(View.VISIBLE);
         tryAgainButton.setVisibility(View.INVISIBLE);
-        deviceManager.startDiscovery(SpirometerConnectingActivity.this);
-        handlerWait.post(runWait);
+       // handlerWait.post(runWait);
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,8 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                     bluetoothEnableRequest();
                     return;
                 }
-                deviceManager.disconnect();
+                //deviceManager.disconnect();
+                deviceManager.stopDiscovery();
                 Log.d(TAG, "Start Discovery!");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
@@ -154,11 +155,8 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                         tryAgainButton.setVisibility(View.INVISIBLE);
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
-
                     }
-
                 }
-
 
         @Override
         public void deviceConnected(Device device) {
@@ -166,8 +164,8 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             localInfo = "connected";
             handleUpdateInfo.post(runUpdateInfo);
             Log.d(TAG, "Device Connected");
-
         }
+
         @Override
         public void deviceDisconnected(Device device) {
             currDevice = null;
@@ -185,8 +183,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             tryAgainButton.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
-
-
         }
         @Override
         public void bluetoothLowEnergieIsNotSupported() {

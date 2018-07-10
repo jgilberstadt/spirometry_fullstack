@@ -24,6 +24,7 @@ import java.util.Map;
 public class BlowDataUploadPage extends AppCompatActivity {
 
     String[][] sixBlowData; //6 data storing 4 String Values; +-
+    String[][] fourBlowDataPefFev1;
    // String[][] upload2dArray; //6 data storing 4 String Values; +-
     private MyParcelable mBundleData;
     private static final String TAG = BlowActivity.class.getSimpleName();
@@ -40,6 +41,7 @@ public class BlowDataUploadPage extends AppCompatActivity {
 
         mBundleData = getIntent().getParcelableExtra("bundle-data"); // we don't need to get an array, we just need to get the whole thing which is just
         sixBlowData = mBundleData.getBlowDataArray();
+        fourBlowDataPefFev1 = mBundleData.getBlowDataArrayPefFev1();
 
         Log.d(TAG, "result blow1" + sixBlowData[4][3]);
         Log.d(TAG, "result blow2" + sixBlowData[0][0]);
@@ -48,13 +50,16 @@ public class BlowDataUploadPage extends AppCompatActivity {
         Log.d(TAG, "result blow5" + sixBlowData[3][3]);
 
         for(int i =0; i<6; i++){
-            upload_PefFev1(sixBlowData[i][0], sixBlowData[i][1], sixBlowData[i][2], sixBlowData[i][3]);
+            upload_FVC(sixBlowData[i][0], sixBlowData[i][1], sixBlowData[i][2], sixBlowData[i][3], sixBlowData[i][4], sixBlowData[i][5]);
             Log.d(TAG, "sixBlowData i Value: " + i);
             Log.d(TAG, "sixBlowData" + sixBlowData[i][0]);
             Log.d(TAG, "sixBlowData" + sixBlowData[i][1]);
             Log.d(TAG, "sixBlowData" + sixBlowData[i][2]);
             Log.d(TAG, "sixBlowData" + sixBlowData[i][3]);
         }
+
+        upload_PefFev1(fourBlowDataPefFev1[0][0], fourBlowDataPefFev1[0][1],fourBlowDataPefFev1[0][2],fourBlowDataPefFev1[0][3]);
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -100,6 +105,55 @@ public class BlowDataUploadPage extends AppCompatActivity {
 
                 return params;
             }
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    void upload_FVC(final String pef, final String fev1, final String fvc, final String fev1_fvc, final String fev6, final String fef2575) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_response";
+        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_FVC_UPLOAD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Instance Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+
+
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to response url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("patient_id", patient_id);
+                params.put("pef", pef);
+                params.put("fev1", fev1);
+                params.put("fvc", fvc);
+                params.put("fev1_fvc", fev1_fvc);
+                params.put("fev6", fev6);
+                params.put("fef2575", fef2575);
+
+                return params;
+            }
+
         };
 
         // Adding request to request queue

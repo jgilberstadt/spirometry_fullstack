@@ -47,18 +47,7 @@ import java.util.Map;
 
 public class BlowActivity extends AppCompatActivity {
 
-    String[][] blowDataStore = new String[6][4]; //6 data storing 4 String Values; +-
-
-   /* ArrayList<Patientsss> PatientBlowInfo = new ArrayList<>();
-    String pef;
-    String fev1;
-    String peftime;
-    String evol; */
-
-  //  Patientsss patientResults = new Patientsss(pef, fev1, peftime, evol); // something I can add in the arraylist
-
     private static final String TAG = BlowActivity.class.getSimpleName();
-    int whileLoop = 0;
 
     DeviceManager deviceManager;
     TextView blowDirection;
@@ -92,9 +81,9 @@ public class BlowActivity extends AppCompatActivity {
 
     DeviceInfo discoveredDeviceInfo;
 
-    private int numBlows = 0;
-    private int numBlowsFvc = 0;
-    private int messageNumber = 6;
+    int numBlows = 0;
+    int value = numBlows + 1;
+    private int messageNumber = 7;
     private int messageNumberFvc = 6;
 
     private String patient_id = "000000";
@@ -122,11 +111,7 @@ public class BlowActivity extends AppCompatActivity {
         //Having callbacks: startTest() results to return
         currDevice.setDeviceCallback(deviceCallback);
 
-        currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
-        currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
-        if(numBlows > 6) {
-            currDevice.stopTest(getApplicationContext());
-        }
+        currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
 
         blowDirection = (TextView) findViewById(R.id.blowDirection);
         blowMessage = (TextView) findViewById(R.id.blowMessage);
@@ -140,10 +125,15 @@ public class BlowActivity extends AppCompatActivity {
         findViewById(R.id.buttonReBlow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
-                currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
-                buttonReBlow.setVisibility(View.INVISIBLE);
-                blowDirection.setVisibility(View.VISIBLE);
+                if(numBlows <6) {
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)50);
+                    buttonReBlow.setVisibility(View.INVISIBLE);
+                    blowDirection.setVisibility(View.VISIBLE);
+                }else{
+                    currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                    buttonReBlow.setVisibility(View.INVISIBLE);
+                    blowDirection.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -246,6 +236,7 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
             Log.d("hyunrae", "a");
+            value = numBlows;
             handlerVisibilityChange.post(runVisibilityChange);
         }
 
@@ -253,37 +244,30 @@ public class BlowActivity extends AppCompatActivity {
         public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
             numBlows++;
             messageNumber--;
-            int overallNumBlows = numBlows -1;
 
-            Log.d("hyunrae", "b");
             Log.d("hyunrae", "one more test added");
             String pef = String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100);
             String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
             String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
-            //String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
 
+            String [] resultArrayPefFev1 = {pef, fev1, peftime, evol};
+
+            mBundleData.setBlowDataArrayPefFev1(0, resultArrayPefFev1);
 
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
-            String [] resultArray = {pef, fev1, peftime, evol};
-            Log.d("overallNumBlows",  "" + overallNumBlows);
-            Log.d("resultArray",  "" + resultArray[0]);
-            Log.d("resultArray",  "" + resultArray[1]);
-            Log.d("resultArray",  "" + resultArray[2]);
-            Log.d("resultArray",  "" + resultArray[3]);
-
-            mBundleData.setBlowDataArray(overallNumBlows, resultArray);
-            Log.d("PETER", mBundleData.getBlowDataArray()[0][0]);
-
-
+            Log.d(TAG, "wow: " + String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100));
+            currDevice.stopTest(getApplicationContext());
         }
 
         @Override
-        public void resultsUpdated(ResultsFvc resultsFvc) { // NOT USED
-            numBlowsFvc++;
-            messageNumberFvc--;
-            int overallNumBlowsFvc = numBlowsFvc -1;
+        public void resultsUpdated(ResultsFvc resultsFvc) {
+            numBlows++;
+            messageNumber--;
+            handlerTextViewNumberChange.post(runTextViewNumberChange);
+
+            int overallNumBlows = numBlows -1;
 
             String pef = String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100);
             String fev1 = String.valueOf(resultsFvc.getFev1_cL() / (float) 100);
@@ -291,17 +275,37 @@ public class BlowActivity extends AppCompatActivity {
             String fev1_fvc = String.valueOf(Math.round(resultsFvc.getFev1_Fvc_pcnt() * 100)/(float)100);
             String fev6 = String.valueOf(resultsFvc.getFev6_cl() / (float) 100);
             String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
+
+            String [] resultArray = {pef, fev1, fvc, fev1_fvc, fev6, fef2575};
+
+            Log.d("overallNumBlows",  "" + overallNumBlows);
+            Log.d("resultArray",  "" + resultArray[0]);
+            Log.d("resultArray",  "" + resultArray[1]);
+            Log.d("resultArray",  "" + resultArray[2]);
+            Log.d("resultArray",  "" + resultArray[3]);
+
+            mBundleData.setBlowDataArray(overallNumBlows, resultArray);
+
+            Log.d(TAG, "wow2: " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100));
+
+            if(numBlows <6) {
+                handlerWaitandStartFvc.post(runWaitandStartFvc); // the thing here is that what happen if the data upload doesn't upload?
+                //like the data upload time is longer than the delay time I set... :( that would be loss in data
+                // and it will crash
+            }else{
+                handlerWaitandStartPefFev1.post(runWaitandStartPefFev1); // the thing here is that what happen if the data upload doesn't upload?
+            }
         }
 
         @Override
         public void testRestarted(Device device) {
             Log.d("hyunrae", "dddd");
-            if(numBlows >= 6){
-                Log.d(TAG, "numBlows =6");
+            Log.d("peter", " " + numBlows);
+            if(numBlows >=6) {
                 currDevice.stopTest(getApplicationContext());
-             //   handlerPostingResult2.post(runPostingResult2);
-              //  handlerVisibilityChange.post(runVisibilityChange);
-                handleIntentToTestComplete.post(runIntentToTestComplete);
+                Log.d("done with all 7 tests", "done with all 7 tests");
+                handlerVisibilityChange.post(runVisibilityChange);
+                handleIntentToTestComplete.post(runIntentToTestComplete); // the thing here is that what happen if the data upload doesn't upload?
             }else {
                 handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
             }
@@ -309,15 +313,16 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void testStopped(Device device) {
-            Log.d("hyunrae", "Test has been stopped");
-            // here you want to display to the participant that he or she probably didn't blow so the test stopped.
-            if (numBlows >=6) {
-       /*         mBundleData.setBlowDataArray(blowDataStore); */ //+-
-            //    handlerVisibilityChange.post(runVisibilityChange);
-             //   handlerPostingResult.post(runPostingResult);
-                Log.d("hyunrae", "test stopped and no more to do");
-                // here you want to display to the participant to blow again
-            }else {
+           // numBlowsFvc++;
+            Log.d("Stopped", "Test has been stopped");
+            if (numBlows > 6) {
+                Log.d("final stopped", "Test has been stopped last");
+            }else if(value == numBlows){
+                handlerVisibilityChange.post(runVisibilityChange);
+                handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
+            }
+            else{
+                Log.d(TAG, "numBlowsCounts: " + numBlows);
                 handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
                 handlerButton.post(runButton);
             }
@@ -371,8 +376,6 @@ public class BlowActivity extends AppCompatActivity {
             intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);
             finish();
-            // tvConnecting.setText();
-            //   tvConnecting.setText(success);
         }
     };
 
@@ -385,64 +388,44 @@ public class BlowActivity extends AppCompatActivity {
         }
     };
 
-    Handler handlerPostingResult = new Handler();
-    Runnable runPostingResult= new Runnable() {
+    Handler handlerWaitandStartFvc = new Handler();
+    Runnable runWaitandStartFvc = new Runnable() {
         @Override
         public void run() {
-            postingResult.setVisibility(View.VISIBLE);
-        }
-    };
-
-    Handler handlerPostingResult2 = new Handler();
-    Runnable runPostingResult2= new Runnable() {
-        @Override
-        public void run() {
-            postingResult.setVisibility(View.VISIBLE);
-
-        }
-    };
-
-   void upload_PefFev1(final String pef, final String fev1, final String peftime, final String evol) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_response";
-        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_PEFFEV1_UPLOAD, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Instance Response: " + response.toString());
-                try {
-                    JSONObject jObj = new JSONObject(response);
-
-
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
+                    Log.d(TAG, "bruh fvc it worked?");
                 }
-            }
-        }, new Response.ErrorListener() {
+            }, 1000);
+        }
+    };
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to response url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("patient_id", patient_id);
-                params.put("pef", pef);
-                params.put("fev1", fev1);
-                params.put("peftime", peftime);
-                params.put("evol", evol);
-                return params;
-            }
-        };
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
+    Handler handlerWaitandStartPefFev1 = new Handler();
+    Runnable runWaitandStartPefFev1= new Runnable() {
+        @Override
+        public void run() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                    Log.d(TAG, "bruh peffev1 it worked?");
+                }
+            }, 1000);        }
+    };
+
+    Handler handlerVisibilityChangeTwoWaitOneSecond = new Handler();
+    Runnable runVisibilityChangeTwoWaitOneSecond= new Runnable() {
+        @Override
+        public void run() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
+                }
+            }, 1000);        }
+    };
 
 }
 

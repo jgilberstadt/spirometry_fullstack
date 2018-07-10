@@ -261,9 +261,9 @@ public class MainActivity extends AppCompatActivity {
 
                     volume=0;
                     //EndOfTestTimeOUT from 15 to 120 sec - Default = 15 sec
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)90);
                     Log.d(TAG, "1 fvc: ");
-                    currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+                  //  currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
                     Log.d(TAG, "1 pefFev1: ");
 
                     //    currDevice.startTest;
@@ -511,7 +511,9 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "resultsUpdated for fvc: " + pef + fvc);
 
-         //   upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
+            currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+
+            //   upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
 
         }
 
@@ -530,12 +532,13 @@ public class MainActivity extends AppCompatActivity {
         public void testStopped(Device device) {
             volume=0;
             Log.d(TAG, "a stopped");
-            currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
+            //currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
             predictedPercentageOfTarget = (float) 1;
             actualPercentageOfTarget = (float) 1;
             handleUpdateTest.post(runUpdateTest);
             infoList.add("Test Stopped " + device.getDeviceInfo().getAdvertisementDataName());
             handleUpdateInfo.post(runUpdateInfo);
+            currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
         }
 
         @Override

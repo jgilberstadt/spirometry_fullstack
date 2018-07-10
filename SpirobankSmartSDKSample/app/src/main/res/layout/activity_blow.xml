@@ -33,15 +33,15 @@
         android:id="@+id/numberCount"
         android:layout_width="180dp"
         android:layout_height="180dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginRight="175dp"
+        android:layout_marginTop="12dp"
         android:text="0"
         android:textAlignment="center"
         android:textSize="120sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintHorizontal_bias="0.594"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blowDirection" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonReBlow" />
 
     <TextView
         android:id="@+id/numberOutOf"
@@ -50,7 +50,7 @@
         android:layout_marginEnd="50dp"
         android:layout_marginStart="150dp"
         android:layout_marginTop="72dp"
-        android:text="6"
+        android:text="7"
         android:textAlignment="center"
         android:textSize="120sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="92dp"
-        android:text="You have 6 Blows Left"
+        android:text="You have 7 Blows Left"
         android:textAlignment="center"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
