@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class SpirometerConnectingActivity extends AppCompatActivity{
 
     private MyParcelable mBundleData;
+    String success = "Success!";
     private static final String TAG = SpirometerConnectingActivity.class.getSimpleName();
     DeviceManager deviceManager;
     Device currDevice;
@@ -37,7 +38,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
     Button tryAgainButton;
     DeviceInfo discoveredDeviceInfo;
     final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
-    String localInfo = "";
+    Boolean localInfo = false;
     int numberOfDisconnect = 0;
     String fullInfo = "", result = "", infoDisconnect = "", strProgress ="";
     BluetoothAdapter bluetoothadapter;
@@ -78,7 +79,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
         progressBar.setVisibility(View.VISIBLE);
         tvConnecting.setVisibility(View.VISIBLE);
         tryAgainButton.setVisibility(View.INVISIBLE);
-       // handlerWait.post(runWait);
+        handlerWait.post(runWait);
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +88,9 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                     bluetoothEnableRequest();
                     return;
                 }
-                //deviceManager.disconnect();
+               // deviceManager.disconnect();
                 deviceManager.stopDiscovery();
-                Log.d(TAG, "Start Discovery!");
+                Log.d(TAG, "Start Discovery!33333");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
@@ -113,7 +114,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(bluetoothIntent, 1);
                 deviceManager.disconnect();
-                Log.d(TAG, "Start Discovery!");
+                Log.d(TAG, "Start Discovery!12222");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
@@ -128,7 +129,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                             return;
                         }
                         deviceManager.disconnect();
-                        Log.d(TAG, "Start Discovery!");
+                        Log.d(TAG, "Start Discovery!11111");
                         progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
                         directionTextView.setVisibility(View.INVISIBLE);
@@ -147,33 +148,42 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             Log.d(TAG, "Some sort of device connected");
                     //I did this so that you don't reconnect with different device.
                     if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
+                   //     localInfo = "success";
                         discoveredDeviceInfo = deviceInfo;
-                        String success = "Success!";
-                        tvConnecting.setText(success);
                         progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
                         tryAgainButton.setVisibility(View.INVISIBLE);
                         handleUpdateListScan.post(runUpdateListScan);
                         Log.d(TAG, "Your Specific Device Connected");
+                    }else{
+                        Log.d(TAG, "Your Specific Device is not Connected");
+                        progressBar.setVisibility(View.VISIBLE);
+                        tvConnecting.setVisibility(View.VISIBLE);
                     }
                 }
 
         @Override
         public void deviceConnected(Device device) {
+            localInfo = true;
+            //     handleSuccess.post(runSuccess);
             currDevice = device;
-            localInfo = "connected";
-            handleUpdateInfo.post(runUpdateInfo);
+            //handleUpdateInfo.post(runUpdateInfo);
             Log.d(TAG, "Device Connected");
+ /*           if(localInfo.equals("success")) {
+            }else{
+                Log.d(TAG, "deviceConnected: "+ "Time was slow");
+            } */
         }
 
         @Override
         public void deviceDisconnected(Device device) {
             currDevice = null;
-            deviceManager.startDiscovery(SpirometerConnectingActivity.this);
+            //deviceManager.startDiscovery(SpirometerConnectingActivity.this);
             Log.d(TAG, "deviceDisconnected");
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.VISIBLE);
+
 
         }
         @Override
@@ -216,6 +226,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
     Runnable runUpdateInfo = new Runnable() {
         @Override
         public void run() {
+            deviceManager.stopDiscovery();
             Intent intent = new Intent(SpirometerConnectingActivity.this, BlowActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             SpirometerConnectingActivity.this.startActivity(intent);
@@ -225,19 +236,30 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
         }
     };
 
+    Handler handleSuccess = new Handler();
+    Runnable runSuccess = new Runnable() {
+        @Override
+        public void run() {
+           tvConnecting.setText(success);
+       tvConnecting.setVisibility(View.VISIBLE);
+        }
+    };
+
     Handler handlerWait = new Handler();
     Runnable runWait = new Runnable() {
         @Override
         public void run() {
-    new Handler().postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
         @Override
         public void run() {
             Log.d(TAG, "no connection");
             deviceManager.stopDiscovery();
-            if(localInfo.equals("connected")){
+           if(localInfo == true){
                 Log.d(TAG, "the device is connect, nothing to show");
-                handleUpdateInfo.post(runUpdateInfo);
-            }else {
+               handleUpdateInfo.post(runUpdateInfo);
+           }else {
+                localInfo = false;
+                deviceManager.disconnect();
                 tvConnecting.setVisibility(View.INVISIBLE);
                 tryAgainButton.setText("RE-CONNECT");
                 tryAgainButton.setVisibility(View.VISIBLE);
@@ -247,14 +269,13 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 if(numberOfDisconnect >=3){
                     directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
                     directionTextView.setTextColor(Color.parseColor("#0000FF"));
-
                     directionTextView.setVisibility(View.VISIBLE);
                 }
                 numberOfDisconnect++;
                 Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
             }
         }
-    }, 5000);
+    }, 9000);
         }
     };
 

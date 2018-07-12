@@ -31,6 +31,8 @@ public class TestCompleteActivity extends AppCompatActivity {
     TextView timeRepresent;
     Button dateButton;
     Calendar finalDate =Calendar.getInstance();
+    TimePicker timePicker;
+    DatePicker datePicker;
 
     private AlarmManager m_alarmMgr;
 
@@ -89,11 +91,13 @@ public class TestCompleteActivity extends AppCompatActivity {
                     }
                 });
 
+                timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
+                datePicker = (DatePicker) dialog.findViewById(R.id.datePicker);
+                datePicker.setMinDate(System.currentTimeMillis()-1000);
+
                 dialog.findViewById(R.id.confirmBtn).setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
-                        DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.datePicker);
 
                         dateRepresent.setText(months[datePicker.getMonth()] + " " + datePicker.getDayOfMonth() + ", " + datePicker.getYear());
                         String AM_PM;
