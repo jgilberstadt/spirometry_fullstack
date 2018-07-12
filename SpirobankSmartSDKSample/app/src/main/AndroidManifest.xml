@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.spirometry.spirobanksmartsdksample">
+    package="com.spirometry.homespirometry">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
-        android:name=".AppController"
+        android:name="com.spirometry.homespirometry.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.spirometry.homespirometry.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".TestCompleteActivity">
+        <activity android:name=".PulseConnectingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QuestionnaireInstructionActivity">
+        <activity android:name="com.spirometry.homespirometry.QuestionnaireInstructionActivity">
 
         </activity>
-        <activity android:name=".SpirometerConnectingActivity" />
-        <activity android:name=".BlowActivity" />
-        <activity android:name=".Q1Activity" />
-        <activity android:name=".Q2Activity" />
-        <activity android:name=".Q3Activity" />
-        <activity android:name=".Q4Activity" />
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".PulseConnectingActivity" />
-        <activity android:name=".PulseActivity" />
-        <activity android:name=".HelpActivity" />
-        <receiver android:name=".AlarmNotificationReciever" />
+        <activity android:name="com.spirometry.homespirometry.SpirometerConnectingActivity" />
+        <activity android:name="com.spirometry.homespirometry.BlowActivity" />
+        <activity android:name="com.spirometry.homespirometry.Q1Activity" />
+        <activity android:name="com.spirometry.homespirometry.Q2Activity" />
+        <activity android:name="com.spirometry.homespirometry.Q3Activity" />
+        <activity android:name="com.spirometry.homespirometry.Q4Activity" />
+        <activity android:name="com.spirometry.homespirometry.LoginActivity"></activity>
+        <activity android:name="com.spirometry.homespirometry.TestCompleteActivity" />
+        <activity android:name="com.spirometry.homespirometry.PulseActivity" />
+        <activity android:name="com.spirometry.homespirometry.HelpActivity" />
+        <receiver android:name="com.spirometry.homespirometry.AlarmNotificationReciever" />
 
-        <activity android:name=".FinalPageActivity"></activity>
-        <activity android:name=".BlowDataUploadPage"></activity>
+        <activity android:name="com.spirometry.homespirometry.FinalPageActivity"></activity>
+        <activity android:name="com.spirometry.homespirometry.BlowDataUploadPage"></activity>
     </application>
 
 </manifest>

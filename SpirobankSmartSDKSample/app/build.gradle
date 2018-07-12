@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId 'com.spirometry.spirobanksmartsdksample'
+        applicationId 'com.spirometry.homespirometry'
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 12
@@ -18,6 +18,12 @@ android {
     }
     productFlavors {
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -28,4 +34,8 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.volley:volley:1.0.0'
     compile project(':spirobanksmartsdk')
+    implementation files('libs/d2xx.jar')
+    implementation files('libs/pl2303driver.jar')
+    implementation files('libs/smartlinklib3.6.4_product.jar')
+    implementation files('libs/iHealthLibrary_2.4.3.jar')
 }

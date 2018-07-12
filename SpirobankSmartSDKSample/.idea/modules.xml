@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SpirobankSmartSDKSample.iml" filepath="$PROJECT_DIR$/SpirobankSmartSDKSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jniLibs/jnilibs.iml" filepath="$PROJECT_DIR$/jniLibs/jnilibs.iml" />
       <module fileurl="file://$PROJECT_DIR$/spirobanksmartsdk/spirobanksmartsdk.iml" filepath="$PROJECT_DIR$/spirobanksmartsdk/spirobanksmartsdk.iml" />
     </modules>
   </component>
