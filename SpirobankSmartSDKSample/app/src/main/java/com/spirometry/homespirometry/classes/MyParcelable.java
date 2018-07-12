@@ -11,6 +11,7 @@ public class MyParcelable implements Parcelable {
     private ArrayList DeviceInfoArray;
     private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
     private String[][] blowDeviceResultArray;
+    private String[][] blowDeviceResultArrayPefFev1;
     private int[] questionStates;
 
     public int describeContents() {
@@ -22,8 +23,14 @@ public class MyParcelable implements Parcelable {
         out.writeList(DeviceInfoArray);
         //blowDeviceResultArray = new String[6][4];
         for (int i =0; i < 6; i++) {
-            for(int j=0; j < 4 ; j++) {
+            for(int j=0; j < 6 ; j++) {
                 out.writeString(blowDeviceResultArray[i][j]);
+            }
+        }
+
+        for (int i =0; i < 1; i++) {
+            for(int j=0; j < 4 ; j++) {
+                out.writeString(blowDeviceResultArrayPefFev1[i][j]);
             }
         }
 
@@ -51,6 +58,9 @@ public class MyParcelable implements Parcelable {
        blowDeviceResultArray[index] = blowPoints;
     }
 
+    public void setBlowDataArrayPefFev1(int indexPefFev1, String[] blowPointsPefFev1){
+        blowDeviceResultArrayPefFev1[indexPefFev1] = blowPointsPefFev1;
+    }
 
     public ArrayList getDeviceInfo(){
         return DeviceInfoArray;
@@ -58,6 +68,10 @@ public class MyParcelable implements Parcelable {
 
     public String[][] getBlowDataArray() {
         return blowDeviceResultArray;
+    }
+
+    public String[][] getBlowDataArrayPefFev1() {
+        return blowDeviceResultArrayPefFev1;
     }
 
     public static final Creator<MyParcelable> CREATOR
@@ -75,10 +89,17 @@ public class MyParcelable implements Parcelable {
         mData = in.readInt();
         //discoveredDeviceInfo = (DeviceInfo)in.readValue(DeviceInfo.class.getClassLoader());
         DeviceInfoArray = in.readArrayList(null);
-        blowDeviceResultArray = new String[6][4];
+        blowDeviceResultArray = new String[6][6];
         for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 6; j++) {  //            for (int j = 0; j < 4; j++) {
                 blowDeviceResultArray[i][j] = in.readString();
+            }
+        }
+
+        blowDeviceResultArrayPefFev1 = new String[1][4];
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 4; j++) {  //            for (int j = 0; j < 4; j++) {
+                blowDeviceResultArrayPefFev1[i][j] = in.readString();
             }
         }
 
@@ -94,10 +115,16 @@ public class MyParcelable implements Parcelable {
     }
 
     public MyParcelable(){
-        blowDeviceResultArray = new String[6][4];
+        blowDeviceResultArray = new String[6][6]; // use to be 4
         for (int i = 0; i<6; i++) {
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 6; j++) {
                 blowDeviceResultArray[i][j] = "";
+            }
+        }
+        blowDeviceResultArrayPefFev1 = new String[1][4]; // use to be 4
+        for (int i = 0; i<1; i++) {
+            for (int j = 0; j < 4; j++) {
+                blowDeviceResultArrayPefFev1[i][j] = "";
             }
         }
 
