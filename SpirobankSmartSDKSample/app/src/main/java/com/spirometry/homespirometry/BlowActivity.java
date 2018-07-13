@@ -365,7 +365,9 @@ public class BlowActivity extends AppCompatActivity {
     Runnable runIntentToTestComplete= new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
+            deviceManager.disconnect();
+            //Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
+            Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);
             finish();

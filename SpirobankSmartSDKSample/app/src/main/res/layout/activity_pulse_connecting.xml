@@ -15,33 +15,34 @@
 
     <TextView
         android:id="@+id/directionTextView"
-        android:layout_width="470dp"
-        android:layout_height="211dp"
+        android:layout_width="match_parent"
+        android:layout_height="331dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="141dp"
-        android:text="Please connect the pulse oximeter and press the button "
+        android:text="@string/search_for_pulse"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="50sp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/retryButton"
         android:layout_width="295dp"
         android:layout_height="115dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="87dp"
         android:onClick="onClickConnect"
-        android:text="Connected!"
-        android:textSize="30sp" />
+        android:text="Retry"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="178dp"
         android:layout_height="120dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="370dp"
-        android:visibility="invisible" />
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
 </RelativeLayout>
