@@ -38,7 +38,9 @@
         <activity android:name="com.spirometry.homespirometry.Q3Activity" />
         <activity android:name="com.spirometry.homespirometry.Q4Activity" />
         <activity android:name="com.spirometry.homespirometry.TestCompleteActivity" />
-        <activity android:name="com.spirometry.homespirometry.PulseActivity" />
+        <activity android:name="com.spirometry.homespirometry.PulseActivity">
+
+        </activity>
         <activity android:name="com.spirometry.homespirometry.HelpActivity" />
         <receiver android:name="com.spirometry.homespirometry.AlarmNotificationReciever" />
 

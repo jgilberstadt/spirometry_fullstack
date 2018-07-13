@@ -33,9 +33,7 @@ import java.util.Map;
 
 public class PulseConnectingActivity extends AppCompatActivity{
     MyParcelable mBundleData;
-
     private String deviceMac;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
