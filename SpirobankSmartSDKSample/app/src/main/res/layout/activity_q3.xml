@@ -53,7 +53,7 @@
                 android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
-                <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                <com.spirometry.homespirometry.classes.ToggleableRadioButton
                     android:id="@+id/c1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -64,7 +64,7 @@
                     android:text="Yes"
                     android:textSize="36sp" />
 
-                <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                <com.spirometry.homespirometry.classes.ToggleableRadioButton
                     android:id="@+id/c2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -122,7 +122,7 @@
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c11"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                             android:text="Yes"
                             android:textSize="40dp" />
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c12"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c21"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                             android:text="Yes"
                             android:textSize="40dp" />
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c22"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
                         android:layout_weight="1.5"
                         android:orientation="horizontal">
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c31"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
                             android:text="Yes"
                             android:textSize="40dp" />
 
-                        <com.spirometry.spirobanksmartsdksample.classes.ToggleableRadioButton
+                        <com.spirometry.homespirometry.classes.ToggleableRadioButton
                             android:id="@+id/c32"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
