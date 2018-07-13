@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihealth.communication.control.Po3Control;
@@ -35,10 +37,18 @@ public class PulseConnectingActivity extends AppCompatActivity{
     MyParcelable mBundleData;
     private String deviceMac;
 
+    TextView directionTV;
+    Button retryButton;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pulse_connecting);
+
+        directionTV = (TextView) findViewById(R.id.directionTextView);
+        retryButton  = (Button) findViewById(R.id.retryButton);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -114,13 +124,14 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
         @Override
         public void onDeviceNotify(String mac, String deviceType, String action, String message) {
-            Log.d("hyunrae", "ondevicenotify");
+            // not needed
         }
 
         @Override
         public void onScanFinish() {
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
-            Log.d("hyunrae", "onScanFinish");
+            progressBar.setVisibility(View.GONE);
+            directionTV.setText(R.string.pulse_not_found);
+            retryButton.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -131,7 +142,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
 
     public void onClickConnect(View view){
-        iHealthDevicesManager.getInstance().startDiscovery(1000);
-        this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+        progressBar.setVisibility(View.VISIBLE);
+        directionTV.setText(R.string.search_for_pulse);
+        retryButton.setVisibility(View.GONE);
     }
 }

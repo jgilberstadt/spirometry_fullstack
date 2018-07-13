@@ -34,6 +34,14 @@
     <string name="LoginActivity"> LoginActivity help page. Come back and fill this out </string>
     <string name="SpirometerConnectingActivity"> SpirometerConnectingActivity help page. Come back and fill this out </string>
     <string name="BlowActivity"> BlowActivity help page. Come back and fill this out </string>
+
+    <string name="search_for_pulse">Searching for Pulse Oximeter</string>
+    <string name="pulse_not_found">The Pulse Oximeter was not found. Please ensure that the device has enough battery. Please press the button on the device and then the RETRY button below</string>
+    <string name="PulseConnectingActivity"> PulseConnectingActivity help page. Come back and fill this out </string>
+
+    <string name="pulse_direction">Please insert any finger except the thumb completely into the pulse oximeter</string>
+    <string name="PulseActivity"> PulseActivity help page. Come back and fill this out </string>
+
     <string name="QuestionnaireInstructionActivity"> QuestionnaireInstructionActivity help page. Come back and fill this out </string>
     <string name="TestCompleteActivity"> TestCompleteActivity help page. Come back and fill this out </string>
     <string name="Q1Activity"> Q1Activity help page. Come back and fill this out </string>
