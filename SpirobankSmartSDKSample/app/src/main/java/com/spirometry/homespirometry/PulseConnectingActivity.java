@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ihealth.communication.control.Po3Control;
 import com.ihealth.communication.control.PoProfile;
+import com.ihealth.communication.manager.DiscoveryTypeEnum;
 import com.ihealth.communication.manager.iHealthDevicesCallback;
 import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
@@ -33,8 +35,6 @@ public class PulseConnectingActivity extends AppCompatActivity{
     MyParcelable mBundleData;
 
     private String deviceMac;
-    private Po3Control mPo3Control;
-    private int clientId;
 
 
     @Override
@@ -47,16 +47,10 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
-
         iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.ASSERT);
 
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
 
-        clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
-
-        /* Limited wants to receive notification specified device */
-        iHealthDevicesManager.getInstance().addCallbackFilterForDeviceType(clientId,
-                iHealthDevicesManager.TYPE_PO3);
 
         try {
             InputStream is = getAssets().open("com_spirometry_homespirometry_android.pem");
@@ -66,7 +60,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             is.close();
             boolean isPass = iHealthDevicesManager.getInstance().sdkAuthWithLicense(buffer);
             Log.i("hyunrae", "isPass:    " + isPass);
-            iHealthDevicesManager.getInstance().startDiscovery(1000);
+            iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         } catch (IOException e) {
             Log.d("hyunrae", e.toString());
             e.printStackTrace();
@@ -86,8 +80,15 @@ public class PulseConnectingActivity extends AppCompatActivity{
             if (manufactorData != null) {
                // Log.d("hyunrae", "onScanDevice mac suffix = " + manufactorData.get(HsProfile.SCALE_WIFI_MAC_SUFFIX));
             }
-
+            deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
+            if (success) {
+                Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
+                intent.putExtra("bundle-data", mBundleData);
+                intent.putExtra("mac", deviceMac);
+                startActivity(intent);
+            }
+
             Log.d("hyunrae2", Boolean.toString(success));
         }
 
@@ -120,8 +121,8 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
         @Override
         public void onScanFinish() {
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
             Log.d("hyunrae", "onScanFinish");
-
         }
 
         @Override
@@ -131,32 +132,8 @@ public class PulseConnectingActivity extends AppCompatActivity{
     };
 
 
-
-    iHealthDevicesCallback mIHealthDeviceCallback = new iHealthDevicesCallback() {
-
-        public void onDeviceConnectionStateChange(String mac, String deviceType, int status, int errorID) {
-            if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
-                Log.d("hyunrae", "connected");
-            } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
-                Log.d("hyunrae", "disconnected");
-            }
-
-        }
-
-
-
-        public void onDeviceNotify(String mac, String deviceType, String action, String message) {
-
-        }
-
-
-    };
-
     public void onClickConnect(View view){
         iHealthDevicesManager.getInstance().startDiscovery(1000);
-
-//        Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
-//        intent.putExtra("bundle-data", mBundleData);
-//        startActivity(intent);
+        this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
     }
 }
