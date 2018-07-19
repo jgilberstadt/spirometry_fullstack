@@ -85,7 +85,7 @@ public class Q1Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
                     }
                 });
             }
@@ -107,7 +107,7 @@ public class Q1Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) (3*(questionLayout.getHeight() + marginSize)) + radioGroup5.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", 3*(questionLayout.getHeight() + marginSize) + radioGroup5.getBottom()).setDuration(2000).start();
                     }
                 });
             }
@@ -118,7 +118,7 @@ public class Q1Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) (4*(questionLayout.getHeight() + marginSize)) + radioGroup6.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", 4*(questionLayout.getHeight() + marginSize) + radioGroup6.getBottom()).setDuration(2000).start();
                     }
                 });
             }
@@ -129,7 +129,7 @@ public class Q1Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) (5*(questionLayout.getHeight() + marginSize)) +radioGroup7.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", 5*(questionLayout.getHeight() + marginSize) +radioGroup7.getBottom()).setDuration(2000).start();
                     }
                 });
             }

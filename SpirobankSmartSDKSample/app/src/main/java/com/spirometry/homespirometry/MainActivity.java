@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 infoList.add("Start Scan");
-                //deviceManager.startDiscovery(MainActivity.this);// so this basically looks for the device to connect
+                deviceManager.startDiscovery(MainActivity.this);// so this basically looks for the device to connect
 
                 deviceInfoArray.clear(); //이 어레이는 옛날에 나와있던 Z008182를 없애준다
                 handleUpdateInfo.post(runUpdateInfo); //여기서 업데이트 해주는거 같은데
@@ -242,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
 
                     volume=0;
                     //EndOfTestTimeOUT from 15 to 120 sec - Default = 15 sec
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
                     Log.d(TAG, "1 fvc: ");
                     currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
                     Log.d(TAG, "1 pefFev1: ");
@@ -262,7 +261,9 @@ public class MainActivity extends AppCompatActivity {
 
                     volume=0;
                     //EndOfTestTimeOUT from 15 to 120 sec - Default = 15 sec
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)90);
+                 //  currDevice.startTest(getApplicationContext(), Device.TestType.Fvc);
+
+                   currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)90);
                     Log.d(TAG, "1 fvc: ");
                   //  currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
                     Log.d(TAG, "1 pefFev1: ");
@@ -379,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
           Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
     //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
     //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-            if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
+          if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 //if you find the device, then send the bluetooth information over.
                 Log.d(TAG, "bro: " + deviceInfo);
                 discoveredDeviceInfo = deviceInfo;
@@ -486,9 +487,10 @@ public class MainActivity extends AppCompatActivity {
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
             String  evol = String.valueOf(resultsPefFev1.geteVol_mL() );
 
-            Log.d(TAG, "resultsUpdated for peffev1: " + pef + fev1);
+            Log.d(TAG, "1111resultsUpdated for peffev1: " + qualityMsgCode);
 
-          //  upload_PefFev1(pef, fev1, peftime, evol);
+
+            upload_PefFev1(pef, fev1, peftime, evol);
 
         }
         @Override
@@ -511,10 +513,13 @@ public class MainActivity extends AppCompatActivity {
             String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
 
             Log.d(TAG, "resultsUpdated for fvc: " + pef + fvc);
+            Log.d(TAG, "1111resultsUpdated for peffev1: " + qualityMsgCode);
+            Log.d(TAG, "1111resultsUpdated for peffev1: " + qualityMsgCode);
 
-            currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
 
-            //   upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
+           // currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+
+               upload_FVC(pef, fev1, fvc, fev1_fvc, fev6, fef2575);
 
         }
 
@@ -539,7 +544,7 @@ public class MainActivity extends AppCompatActivity {
             handleUpdateTest.post(runUpdateTest);
             infoList.add("Test Stopped " + device.getDeviceInfo().getAdvertisementDataName());
             handleUpdateInfo.post(runUpdateInfo);
-            currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
+           // currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)40);
         }
 
         @Override
@@ -619,39 +624,42 @@ public class MainActivity extends AppCompatActivity {
             switch (qualityMsgCode) {
                 case Patient.QualityMessageAvoidCoughing:
                     qualityMsgString = "Avoid Coughing";
-                    Log.d(TAG, "aaaa");
+                    Log.d(TAG, "aaaa---a");
                     break;
                 case Patient.QualityMessageBlowOutFaster:
                     qualityMsgString = "Blow Out Faster";
-                    Log.d(TAG, "bbbb");
+                    Log.d(TAG, "bbbb---b");
 
                     break;
                 case Patient.QualityMessageDontEsitate:
                     qualityMsgString = "Don't Esitate";
-                    Log.d(TAG, "cccc");
+                    Log.d(TAG, "cccc---c");
 
                     break;
                 case Patient.QualityMessageDontStartTooEarly:
                     qualityMsgString = "Don't Start Too Early";
-                    Log.d(TAG, "dddd");
+                    Log.d(TAG, "dddd---d");
 
                     break;
                 case Patient.QualityMessageGoodBlow:
                     qualityMsgString = "Good Blow";
-                    Log.d(TAG, "eeee");
+                    Log.d(TAG, "eeee---e");
 
                     break;
                 case Patient.QualityMessageBlowOutLonger:
                     qualityMsgString = "Blow Out Longer";
-                    Log.d(TAG, "ffff");
+                    Log.d(TAG, "ffff---f");
 
                     break;
                 case Patient.QualityMessageAbruptEnd:
                     qualityMsgString = "Abrupt End";
-                    Log.d(TAG, "gggg");
+                    Log.d(TAG, "gggg---g");
 
                     break;
             }
+            ((TextView) findViewById(R.id.tvResult)).setText(result);
+            ((TextView) findViewById(R.id.tvQualityMsg)).setText(Integer.toHexString(qualityRawCode) + " " + qualityMsgString);
+
         }
     };
 

@@ -1,103 +1,107 @@
 package com.spirometry.homespirometry;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihealth.communication.control.Po3Control;
 import com.ihealth.communication.control.PoProfile;
+import com.ihealth.communication.manager.DiscoveryTypeEnum;
 import com.ihealth.communication.manager.iHealthDevicesCallback;
 import com.ihealth.communication.manager.iHealthDevicesManager;
-import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.homespirometry.R;
+import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.util.Random;
+import java.io.IOException;
+import java.io.InputStream;
 
+public class PO3 extends AppCompatActivity implements View.OnClickListener {
 
-public class PulseActivity extends AppCompatActivity {
+    private static String TAG = "Po3";
 
-    private static final String TAG = PulseActivity.class.getSimpleName();
-
-    MyParcelable mBundleData;
+    private TextView tv_return;
+    private String deviceMac;
     private int clientId;
     private Po3Control mPo3Control;
-    private String deviceMac;
-
-    TextView pulseNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pulse);
+        setContentView(R.layout.activity_po3);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        //set screen always ON
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
-        mBundleData = getIntent().getParcelableExtra("bundle-data");
-
-        deviceMac = getIntent().getStringExtra("mac");
-
-        clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
-
+        initView();
+        Intent intent = getIntent();
+        deviceMac = intent.getStringExtra("mac");
+        clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDevicesCallback);
         /* Limited wants to receive notification specified device */
         iHealthDevicesManager.getInstance().addCallbackFilterForDeviceType(clientId,
                 iHealthDevicesManager.TYPE_PO3);
-
-        pulseNumber = (TextView) findViewById(R.id.pulseNumber);
-
+        /* Get po3 controller */
         mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
-        Log.d("hyunrae", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
-
-        mPo3Control.getHistoryData(); // this will be function b
-        mPo3Control.startMeasure();  // function c (called after function b)
-
-   /*     Random r = new Random();
-        int subRandom = r.nextInt(5);
-        int finalRandom = r.nextInt(subRandom);
-
-        Boolean administerSurvey = finalRandom == 0;
-
-        if (administerSurvey) {
-            // administer survey
-
-        } else {
-            // skip survey
-
-        } */
-
- //       Log.d(TAG, "onCreate: " + "until");
-//        mPo3Control.startMeasure();
-
+        Log.d(TAG, "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
     }
 
-    iHealthDevicesCallback mIHealthDeviceCallback = new iHealthDevicesCallback() {
+    private void initView() {
+        tv_return = (TextView) findViewById(R.id.tv_return);
+        findViewById(R.id.btn_getOfflineData).setOnClickListener(this);
+        findViewById(R.id.btn_disconnect).setOnClickListener(this);
+        findViewById(R.id.btn_startMeasure).setOnClickListener(this);
+        findViewById(R.id.btn_getBattery).setOnClickListener(this);
+        findViewById(R.id.btn_askDeviceInfo).setOnClickListener(this);
+        findViewById(R.id.btn_startUpgrade).setOnClickListener(this);
+        findViewById(R.id.btn_stopUpgrade).setOnClickListener(this);
+    }
+
+    iHealthDevicesCallback mIHealthDevicesCallback = new iHealthDevicesCallback() {
 
         public void onDeviceConnectionStateChange(String mac, String deviceType, int status, int errorID) {
-            if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
-                Log.d("hyunrae o", "device is connected");
-                mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
-                Log.d("hyunrae o", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
-                //mPo3Control.startMeasure();
+            Log.e(TAG, "mac:" + mac + "-deviceType:" + deviceType + "-status:" + status);
+            noticeString = "device disconnect";
+            mPo3Control = null;
+            Message message2 = new Message();
+            message2.what = 1;
+            message2.obj = noticeString;
+            mHandler.sendMessage(message2);
 
-            } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
-                Log.d("hyunrae o", "disconnected");
+            switch (status) {
+                case iHealthDevicesManager.DEVICE_STATE_DISCONNECTED:
+                    mPo3Control = null;
+                    Toast.makeText(PO3.this, "The device disconnect", Toast.LENGTH_LONG).show();
+
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        public void onDeviceNotify(String mac, String deviceType, String action, String message) {
+        ;
 
+        public void onDeviceNotify(String mac, String deviceType, String action, String message) {
             Log.d(TAG, "mac:" + mac + "--type:" + deviceType + "--action:" + action + "--message:" + message);
             JSONTokener jsonTokener = new JSONTokener(message);
             switch (action) {
@@ -120,13 +124,11 @@ public class PulseActivity extends AppCompatActivity {
                                     + "-wave1:"
                                     + wave[0]
                                     + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                            //pulseNumber.setText( oxygen + " " + pulseRate);
                         }
-
                         Message message2 = new Message();
                         message2.what = 1;
                         message2.obj = message;
-                        //-         mHandler.sendMessage(message2);
+                        mHandler.sendMessage(message2);
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -148,7 +150,7 @@ public class PulseActivity extends AppCompatActivity {
                         Message message3 = new Message();
                         message3.what = 1;
                         message3.obj = message;
-                        //-          mHandler.sendMessage(message3);
+                        mHandler.sendMessage(message3);
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -171,18 +173,18 @@ public class PulseActivity extends AppCompatActivity {
                         Message message3 = new Message();
                         message3.what = 1;
                         message3.obj = message;
-                        //-        mHandler.sendMessage(message3);
+                        mHandler.sendMessage(message3);
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     break;
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
-                    //-         noticeString = "no history data";
+                    noticeString = "no history data";
                     Message message2 = new Message();
                     message2.what = 1;
-                    //-             message2.obj = noticeString;
-                    //-           mHandler.sendMessage(message2);
+                    message2.obj = noticeString;
+                    mHandler.sendMessage(message2);
                     break;
                 case PoProfile.ACTION_BATTERY_PO:
                     JSONObject jsonobject;
@@ -198,23 +200,102 @@ public class PulseActivity extends AppCompatActivity {
                     Message message3 = new Message();
                     message3.what = 1;
                     message3.obj = message;
-                    //-      mHandler.sendMessage(message3);
+                    mHandler.sendMessage(message3);
                     break;
                 default:
                     break;
             }
-
         }
 
+        ;
     };
+    String noticeString = "";
+    Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+                    tv_return.setText((String) msg.obj);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
+
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.btn_getOfflineData:
+                if (mPo3Control == null) {
+                    Log.i(TAG, "mPo3Control == null");
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+
+                } else {
+                    mPo3Control.getHistoryData();
+                }
+                break;
+            case R.id.btn_startMeasure:
+                if (mPo3Control == null) {
+                    Log.i(TAG, "mPo3Control == null");
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+                    ;
+
+                } else {
+                    mPo3Control.startMeasure();
+                }
+                break;
+            case R.id.btn_getBattery:
+                if (mPo3Control == null) {
+                    Log.i(TAG, "mPo3Control == null");
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+
+                } else {
+                    mPo3Control.getBattery();
+                }
+                break;
+            case R.id.btn_askDeviceInfo:
+                if (mPo3Control != null)
+                    iHealthDevicesUpgradeManager.getInstance().queryUpgradeInfoFromDeviceAndCloud(deviceMac, iHealthDevicesManager.TYPE_PO3);
+                else
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.btn_startUpgrade:
+                if (mPo3Control != null)
+                    iHealthDevicesUpgradeManager.getInstance().startUpGrade(deviceMac, iHealthDevicesManager.TYPE_PO3);
+                else
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.btn_disconnect:
+                if (mPo3Control == null) {
+                    Log.i(TAG, "mPo3Control == null");
+                    Toast.makeText(PO3.this, "mPo3Control == null", Toast.LENGTH_LONG).show();
+
+                } else {
+                    mPo3Control.disconnect();
+                }
+                break;
+            case R.id.btn_stopUpgrade:
+                iHealthDevicesUpgradeManager.getInstance().stopUpgrade(deviceMac, iHealthDevicesManager.TYPE_PO3);
+                break;
+            default:
+                iHealthDevicesUpgradeManager.getInstance().isUpgradeState(deviceMac, iHealthDevicesManager.TYPE_PO3);
+
+                break;
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        iHealthDevicesManager.getInstance().unRegisterClientCallback(clientId);
+        if (mPo3Control!=null)
+        mPo3Control.destroy();
+    }
+
 }
-
- /*   Handler handlerPulseRate = new Handler();
-    Runnable runPulseRate = new Runnable() {
-        @Override
-        public void run() {
-        } //+++
-    }; */
-
-
-

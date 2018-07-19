@@ -22,6 +22,7 @@ import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.BuildConfig;
 import com.spirometry.homespirometry.R;
+import com.spirometry.spirobanksmartsdk.DeviceManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +36,11 @@ import java.util.Map;
 
 public class PulseConnectingActivity extends AppCompatActivity{
     MyParcelable mBundleData;
+    private static final String TAG = PulseConnectingActivity.class.getSimpleName();
+
     private String deviceMac;
+
+    DeviceManager deviceManager;
 
     TextView directionTV;
     Button retryButton;
@@ -46,6 +51,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pulse_connecting);
 
+        //deviceManager.disconnect();
         directionTV = (TextView) findViewById(R.id.directionTextView);
         retryButton  = (Button) findViewById(R.id.retryButton);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -73,8 +79,8 @@ public class PulseConnectingActivity extends AppCompatActivity{
             Log.d("hyunrae", e.toString());
             e.printStackTrace();
         }
-    }
 
+    }
 
     private iHealthDevicesCallback miHealthDevicesCallback = new iHealthDevicesCallback() {
 
@@ -90,11 +96,15 @@ public class PulseConnectingActivity extends AppCompatActivity{
             }
             deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
-            if (success) {
-                Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
-                intent.putExtra("bundle-data", mBundleData);
-                intent.putExtra("mac", deviceMac);
-                startActivity(intent);
+            if (!success) {
+                Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
+
+            }else { //if(success)
+                Log.d(TAG, "onScanDevice: " + "Bro 3.3 Scanned Device Successfully");
+            //    Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
+            //    intent.putExtra("bundle-data", mBundleData);
+            //    intent.putExtra("mac", deviceMac);
+            //    startActivity(intent);
             }
 
             Log.d("hyunrae2", Boolean.toString(success));
@@ -107,10 +117,18 @@ public class PulseConnectingActivity extends AppCompatActivity{
             bundle.putString("mac", mac);
             bundle.putString("type", deviceType);
             Message msg = new Message();
-            if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
-            } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
-            }
             msg.setData(bundle);
+
+            if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
+                Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro 3.4 Connected to device successfully");
+                Intent intent = new Intent(PulseConnectingActivity.this, PO3.class);
+                intent.putExtra("bundle-data", mBundleData);
+                intent.putExtra("mac", deviceMac);
+                startActivity(intent);
+
+            } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
+                Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro the Device Is Disconnected");
+            }
         }
 
         @Override
@@ -120,6 +138,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             bundle.putString("userstatus", userStatus + "");
             Message msg = new Message();
             msg.setData(bundle);
+            Log.d(TAG, "onUserStatus: " + "Bro2");
         }
 
         @Override
@@ -132,6 +151,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             progressBar.setVisibility(View.GONE);
             directionTV.setText(R.string.pulse_not_found);
             retryButton.setVisibility(View.VISIBLE);
+            Log.d(TAG, "onScanFinish: "  + "Bro3");
         }
 
         @Override
@@ -140,9 +160,13 @@ public class PulseConnectingActivity extends AppCompatActivity{
         }
     };
 
-
     public void onClickConnect(View view){
-        iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+        //iHealthDevicesManager.getInstance().startDiscovery();
+      //  iHealthDevicesManager.getInstance().startDiscovery(1000);
+        iHealthDevicesManager.getInstance().stopDiscovery();
+       iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+        Log.d(TAG, "onClickConnect " + "Connecting ....");
+
         progressBar.setVisibility(View.VISIBLE);
         directionTV.setText(R.string.search_for_pulse);
         retryButton.setVisibility(View.GONE);

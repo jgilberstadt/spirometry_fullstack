@@ -78,7 +78,7 @@ public class Q4Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
                     }
                 });
             }
@@ -100,7 +100,7 @@ public class Q4Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) (3*(questionLayout.getHeight() + marginSize)) + radioGroup5.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", 3*(questionLayout.getHeight() + marginSize) + radioGroup5.getBottom()).setDuration(2000).start();
                     }
                 });
             }

@@ -77,7 +77,7 @@ public class Q2Activity extends AppCompatActivity {
                 answersSV.post(new Runnable() {
                     @Override
                     public void run() {
-                        ObjectAnimator.ofInt(answersSV, "scrollY", (int) marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
+                        ObjectAnimator.ofInt(answersSV, "scrollY", marginSize + questionLayout.getHeight() + radioGroup3.getBottom()).setDuration(2000).start();
                     }
                 });
             }

@@ -104,7 +104,8 @@ public class BlowActivity extends AppCompatActivity {
         //Having callbacks: startTest() results to return
         currDevice.setDeviceCallback(deviceCallback);
 
-        currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
+        //currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
+        currDevice.startTest(getApplicationContext(), Device.TestType.Fvc);
 
         blowDirection = (TextView) findViewById(R.id.blowDirection);
         blowMessage = (TextView) findViewById(R.id.blowMessage);
@@ -119,7 +120,9 @@ public class BlowActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(numBlows <6) {
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)50);
+                    //currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)50);
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc);
+
                     buttonReBlow.setVisibility(View.INVISIBLE);
                     blowDirection.setVisibility(View.VISIBLE);
                 }else{
@@ -236,6 +239,7 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void resultsUpdated(ResultsPefFev1 resultsPefFev1) {
+
             numBlows++;
             messageNumber--;
 
@@ -257,6 +261,9 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void resultsUpdated(ResultsFvc resultsFvc) {
+            Log.d("hyunrae", Integer.toString(resultsFvc.getFvc_cL()));
+            Log.d("hyunrae", Integer.toString(resultsFvc.getFev6_cl()));
+
             numBlows++;
             messageNumber--;
             handlerTextViewNumberChange.post(runTextViewNumberChange);
@@ -367,8 +374,8 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void run() {
             deviceManager.disconnect();
-            //Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
-            Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
+            Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
+          //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);
             finish();
@@ -391,7 +398,8 @@ public class BlowActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
+                   // currDevice.startTest(getApplicationContext(), Device.TestType.Fvc, (byte)50);
+                    currDevice.startTest(getApplicationContext(), Device.TestType.Fvc);
                     Log.d(TAG, "bruh fvc it worked?");
                 }
             }, 1000);
