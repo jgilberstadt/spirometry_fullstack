@@ -137,26 +137,26 @@ public class BlowActivity extends AppCompatActivity {
             Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
             //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
             //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-            if (deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+            if (deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 //if you find the device, then send the bluetooth information over.
                 Log.d(TAG, "When HardCode Device Matches: " + deviceInfo);
-                discoveredDeviceInfo = deviceInfo;
+      /*          discoveredDeviceInfo = deviceInfo;
                 deviceInfoStringAddress = discoveredDeviceInfo.getAddress();
                 deviceInfoStringName = discoveredDeviceInfo.getName();
                 deviceInfoStringProtocol = discoveredDeviceInfo.getProtocol();
                 deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
-                deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName();
+                deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName(); */
 
                 handleUpdateListScan.post(runUpdateListScan); // I need this in next activity to connect
                 // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
-                deviceInfoArray.add(deviceInfoStringAddress);
+        /*        deviceInfoArray.add(deviceInfoStringAddress);
                 deviceInfoArray.add(deviceInfoStringName);
                 deviceInfoArray.add(deviceInfoStringProtocol);
                 deviceInfoArray.add(deviceInfoStringSerialNumber);
                 deviceInfoArray.add(deviceInfoStringAdvertisementDataName);
 
-                mBundleData.setDeviceInfoArray(deviceInfoArray);
-                Log.d("deviceInfo", "Hello: " + discoveredDeviceInfo.toString());
+                mBundleData.setDeviceInfoArray(deviceInfoArray); */
+         //       Log.d("deviceInfo", "Hello: " + discoveredDeviceInfo.toString());
                /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
                 handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
             } else {
@@ -180,6 +180,7 @@ public class BlowActivity extends AppCompatActivity {
             infoDisconnect = "Disconnected \n" + device.getDeviceInfo().getAdvertisementDataName();
             deviceManager.startDiscovery(BlowActivity.this);
             currDevice = null;
+
             //  handleUpdateInfo.post(runUpdateInfo);
         }
 
@@ -429,19 +430,3 @@ public class BlowActivity extends AppCompatActivity {
     }
 
 }
-
-
-
- /* class Patientsss {
-    String pef;
-    String fev1;
-    String peftime;
-    String evol;
-    Patientsss(String pef, String fev1, String peftime, String evol){
-        this.pef = pef;
-        this.fev1 = fev1;
-        this.peftime = peftime;
-        this.evol = evol;
-    }
-} */
-

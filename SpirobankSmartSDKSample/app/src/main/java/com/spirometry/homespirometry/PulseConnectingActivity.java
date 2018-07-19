@@ -35,8 +35,8 @@ import java.util.Map;
 
 public class PulseConnectingActivity extends AppCompatActivity{
     MyParcelable mBundleData;
-
     private String deviceMac;
+
     TextView directionTV;
     Button retryButton;
     ProgressBar progressBar;
