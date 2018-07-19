@@ -143,6 +143,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
     public void onClickConnect(View view){
         iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+        iHealthDevicesManager.getInstance().startDiscovery(2000);
         progressBar.setVisibility(View.VISIBLE);
         directionTV.setText(R.string.search_for_pulse);
         retryButton.setVisibility(View.GONE);
