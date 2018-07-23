@@ -165,7 +165,7 @@ public class BlowDataUploadPage extends AppCompatActivity {
     Runnable runIntentToTestComplete= new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(BlowDataUploadPage.this, TestCompleteActivity.class);
+            Intent intent = new Intent(BlowDataUploadPage.this, PulseConnectingActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             BlowDataUploadPage.this.startActivity(intent);
             finish();

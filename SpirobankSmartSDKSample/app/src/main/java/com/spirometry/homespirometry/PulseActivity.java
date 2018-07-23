@@ -3,10 +3,12 @@ package com.spirometry.homespirometry;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -35,6 +37,11 @@ public class PulseActivity extends AppCompatActivity {
     private String deviceMac;
 
     TextView pulseNumber;
+    TextView countDown;
+    TextView secondsRemaining;
+    boolean startTest = false;
+
+    CountDownTimer myCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class PulseActivity extends AppCompatActivity {
                 iHealthDevicesManager.TYPE_PO3);
 
         pulseNumber = (TextView) findViewById(R.id.pulseNumber);
+        countDown = (TextView) findViewById(R.id.countDown);
+        secondsRemaining = (TextView) findViewById(R.id.secondsRemaining);
 
         mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
         Log.d("hyunrae", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
@@ -98,7 +107,7 @@ public class PulseActivity extends AppCompatActivity {
 
         public void onDeviceNotify(String mac, String deviceType, String action, String message) {
 
-            Log.d(TAG, "mac:" + mac + "--type:" + deviceType + "--action:" + action + "--message:" + message);
+         //   Log.d(TAG, "mac:" + mac + "--type:" + deviceType + "--action:" + action + "--message:" + message);
             JSONTokener jsonTokener = new JSONTokener(message);
             switch (action) {
                 case PoProfile.ACTION_OFFLINEDATA_PO:
@@ -120,20 +129,22 @@ public class PulseActivity extends AppCompatActivity {
                                     + "-wave1:"
                                     + wave[0]
                                     + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                            Log.i(TAG, "BRUH1111");
                             //pulseNumber.setText( oxygen + " " + pulseRate);
                         }
 
-                        Message message2 = new Message();
-                        message2.what = 1;
-                        message2.obj = message;
-                        //-         mHandler.sendMessage(message2);
+                //        Message message2 = new Message();
+                //        message2.what = 1;
+                //        message2.obj = message;
+                //        mHandler.sendMessage(message2);
+
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     break;
                 case PoProfile.ACTION_LIVEDA_PO:
-                    try {
+                    try { // this one only tells on LOG.I, so not really important
                         JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
                         int oxygen = jsonObject.getInt(PoProfile.BLOOD_OXYGEN_PO);
                         int pulseRate = jsonObject.getInt(PoProfile.PULSE_RATE_PO);
@@ -143,12 +154,45 @@ public class PulseActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             wave[i] = jsonArray.getInt(i);
                         }
-                        Log.i(TAG, "oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-                                + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                        Message message3 = new Message();
-                        message3.what = 1;
-                        message3.obj = message;
-                        //-          mHandler.sendMessage(message3);
+               //         Log.i(TAG, "oxygenn:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
+               //                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                        Log.i(TAG, "BRUH2222" + message);
+                        Log.i(TAG, "BRUH2222" + oxygen);
+
+                       // Message message3 = new Message();
+                       // message3.what = 1;
+                       // message3.obj = message;
+                       // mHandler.sendMessage(message3);
+                        Message wow = new Message();
+                        wow.what =1;
+                        String stOxygen = Integer.toString(oxygen);
+                        String stPulseRate = Integer.toString(pulseRate);
+                        wow.obj = ("spO2%: " + stOxygen + "      PR bpm: " + stPulseRate);
+                        mHandler.sendMessage(wow);
+
+                        if(startTest == false){
+                            startTest = true;
+
+                            myCountDownTimer = new CountDownTimer(15000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                    int countDown = (int)(millisUntilFinished / 1000);
+                                    secondsRemaining.setText(String.valueOf(countDown));
+                                }
+
+                                public void onFinish() {
+                                    countDown.setText("Done!");
+                                    secondsRemaining.setVisibility(View.GONE);
+                                    Intent intent = new Intent(PulseActivity.this, TestCompleteActivity.class);
+                                    intent.putExtra("bundle-data", mBundleData);
+                                    intent.putExtra("mac", deviceMac);
+                                    startActivity(intent);
+                                }
+                            }.start();
+                        }
+
+
+
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -166,30 +210,39 @@ public class PulseActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             wave[i] = jsonArray.getInt(i);
                         }
-                        Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-                                + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                        Message message3 = new Message();
-                        message3.what = 1;
-                        message3.obj = message;
-                        //-        mHandler.sendMessage(message3);
+              //          Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
+              //                  + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                        Log.i(TAG, "BRUH3333");
+              //          Message message3 = new Message();
+              //          message3.what = 1;
+              //          message3.obj = message;
+              //          mHandler.sendMessage(message3);
+
+                        myCountDownTimer.cancel();
+                        startTest = false;
+
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     break;
+
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
-                    //-         noticeString = "no history data";
+                    noticeString = "no history data";
+                    Log.i(TAG, "BRUH4444");
                     Message message2 = new Message();
                     message2.what = 1;
-                    //-             message2.obj = noticeString;
-                    //-           mHandler.sendMessage(message2);
+                    message2.obj = noticeString;
+                    mHandler.sendMessage(message2);
                     break;
+
                 case PoProfile.ACTION_BATTERY_PO:
                     JSONObject jsonobject;
                     try {
                         jsonobject = (JSONObject) jsonTokener.nextValue();
                         int battery = jsonobject.getInt(PoProfile.BATTERY_PO);
                         Log.d(TAG, "battery:" + battery);
+                        Log.i(TAG, "BRUH5555");
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
@@ -198,7 +251,7 @@ public class PulseActivity extends AppCompatActivity {
                     Message message3 = new Message();
                     message3.what = 1;
                     message3.obj = message;
-                    //-      mHandler.sendMessage(message3);
+                    mHandler.sendMessage(message3);
                     break;
                 default:
                     break;
@@ -207,7 +260,29 @@ public class PulseActivity extends AppCompatActivity {
         }
 
     };
+    String noticeString = "";
+    Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+                    pulseNumber.setText((String) msg.obj);
+                    break;
+
+                case 2:
+                    pulseNumber.setText(msg.arg1);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
+
 }
+
+
 
  /*   Handler handlerPulseRate = new Handler();
     Runnable runPulseRate = new Runnable() {
