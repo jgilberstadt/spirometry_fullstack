@@ -124,6 +124,7 @@ public class PO3 extends AppCompatActivity implements View.OnClickListener {
                                     + "-wave1:"
                                     + wave[0]
                                     + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                            Log.d(TAG, "BRUH1");
                         }
                         Message message2 = new Message();
                         message2.what = 1;
@@ -147,6 +148,7 @@ public class PO3 extends AppCompatActivity implements View.OnClickListener {
                         }
                         Log.i(TAG, "oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
                                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                        Log.d(TAG, "BRUH2");
                         Message message3 = new Message();
                         message3.what = 1;
                         message3.obj = message;
@@ -170,6 +172,7 @@ public class PO3 extends AppCompatActivity implements View.OnClickListener {
                         }
                         Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
                                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                        Log.d(TAG, "BRUH3");
                         Message message3 = new Message();
                         message3.what = 1;
                         message3.obj = message;
@@ -181,6 +184,7 @@ public class PO3 extends AppCompatActivity implements View.OnClickListener {
                     break;
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
                     noticeString = "no history data";
+                    Log.d(TAG, "BRUH4");
                     Message message2 = new Message();
                     message2.what = 1;
                     message2.obj = noticeString;
@@ -192,6 +196,7 @@ public class PO3 extends AppCompatActivity implements View.OnClickListener {
                         jsonobject = (JSONObject) jsonTokener.nextValue();
                         int battery = jsonobject.getInt(PoProfile.BATTERY_PO);
                         Log.d(TAG, "battery:" + battery);
+                        Log.d(TAG, "BRUH5");
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block

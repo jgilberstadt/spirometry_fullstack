@@ -31,10 +31,10 @@
         android:gravity="center"
         android:text="NA"
         android:textColor="@color/colorAccent"
-        android:textSize="100sp" />
+        android:textSize="45sp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/countDown"
         android:layout_width="348dp"
         android:layout_height="105dp"
         android:layout_alignParentBottom="true"
@@ -50,9 +50,9 @@
         android:id="@+id/secondsRemaining"
         android:layout_width="127dp"
         android:layout_height="104dp"
-        android:layout_alignTop="@+id/textView6"
+        android:layout_alignTop="@+id/countDown"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/countDown"
         android:gravity="center"
         android:text="15"
         android:textColor="@android:color/black"

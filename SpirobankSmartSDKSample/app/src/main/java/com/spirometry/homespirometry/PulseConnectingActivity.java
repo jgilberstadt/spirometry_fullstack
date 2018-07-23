@@ -121,7 +121,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
             if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
                 Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro 3.4 Connected to device successfully");
-                Intent intent = new Intent(PulseConnectingActivity.this, PO3.class);
+                Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
                 intent.putExtra("bundle-data", mBundleData);
                 intent.putExtra("mac", deviceMac);
                 startActivity(intent);
