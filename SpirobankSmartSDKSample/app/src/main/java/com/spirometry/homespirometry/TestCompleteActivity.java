@@ -57,6 +57,12 @@ public class TestCompleteActivity extends AppCompatActivity {
         Calendar weekAddedCal = Calendar.getInstance();
         weekAddedCal.add(Calendar.DATE, 7); // Adding a week to current time to set a appointment date
 
+        int minutes = weekAddedCal.get(Calendar.MINUTE);
+        int mod = minutes % 15;
+        weekAddedCal.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod));
+
+        Log.d("minutes", Integer.toString(minutes));
+
         SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
         String formattedDate = df.format(weekAddedCal.getTime());
         dateRepresent.setText(formattedDate);
