@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MyParcelable implements Parcelable {
     private int mData;
@@ -13,6 +14,7 @@ public class MyParcelable implements Parcelable {
     private String[][] blowDeviceResultArray;
     private String[][] blowDeviceResultArrayPefFev1;
     private int[] questionStates;
+    private LinkedList pulseData;
 
     public int describeContents() {
         return 0;
@@ -21,6 +23,7 @@ public class MyParcelable implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mData);
         out.writeList(DeviceInfoArray);
+        out.writeList(pulseData);
         //blowDeviceResultArray = new String[6][4];
         for (int i =0; i < 6; i++) {
             for(int j=0; j < 6 ; j++) {
@@ -47,6 +50,9 @@ public class MyParcelable implements Parcelable {
     public void setDeviceInfoArray(ArrayList arr){
         DeviceInfoArray = arr;
     }
+
+    public void setPulseData(LinkedList<String[]> list) { pulseData = list; }
+    public LinkedList<String[]> getPulseData() { return pulseData; }
 
     public void setSurveyAnswers(int index, int value) { surveyAnswers[index] = value; }
     public int getSurveyAnswers(int index) { return surveyAnswers[index]; }
@@ -89,6 +95,10 @@ public class MyParcelable implements Parcelable {
         mData = in.readInt();
         //discoveredDeviceInfo = (DeviceInfo)in.readValue(DeviceInfo.class.getClassLoader());
         DeviceInfoArray = in.readArrayList(null);
+
+        pulseData = new LinkedList<String[]>();
+        in.readList(pulseData,null);
+
         blowDeviceResultArray = new String[6][6];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {  //            for (int j = 0; j < 4; j++) {
@@ -115,6 +125,7 @@ public class MyParcelable implements Parcelable {
     }
 
     public MyParcelable(){
+        pulseData = new LinkedList<String[]>();
         blowDeviceResultArray = new String[6][6]; // use to be 4
         for (int i = 0; i<6; i++) {
             for (int j = 0; j < 6; j++) {

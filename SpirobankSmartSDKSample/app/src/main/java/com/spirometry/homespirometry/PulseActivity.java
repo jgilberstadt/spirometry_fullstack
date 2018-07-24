@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Random;
 
 
@@ -43,6 +45,8 @@ public class PulseActivity extends AppCompatActivity {
 
     CountDownTimer myCountDownTimer;
 
+    LinkedList pulseData = new LinkedList<String[]>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,6 +57,9 @@ public class PulseActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
+        if (mBundleData == null) {
+            mBundleData = new MyParcelable();
+        }
 
         deviceMac = getIntent().getStringExtra("mac");
 
@@ -72,36 +79,19 @@ public class PulseActivity extends AppCompatActivity {
         mPo3Control.getHistoryData(); // this will be function b
         mPo3Control.startMeasure();  // function c (called after function b)
 
-   /*     Random r = new Random();
-        int subRandom = r.nextInt(5);
-        int finalRandom = r.nextInt(subRandom);
-
-        Boolean administerSurvey = finalRandom == 0;
-
-        if (administerSurvey) {
-            // administer survey
-
-        } else {
-            // skip survey
-
-        } */
-
- //       Log.d(TAG, "onCreate: " + "until");
-//        mPo3Control.startMeasure();
-
     }
 
     iHealthDevicesCallback mIHealthDeviceCallback = new iHealthDevicesCallback() {
 
         public void onDeviceConnectionStateChange(String mac, String deviceType, int status, int errorID) {
             if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
-                Log.d("hyunrae o", "device is connected");
+                Log.d("hyunrae", "device is connected");
                 mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
-                Log.d("hyunrae o", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
+                Log.d("hyunrae", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
                 //mPo3Control.startMeasure();
 
             } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
-                Log.d("hyunrae o", "disconnected");
+                Log.d("hyunrae", "disconnected");
             }
         }
 
@@ -109,6 +99,7 @@ public class PulseActivity extends AppCompatActivity {
 
          //   Log.d(TAG, "mac:" + mac + "--type:" + deviceType + "--action:" + action + "--message:" + message);
             JSONTokener jsonTokener = new JSONTokener(message);
+
             switch (action) {
                 case PoProfile.ACTION_OFFLINEDATA_PO:
                     try {
@@ -129,14 +120,8 @@ public class PulseActivity extends AppCompatActivity {
                                     + "-wave1:"
                                     + wave[0]
                                     + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                            Log.i(TAG, "BRUH1111");
-                            //pulseNumber.setText( oxygen + " " + pulseRate);
-                        }
 
-                //        Message message2 = new Message();
-                //        message2.what = 1;
-                //        message2.obj = message;
-                //        mHandler.sendMessage(message2);
+                        }
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
@@ -149,31 +134,27 @@ public class PulseActivity extends AppCompatActivity {
                         int oxygen = jsonObject.getInt(PoProfile.BLOOD_OXYGEN_PO);
                         int pulseRate = jsonObject.getInt(PoProfile.PULSE_RATE_PO);
                         float PI = (float) jsonObject.getDouble(PoProfile.PI_PO);
+                        int pulseStrength = jsonObject.getInt(PoProfile.PULSE_STRENGTH_PO);
                         JSONArray jsonArray = jsonObject.getJSONArray(PoProfile.PULSE_WAVE_PO);
                         int[] wave = new int[3];
                         for (int i = 0; i < jsonArray.length(); i++) {
                             wave[i] = jsonArray.getInt(i);
                         }
-               //         Log.i(TAG, "oxygenn:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-               //                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                        Log.i(TAG, "BRUH2222" + message);
-                        Log.i(TAG, "BRUH2222" + oxygen);
 
-                       // Message message3 = new Message();
-                       // message3.what = 1;
-                       // message3.obj = message;
-                       // mHandler.sendMessage(message3);
-                        Message wow = new Message();
-                        wow.what =1;
+                        Message dataMsg = new Message();
+                        dataMsg.what =1;
                         String stOxygen = Integer.toString(oxygen);
                         String stPulseRate = Integer.toString(pulseRate);
-                        wow.obj = ("spO2%: " + stOxygen + "      PR bpm: " + stPulseRate);
-                        mHandler.sendMessage(wow);
+                        dataMsg.obj = ("spO2%: " + stOxygen + "      PR bpm: " + stPulseRate);
+                        mHandler.sendMessage(dataMsg);
+
+                        String[] dataArr = {Integer.toString(pulseRate), Integer.toString(oxygen), Integer.toString(pulseStrength), Float.toString(PI), Arrays.toString(wave)};
+                        pulseData.add(dataArr);
 
                         if(startTest == false){
                             startTest = true;
 
-                            myCountDownTimer = new CountDownTimer(15000, 1000) {
+                            myCountDownTimer = new CountDownTimer(60000, 1000) {
 
                                 public void onTick(long millisUntilFinished) {
                                     int countDown = (int)(millisUntilFinished / 1000);
@@ -183,7 +164,23 @@ public class PulseActivity extends AppCompatActivity {
                                 public void onFinish() {
                                     countDown.setText("Done!");
                                     secondsRemaining.setVisibility(View.GONE);
-                                    Intent intent = new Intent(PulseActivity.this, TestCompleteActivity.class);
+                                    mBundleData.setPulseData(pulseData);
+                                    iHealthDevicesManager.getInstance().destroy();
+                                    // if out of normal range or random
+
+//                                    Random r = new Random();
+//                                    int subRandom = r.nextInt(5);
+//                                    int finalRandom = r.nextInt(subRandom);
+//
+//                                    Boolean administerSurvey = finalRandom == 0;
+//
+//                                    if (administerSurvey) {
+//                                        // administer survey
+//                                    } else {
+//                                            // skip survey
+//                                    }
+
+                                    Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
                                     intent.putExtra("bundle-data", mBundleData);
                                     intent.putExtra("mac", deviceMac);
                                     startActivity(intent);
@@ -201,6 +198,7 @@ public class PulseActivity extends AppCompatActivity {
                 case PoProfile.ACTION_RESULTDATA_PO:
                     try {
                         JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
+
                         String dataId = jsonObject.getString(PoProfile.DATAID);
                         int oxygen = jsonObject.getInt(PoProfile.BLOOD_OXYGEN_PO);
                         int pulseRate = jsonObject.getInt(PoProfile.PULSE_RATE_PO);
@@ -210,13 +208,6 @@ public class PulseActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             wave[i] = jsonArray.getInt(i);
                         }
-              //          Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-              //                  + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                        Log.i(TAG, "BRUH3333");
-              //          Message message3 = new Message();
-              //          message3.what = 1;
-              //          message3.obj = message;
-              //          mHandler.sendMessage(message3);
 
                         myCountDownTimer.cancel();
                         startTest = false;
@@ -229,7 +220,6 @@ public class PulseActivity extends AppCompatActivity {
 
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
                     noticeString = "no history data";
-                    Log.i(TAG, "BRUH4444");
                     Message message2 = new Message();
                     message2.what = 1;
                     message2.obj = noticeString;
@@ -242,7 +232,6 @@ public class PulseActivity extends AppCompatActivity {
                         jsonobject = (JSONObject) jsonTokener.nextValue();
                         int battery = jsonobject.getInt(PoProfile.BATTERY_PO);
                         Log.d(TAG, "battery:" + battery);
-                        Log.i(TAG, "BRUH5555");
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
@@ -281,15 +270,6 @@ public class PulseActivity extends AppCompatActivity {
     };
 
 }
-
-
-
- /*   Handler handlerPulseRate = new Handler();
-    Runnable runPulseRate = new Runnable() {
-        @Override
-        public void run() {
-        } //+++
-    }; */
 
 
 
