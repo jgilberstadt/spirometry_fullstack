@@ -1,0 +1,102 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+MERGED from [com.android.volley:volley:1.0.0] /Users/dingwenli/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/4982192c1a266158d92345c355b1b288/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+	package
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:3:5-40
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.volley:volley:1.0.0] /Users/dingwenli/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/4982192c1a266158d92345c355b1b288/AndroidManifest.xml:7:5-43
+MERGED from [com.android.volley:volley:1.0.0] /Users/dingwenli/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/4982192c1a266158d92345c355b1b288/AndroidManifest.xml:7:5-43
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:9:9-38
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:8:9-35
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:11:5-68
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:11:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:12:5-74
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:12:22-71
+uses-permission#android.permission.INTERNET
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:13:5-66
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:13:22-64
+uses-feature#android.hardware.bluetooth_le
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:15:5-17:35
+	android:required
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:17:9-32
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:16:9-53
+application
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:19:5-42:19
+MERGED from [com.android.volley:volley:1.0.0] /Users/dingwenli/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/4982192c1a266158d92345c355b1b288/AndroidManifest.xml:9:5-20
+MERGED from [com.android.volley:volley:1.0.0] /Users/dingwenli/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/4982192c1a266158d92345c355b1b288/AndroidManifest.xml:9:5-20
+	android:label
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:23:9-41
+	android:icon
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:22:9-45
+	android:allowBackup
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:21:9-35
+	android:theme
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:24:9-40
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:20:9-61
+activity#com.stollmann.tiov2sample.ManagerActivity
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:25:9-33:20
+	android:label
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:27:13-45
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:26:13-69
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:28:13-32:29
+action#android.intent.action.MAIN
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:29:17-69
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:29:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:31:17-77
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:31:27-74
+activity#com.stollmann.tiov2sample.PeripheralActivity
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:34:9-41:20
+	android:parentActivityName
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:37:13-57
+	android:label
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:36:13-62
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:35:13-72
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:38:13-40:51
+	android:value
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:40:17-48
+	android:name
+		ADDED from /Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/src/main/AndroidManifest.xml:39:17-63

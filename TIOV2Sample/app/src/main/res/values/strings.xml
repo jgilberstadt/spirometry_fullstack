@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Stollmann TIOV2Sample</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="scan_button_title">Scan</string>
+    <string name="clear_all_button_title">Clear</string>
+    <string name="remove_button_title">Remove</string>
+    
+    <string name="main_title_placeholder">BM+SR 0123  00:80:25:11:22:33</string>
+    <string name="sub_title_placeholder">BM+SR 0123 [BondableFunctional]</string>
+    
+    <string name="title_activity_peripheral">Stollmann TIOV2Sample</string>
+    
+    <string name="connect_button_title">Connect</string>
+    <string name="disconnect_button_title">Disconnect</string>
+    <string name="send_button_title">Send</string>
+    <string name="clear_button_title">Clear</string>
+    
+    <string name="db_label">dB</string>
+    <string name="db_placeholder">-75</string>
+    <string name="sending_label">Sending</string>
+    <string name="receiving_label">Receiving</string>
+    <string name="credits_label">Credits</string>
+    <string name="credits_placeholder">25</string>
+    <string name="data_to_send_placeholder">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+    
+</resources>
