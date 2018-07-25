@@ -19,19 +19,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity">
-
-        </activity>
-        <activity android:name=".SpirometerConnectingActivity" />
-        <activity android:name=".QuestionnaireInstructionActivity" />
-        <activity android:name=".PulseConnectingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SpirometerConnectingActivity" />
+        <activity android:name=".QuestionnaireInstructionActivity" />
+
+        <activity android:name=".PulseConnectingActivity">
+
+        </activity>
+
         <activity android:name=".BlowActivity" />
-        <activity android:name=".Q1Activity" />
+        <activity android:name=".Q1Activity" /> 
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />

@@ -1,0 +1,220 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PeripheralActivity"
+    >
+
+    <TextView
+        android:id="@+id/mainTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/main_title_placeholder"
+        />
+
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mainTitle"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/sub_title_placeholder"
+        />
+
+    <TextView
+        android:id="@+id/rssiLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/subTitle"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="4dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/db_label"
+        />
+
+    <TextView
+        android:id="@+id/rssiTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/subTitle"
+        android:layout_toLeftOf="@+id/rssiLabel"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/db_placeholder"
+        />
+    
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/subTitle"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="onConnectButtonPressed"
+        android:text="@string/connect_button_title"
+        />
+    
+    <Button
+        android:id="@+id/disconnectButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/connectButton"
+        android:layout_marginRight="20dp"
+        android:onClick="onDisconnectButtonPressed"
+        android:text="@string/disconnect_button_title"
+        />
+
+    <TextView
+        android:id="@+id/dataToSendLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mainTitle"
+        android:layout_below="@+id/connectButton"
+        android:layout_marginTop="6dp"
+        android:text="@string/sending_label"
+        android:labelFor="@+id/dataToSendEditText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
+    
+    <TextView
+        android:id="@+id/remoteCreditsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/dataToSendLabel"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="4dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/credits_label"
+        />
+
+    <TextView
+        android:id="@+id/remoteCreditsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/dataToSendLabel"
+        android:layout_toLeftOf="@+id/remoteCreditsLabel"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/credits_placeholder"
+        />
+    
+    <EditText
+        android:id="@+id/dataToSendEditText"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/dataToSendLabel"
+        android:layout_marginTop="2dp"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:background="#E5EAF0"
+        android:text="@string/data_to_send_placeholder"
+        />
+    
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dataToSendEditText"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="onSendButtonPressed"
+        android:text="@string/send_button_title"
+        />
+    
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/sendButton"
+        android:layout_marginRight="20dp"
+        android:onClick="onClearButtonPressed"
+        android:text="@string/clear_button_title"
+        />
+
+    <TextView
+        android:id="@+id/receivedDataLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mainTitle"
+        android:layout_below="@+id/sendButton"
+        android:layout_marginTop="6dp"
+        android:text="@string/receiving_label"
+        android:labelFor="@+id/receivedDataTextView"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
+    
+    <TextView
+        android:id="@+id/localCreditsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/receivedDataLabel"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="4dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/credits_label"
+        />
+
+    <TextView
+        android:id="@+id/localCreditsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/receivedDataLabel"
+        android:layout_toLeftOf="@+id/localCreditsLabel"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/credits_placeholder"
+        />
+
+    <ScrollView
+        android:id="@+id/receivedDataScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/receivedDataLabel"
+        android:layout_marginTop="20dp"
+        android:fillViewport="false"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/receivedDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#6A7C91"
+            android:gravity="top"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF" />
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/receivedDataScrollView"
+        android:onClick="upload_test"
+        android:text="Upload" />
+
+</RelativeLayout>
+
+		<!-- 
+    android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:enabled="false"
+		-->
