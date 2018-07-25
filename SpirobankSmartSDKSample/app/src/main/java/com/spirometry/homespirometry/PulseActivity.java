@@ -153,8 +153,8 @@ public class PulseActivity extends AppCompatActivity {
                         }
                //         Log.i(TAG, "oxygenn:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
                //                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                        Log.i(TAG, "BRUH2222" + message);
-                        Log.i(TAG, "BRUH2222" + oxygen);
+                        Log.i(TAG, "2222" + message);
+                        Log.i(TAG, "2222" + oxygen);
 
                        // Message message3 = new Message();
                        // message3.what = 1;
@@ -185,7 +185,7 @@ public class PulseActivity extends AppCompatActivity {
                                 }
 
                                 public void onFinish() {
-                                    countDown.setText("Done!");
+                                    countDown.setText("Finished");
                                     secondsRemaining.setVisibility(View.GONE);
                                     mBundleData.setPulseData(pulseData);
                                     iHealthDevicesManager.getInstance().destroy();
@@ -235,7 +235,7 @@ public class PulseActivity extends AppCompatActivity {
               //          Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
               //                  + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
                      //   pulseNumber.setTextSize(80);
-                        Log.i(TAG, "BRUH3333");
+                        Log.i(TAG, "3333");
               //          Message message3 = new Message();
               //          message3.what = 1;
               //          message3.obj = message;
@@ -272,9 +272,8 @@ public class PulseActivity extends AppCompatActivity {
                             }, 6000); // after 2 second (or 2000 miliseconds), the task will be active.
                         }
 
-
                     //    mySnackbar.setAction("Action", null).show();
-            /*           Snackbar.make(parentLayout, "Wazzzz UPPPPPPP", Snackbar.LENGTH_LONG)
+            /*           Snackbar.make(parentLayout, "Text for SnackBar", Snackbar.LENGTH_LONG)
                                 .setAction("CLOSE", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -296,7 +295,7 @@ public class PulseActivity extends AppCompatActivity {
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
                     //noticeString = "no history data";
                     noticeString = "N/A";
-                    Log.i(TAG, "BRUH4444");
+                    Log.i(TAG, "4444");
                     Message message2 = new Message();
                     message2.what = 1;
                     message2.obj = noticeString;
@@ -322,10 +321,9 @@ public class PulseActivity extends AppCompatActivity {
                 default:
                     break;
             }
-
         }
-
     };
+
     String noticeString = "";
     Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
