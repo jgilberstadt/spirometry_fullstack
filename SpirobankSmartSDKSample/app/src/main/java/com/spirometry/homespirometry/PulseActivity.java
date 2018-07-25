@@ -1,13 +1,20 @@
 package com.spirometry.homespirometry;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -25,6 +32,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class PulseActivity extends AppCompatActivity {
@@ -41,7 +50,11 @@ public class PulseActivity extends AppCompatActivity {
     TextView secondsRemaining;
     boolean startTest = false;
 
+  //  View parentLayout = findViewById(android.R.id.content);
+
     CountDownTimer myCountDownTimer;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +176,7 @@ public class PulseActivity extends AppCompatActivity {
                        // message3.what = 1;
                        // message3.obj = message;
                        // mHandler.sendMessage(message3);
+                        pulseNumber.setTextSize(45);
                         Message wow = new Message();
                         wow.what =1;
                         String stOxygen = Integer.toString(oxygen);
@@ -173,7 +187,7 @@ public class PulseActivity extends AppCompatActivity {
                         if(startTest == false){
                             startTest = true;
 
-                            myCountDownTimer = new CountDownTimer(15000, 1000) {
+                            myCountDownTimer = new CountDownTimer(60000, 1000) {
 
                                 public void onTick(long millisUntilFinished) {
                                     int countDown = (int)(millisUntilFinished / 1000);
@@ -187,6 +201,7 @@ public class PulseActivity extends AppCompatActivity {
                                     intent.putExtra("bundle-data", mBundleData);
                                     intent.putExtra("mac", deviceMac);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }.start();
                         }
@@ -212,6 +227,7 @@ public class PulseActivity extends AppCompatActivity {
                         }
               //          Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
               //                  + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+                     //   pulseNumber.setTextSize(80);
                         Log.i(TAG, "BRUH3333");
               //          Message message3 = new Message();
               //          message3.what = 1;
@@ -219,7 +235,50 @@ public class PulseActivity extends AppCompatActivity {
               //          mHandler.sendMessage(message3);
 
                         myCountDownTimer.cancel();
+                        if(!(PulseActivity.this).isFinishing()) {
+                            //show dialog
+                            AlertDialog.Builder alert = new AlertDialog.Builder(PulseActivity.this);
+
+                            TextView title = new TextView(getApplicationContext());
+                            title.setHeight(80);
+                            int darkBlue = Color.parseColor("#000080");
+                            title.setBackgroundColor(darkBlue);
+                            title.setText("Notification");
+                            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                            title.setTextColor(Color.WHITE);
+                            title.setGravity(Gravity.CENTER);
+                            alert.setCustomTitle(title);
+
+                            alert.setMessage("You need to measure your pulse oximeter for 60 seconds. You will need to retry.");
+                            alert.setPositiveButton("OK", null);
+                            final AlertDialog dialog = alert.create();
+                            dialog.show();
+                            TextView messageSize = (TextView) dialog.findViewById(android.R.id.message);
+                            messageSize.setTextSize(30);
+
+                            final Timer ticking = new Timer();
+                            ticking.schedule(new TimerTask() {
+                                public void run() {
+                                    dialog.dismiss(); // when the task active then close the dialog
+                                    ticking.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                                }
+                            }, 6000); // after 2 second (or 2000 miliseconds), the task will be active.
+                        }
+
+
+                    //    mySnackbar.setAction("Action", null).show();
+            /*           Snackbar.make(parentLayout, "Wazzzz UPPPPPPP", Snackbar.LENGTH_LONG)
+                                .setAction("CLOSE", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                // .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                                .show(); */
                         startTest = false;
+                        secondsRemaining.setText("60");
+
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
@@ -228,7 +287,8 @@ public class PulseActivity extends AppCompatActivity {
                     break;
 
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
-                    noticeString = "no history data";
+                    //noticeString = "no history data";
+                    noticeString = "N/A";
                     Log.i(TAG, "BRUH4444");
                     Message message2 = new Message();
                     message2.what = 1;

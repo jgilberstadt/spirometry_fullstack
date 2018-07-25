@@ -183,7 +183,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             Log.d(TAG, "deviceDisconnected");
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
-            tvConnecting.setVisibility(View.VISIBLE);
 
 
         }
@@ -228,7 +227,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
         @Override
         public void run() {
             deviceManager.stopDiscovery();
-            Intent intent = new Intent(SpirometerConnectingActivity.this, BlowActivity.class);
+            Intent intent = new Intent(SpirometerConnectingActivity.this, SpirometerInstructionActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             SpirometerConnectingActivity.this.startActivity(intent);
             finish();

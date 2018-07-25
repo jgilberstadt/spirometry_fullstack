@@ -280,12 +280,12 @@ public class BlowActivity extends AppCompatActivity {
             String [] resultArray = {pef, fev1, fvc, fev1_fvc, fev6, fef2575};
 
             Log.d("overallNumBlows",  "" + overallNumBlows);
-            Log.d("11pef",  "" + resultArray[0]);
-            Log.d("11fev1",  "" + resultArray[1]);
-            Log.d("11fvc",  "" + resultArray[2]);
-            Log.d("11fev1_fvc",  "" + resultArray[3]);
-            Log.d("11fev6",  "" + resultArray[4]);
-            Log.d("11fef2575",  "" + resultArray[5]);
+            Log.d("1pef",  "" + resultArray[0]);
+            Log.d("fev1",  "" + resultArray[1]);
+            Log.d("fvc",  "" + resultArray[2]);
+            Log.d("fev1_fvc",  "" + resultArray[3]);
+            Log.d("fev6",  "" + resultArray[4]);
+            Log.d("fef2575",  "" + resultArray[5]);
           //  Log.d("resultArray",  "" + resultArray[3]);
 
 
