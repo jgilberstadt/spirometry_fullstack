@@ -146,9 +146,10 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d(TAG, "Some sort of device connected");
-                    //I did this so that you don't reconnect with different device.
-                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
+            Log.d("hyunrae", deviceInfo.getSerialNumber());
+            Log.d("hyunrae", deviceInfo.getAddress());
+                    //I did this so that you don't reconnect with different device
+                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB") || deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                    //     localInfo = "success";
                         discoveredDeviceInfo = deviceInfo;
                         progressBar.setVisibility(View.VISIBLE);
@@ -189,7 +190,6 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
         @Override
         public void deviceConnectionFailed(DeviceInfo deviceInfo) {
             currDevice=null;
-            Log.d(TAG, "did it not work?: we found the address for your device, but it can't connect" + currDevice);
             tryAgainButton.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);

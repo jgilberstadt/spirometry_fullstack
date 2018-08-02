@@ -217,7 +217,6 @@ public class Q1Activity extends AppCompatActivity {
                 questionTV.setText(R.string.ifYes);
                 return;
             } else if (initialAnswer.getText().toString().equals(("No"))) {
-                Log.d("Hyunrae", "SHIT3");
 
                 for (int i = 0; i < 7; i++) {
                     mBundleData.setSurveyAnswers(i, 0);
@@ -246,13 +245,13 @@ public class Q1Activity extends AppCompatActivity {
             for (int i = 0; i < selectedIdArr.length; i++) {
                 if (selectedIdArr[i] == -1) {
                     skipped = true;
-                    mBundleData.setSurveyAnswers(i, -1);
+                    mBundleData.setSurveyAnswers(i, 0);
                 } else {
                     RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
                     if (radioButton.getText().toString().equals("Yes")) {
-                        mBundleData.setSurveyAnswers(i, 1);
+                        mBundleData.setSurveyAnswers(i, 2);
                     } else {
-                        mBundleData.setSurveyAnswers(i, 0);
+                        mBundleData.setSurveyAnswers(i, 1);
                     }
                 }
 

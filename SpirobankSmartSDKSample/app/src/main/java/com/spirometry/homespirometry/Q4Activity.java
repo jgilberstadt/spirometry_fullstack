@@ -167,13 +167,12 @@ public class Q4Activity extends AppCompatActivity {
                             mBundleData.setSurveyAnswers(14 + i, -1);
                         }
                         mBundleData.setQuestionStates(3, -1);
-                        Intent intent = new Intent(Q4Activity.this, LoginActivity.class);
+                        Intent intent = new Intent(Q4Activity.this, TestCompleteActivity.class);
                         intent.putExtra("bundle-data", mBundleData);
                         startActivity(intent);
                     }
                 });
-                return;///''
-
+                return;
             }
 
             RadioButton initialAnswer = (RadioButton) findViewById(initialRadioGroup.getCheckedRadioButtonId());
@@ -191,7 +190,7 @@ public class Q4Activity extends AppCompatActivity {
                     mBundleData.setSurveyAnswers(14 + i, 0);
                 }
                 mBundleData.setQuestionStates(3, -1);
-                Intent intent = new Intent(Q4Activity.this, LoginActivity.class);
+                Intent intent = new Intent(Q4Activity.this, TestCompleteActivity.class);
                 intent.putExtra("bundle-data", mBundleData);
                 startActivity(intent);
             }
@@ -241,14 +240,14 @@ public class Q4Activity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             mBundleData.setQuestionStates(3, -1);
-                            Intent intent = new Intent(Q4Activity.this, LoginActivity.class);
+                            Intent intent = new Intent(Q4Activity.this, TestCompleteActivity.class);
                             intent.putExtra("bundle-data", mBundleData);
                             startActivity(intent);
                         }
                     });
                 } else {
                     mBundleData.setQuestionStates(3, -1);
-                    Intent intent = new Intent(Q4Activity.this, LoginActivity.class);
+                    Intent intent = new Intent(Q4Activity.this, TestCompleteActivity.class);
                     intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);
                 }

@@ -1,4 +1,4 @@
-#Wed Jul 18 15:50:05 CDT 2018
-base.0=/Users/dingwenli/Documents/Research/Home Spirometry/TIO_Implementation_Android and IOS/TerminalIO_V2_Android_SampleAndDocumentation_r03/TIOV2Sample/app/build/intermediates/transforms/dexMerger/debug/18
+#Thu Aug 02 16:26:35 CDT 2018
+base.0=C\:\\Users\\ASUS\\Desktop\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\18
 path.0=classes.dex
 renamed.0=classes.dex

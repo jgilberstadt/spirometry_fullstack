@@ -2,8 +2,12 @@ package com.spirometry.homespirometry;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -31,11 +35,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.zip.DeflaterOutputStream;
 
 
 public class PulseActivity extends AppCompatActivity {
@@ -51,8 +67,6 @@ public class PulseActivity extends AppCompatActivity {
     TextView countDown;
     TextView secondsRemaining;
     boolean startTest = false;
-
-  //  View parentLayout = findViewById(android.R.id.content);
 
     CountDownTimer myCountDownTimer;
 
@@ -91,6 +105,7 @@ public class PulseActivity extends AppCompatActivity {
         mPo3Control.startMeasure();  // function c (called after function b)
 
     }
+
 
     iHealthDevicesCallback mIHealthDeviceCallback = new iHealthDevicesCallback() {
 
@@ -151,15 +166,10 @@ public class PulseActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             wave[i] = jsonArray.getInt(i);
                         }
-               //         Log.i(TAG, "oxygenn:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-               //                 + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
+
                         Log.i(TAG, "2222" + message);
                         Log.i(TAG, "2222" + oxygen);
 
-                       // Message message3 = new Message();
-                       // message3.what = 1;
-                       // message3.obj = message;
-                       // mHandler.sendMessage(message3);
                         pulseNumber.setTextSize(45);
                         Message wow = new Message();
                         wow.what =1;
@@ -171,7 +181,26 @@ public class PulseActivity extends AppCompatActivity {
                         dataMsg.obj = ("spO2%: " + stOxygen + "      PR bpm: " + stPulseRate);
                         mHandler.sendMessage(dataMsg);
 
-                        String[] dataArr = {Integer.toString(pulseRate), Integer.toString(oxygen), Integer.toString(pulseStrength), Float.toString(PI), Arrays.toString(wave)};
+                        StringBuilder builder = new StringBuilder();
+                        for (int i = 0; i < wave.length; i++) {
+                            builder.append(wave[i]);
+                            if (i != wave.length -1) {
+                                builder.append(",");
+                            }
+                        }
+                        String waveString = builder.toString();
+
+                        String pulseRateString = "";
+                        if (pulseRate < 100) {
+                            pulseRateString = "0" + pulseRate;
+                        }
+
+                        String pulseStrengthString = "";
+                        if (pulseStrength < 10) {
+                            pulseStrengthString = "0" + pulseStrength;
+                        }
+
+                        String[] dataArr = {pulseRateString, Integer.toString(oxygen), pulseStrengthString, Float.toString(PI), waveString};
                         pulseData.add(dataArr);
 
                         if(startTest == false){
@@ -212,8 +241,6 @@ public class PulseActivity extends AppCompatActivity {
                             }.start();
                         }
 
-
-
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -222,24 +249,6 @@ public class PulseActivity extends AppCompatActivity {
                 case PoProfile.ACTION_RESULTDATA_PO:
                     try {
                         JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
-
-                        String dataId = jsonObject.getString(PoProfile.DATAID);
-                        int oxygen = jsonObject.getInt(PoProfile.BLOOD_OXYGEN_PO);
-                        int pulseRate = jsonObject.getInt(PoProfile.PULSE_RATE_PO);
-                        float PI = (float) jsonObject.getDouble(PoProfile.PI_PO);
-                        JSONArray jsonArray = jsonObject.getJSONArray(PoProfile.PULSE_WAVE_PO);
-                        int[] wave = new int[3];
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            wave[i] = jsonArray.getInt(i);
-                        }
-              //          Log.i(TAG, "dataId:" + dataId + "--oxygen:" + oxygen + "--pulseRate:" + pulseRate + "--Pi:" + PI + "-wave1:" + wave[0]
-              //                  + "-wave2:" + wave[1] + "--wave3:" + wave[2]);
-                     //   pulseNumber.setTextSize(80);
-                        Log.i(TAG, "3333");
-              //          Message message3 = new Message();
-              //          message3.what = 1;
-              //          message3.obj = message;
-              //          mHandler.sendMessage(message3);
 
                         myCountDownTimer.cancel();
                         if(!(PulseActivity.this).isFinishing()) {
@@ -272,16 +281,6 @@ public class PulseActivity extends AppCompatActivity {
                             }, 6000); // after 2 second (or 2000 miliseconds), the task will be active.
                         }
 
-                    //    mySnackbar.setAction("Action", null).show();
-            /*           Snackbar.make(parentLayout, "Text for SnackBar", Snackbar.LENGTH_LONG)
-                                .setAction("CLOSE", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                // .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
-                                .show(); */
                         startTest = false;
                         secondsRemaining.setText("60");
 
@@ -295,7 +294,6 @@ public class PulseActivity extends AppCompatActivity {
                 case PoProfile.ACTION_NO_OFFLINEDATA_PO:
                     //noticeString = "no history data";
                     noticeString = "N/A";
-                    Log.i(TAG, "4444");
                     Message message2 = new Message();
                     message2.what = 1;
                     message2.obj = noticeString;

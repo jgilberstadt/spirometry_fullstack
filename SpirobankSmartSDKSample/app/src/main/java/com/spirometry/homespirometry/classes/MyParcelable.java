@@ -80,6 +80,8 @@ public class MyParcelable implements Parcelable {
         return blowDeviceResultArrayPefFev1;
     }
 
+    public int[] getSurveyAnswerArr() { return surveyAnswers; }
+
     public static final Creator<MyParcelable> CREATOR
             = new Creator<MyParcelable>() {
         public MyParcelable createFromParcel(Parcel in) {

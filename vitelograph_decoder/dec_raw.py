@@ -1,5 +1,5 @@
 # decode device raw string
-str_text = "GTD00001851003322873234230762750000000000000950900001807182058040961e"
+str_text = "GTD00001851001822192734590592360000000000000950900001808022214210961a"
 did = str_text[3:13]
 pef = str_text[13:16]
 fev075 = str_text[16:19]
@@ -23,7 +23,7 @@ second = str_text[62:64]
 gt = str_text[64:65]
 swm = str_text[65:]
 
-print "device_id:", did 
+print "device_id:", did
 print "pef:", pef
 print "fev0.75:", fev075
 print "fev1:", fev1

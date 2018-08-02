@@ -60,6 +60,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
+        if (mBundleData == null) {
+            mBundleData = new MyParcelable();
+        }
 
         iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.ASSERT);
 
