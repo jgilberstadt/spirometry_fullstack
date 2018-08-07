@@ -194,7 +194,7 @@ public class Q1Activity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         for (int i = 0; i < 7; i++) {
-                            mBundleData.setSurveyAnswers(i, -1);
+                            mBundleData.setSurveyAnswers(i, 0);
                         }
                         mBundleData.setQuestionStates(0, -1);
                         Intent intent = new Intent(Q1Activity.this, Q2Activity.class);
@@ -219,7 +219,7 @@ public class Q1Activity extends AppCompatActivity {
             } else if (initialAnswer.getText().toString().equals(("No"))) {
 
                 for (int i = 0; i < 7; i++) {
-                    mBundleData.setSurveyAnswers(i, 0);
+                    mBundleData.setSurveyAnswers(i, 1);
                 }
                 mBundleData.setQuestionStates(0, 0);
                 Intent intent = new Intent(Q1Activity.this, Q2Activity.class);
