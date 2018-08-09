@@ -3,24 +3,23 @@ package com.spirometry.homespirometry;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.homespirometry.R;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -30,19 +29,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.zip.DeflaterOutputStream;
 
 public class TestCompleteActivity extends AppCompatActivity {
+
+    public static final String FILE_NAME = "timeKeeping.txt";
 
     String[][] arraya; //6 data storing 4 String Values; +-
     private MyParcelable mBundleData;
@@ -68,7 +67,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_complete);
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
+//        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
 
         nextAppointment = (TextView) findViewById(R.id.nextAppointment);
         dateRepresent = (TextView) findViewById(R.id.dateRepresent);
@@ -82,7 +81,9 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         int minutes = weekAddedCal.get(Calendar.MINUTE);
         int mod = minutes % 15;
-        weekAddedCal.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod));
+        weekAddedCal.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod)); //mod < 8 ? -mod : (15-mod)
+        //If the equality is true, then do the first one (number before colon)
+        //if the equality is not right, then do the second one (number after the colon)
 
         Log.d("minutes", Integer.toString(minutes));
 
@@ -129,6 +130,13 @@ public class TestCompleteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
+                                0);
+                        alarmManager.cancel(pendingIntent);//important
+                        pendingIntent.cancel();//important
+
                         dateRepresent.setText(months[datePicker.getMonth()] + " " + datePicker.getDayOfMonth() + ", " + datePicker.getYear());
                         String AM_PM;
                         if (timePicker.getCurrentHour() < 12) {
@@ -155,9 +163,39 @@ public class TestCompleteActivity extends AppCompatActivity {
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String text = dateRepresent.getText().toString() + " "+ timeRepresent.getText().toString();
+                FileOutputStream fos = null;
+
+                Log.d(TAG, "try" + text);
+                Log.d(TAG, "try" + finalDate);
+
+
+                try { //try always gets executed, and then if some kind of error occurs, then go to catch method. (Ah i see this now heh)
+                    fos = openFileOutput(FILE_NAME, MODE_PRIVATE); //Mode_private means that only this spirometer app can access the file, not the other apps
+                    fos.write(text.getBytes()); // now we need to actaully save this outputstream file, officially saves the data
+
+                    Toast.makeText(getApplicationContext(), "Saved: " + FILE_NAME, // Saved to " + getFilesDir() + "/" +
+                            Toast.LENGTH_LONG).show();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) { // this is an exception from for.write(text.getBytes())
+                    e.printStackTrace();
+                } finally { // this will be executed even if the exception is thrown
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+
                 startAlarm(true);
                 Intent intent = new Intent(TestCompleteActivity.this, FinalPageActivity.class);
-                //intent.putExtra("bundle-data", mBundleData);
+                intent.putExtra("bundle-data", mBundleData);
                 TestCompleteActivity.this.startActivity(intent);
                 finish();
             }

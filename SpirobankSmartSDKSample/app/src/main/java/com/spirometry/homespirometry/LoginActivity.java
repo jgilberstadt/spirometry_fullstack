@@ -27,7 +27,6 @@ import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
-import com.spirometry.homespirometry.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -126,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
                 if(truePassword.equals(etPassword.getText().toString())) {
                     // do stuff
-                    Intent intent = new Intent(LoginActivity.this, SpirometerConnectingActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
                     Log.d(TAG, "bundle-data" +mBundleData);
                     intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);

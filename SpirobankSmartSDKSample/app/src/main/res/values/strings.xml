@@ -31,6 +31,7 @@
     <string name="test_complete">Thank you. \n\nYour next appointment is scheduled for:</string>
 
     <string name="title_activity_po3">PO3</string>
+    <string name="no_alarm_set">You Currently Do Not Have Any Appointment</string>
 
 
     <string name="LoginActivity"> LoginActivity help page. Come back and fill this out </string>

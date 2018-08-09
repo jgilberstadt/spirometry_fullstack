@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ApplicationChooseActivity">
+
+    <include
+        layout="@layout/window_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/timeKeepingText"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="105dp"
+        android:gravity="center"
+        android:text="Your Next Appointment"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="42sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="427dp"
+        android:layout_height="127dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="327dp"
+        android:onClick="startTest"
+        android:text="Start Test"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/button_load"
+        android:layout_width="427dp"
+        android:layout_height="138dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="158dp"
+        android:onClick="changeAppointment"
+        android:text="Change Appointment"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/dateTimeRepresent"
+        android:layout_width="465dp"
+        android:layout_height="209dp"
+        android:layout_below="@+id/timeKeepingText"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="#40e0d0"
+        android:textSize="70sp" />
+</RelativeLayout>

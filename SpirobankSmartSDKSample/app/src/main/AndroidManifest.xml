@@ -27,17 +27,16 @@
         </activity>
         <activity android:name=".SpirometerConnectingActivity" />
         <activity android:name=".QuestionnaireInstructionActivity" />
-
-        <activity android:name=".PulseConnectingActivity">
-
-        </activity>
-
+        <activity android:name=".PulseConnectingActivity"></activity>
         <activity android:name=".BlowActivity" />
-        <activity android:name=".Q1Activity" /> 
+        <activity android:name=".Q1Activity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4Activity" />
-        <activity android:name=".TestCompleteActivity" />
+        <activity android:name=".TestCompleteActivity" >
+
+        </activity>
+
         <activity android:name=".PulseActivity" />
         <activity android:name=".HelpActivity" />
 
@@ -49,9 +48,8 @@
             android:name=".PO3"
             android:label="@string/title_activity_po3"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SpirometerInstructionActivity">
-
-        </activity>
+        <activity android:name=".SpirometerInstructionActivity"></activity>
+        <activity android:name=".ApplicationChooseActivity"></activity>
     </application>
 
 </manifest>
