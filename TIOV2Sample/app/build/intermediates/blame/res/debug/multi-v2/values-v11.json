@@ -1,34 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\ASUS\\Desktop\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+            "outputFile": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ASUS\\Desktop\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\values-v11\\styles.xml",
-                    "from": {
-                        "startLines": "6",
-                        "startColumns": "4",
-                        "startOffsets": "182",
-                        "endLines": "8",
-                        "endColumns": "12",
-                        "endOffsets": "316"
-                    },
-                    "to": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "187"
-                    }
-                }
-            ]
-        },
-        {
-            "outputFile": "C:\\Users\\dingwenli\\Documents\\Research\\Home Spirometry\\TIO_Implementation_Android and IOS\\TerminalIO_V2_Android_SampleAndDocumentation_r03\\TIOV2Sample\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\dingwenli\\Documents\\Research\\Home Spirometry\\TIO_Implementation_Android and IOS\\TerminalIO_V2_Android_SampleAndDocumentation_r03\\TIOV2Sample\\app\\src\\main\\res\\values-v11\\styles.xml",
+                    "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/values-v11/styles.xml",
                     "from": {
                         "startLines": "6",
                         "startColumns": "4",

@@ -17,7 +17,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.homespirometry.R;
 
 
 /**
@@ -94,6 +93,15 @@ public class Q2Activity extends AppCompatActivity {
             }
         });
 
+        if (mBundleData.getSurveyAnswers(0) == 2) {
+            questionState = 1;
+            answersSV.setVisibility(View.VISIBLE);
+            LinearLayout initialAnswers = (LinearLayout) findViewById(R.id.initialRadio);
+            initialAnswers.setVisibility(View.GONE);
+            TextView questionTV = (TextView) findViewById(R.id.Q2text);
+            questionTV.setText(R.string.ifYes);
+        }
+
     }
 
     public void populatePreviousAnswers() {
@@ -153,7 +161,7 @@ public class Q2Activity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         for (int i = 0; i < 4; i++) {
-                            mBundleData.setSurveyAnswers(7+i, -1);
+                            mBundleData.setSurveyAnswers(7+i, 0);
                         }
                         mBundleData.setQuestionStates(1, -1);
                         Intent intent = new Intent(Q2Activity.this, Q3Activity.class);
@@ -177,7 +185,7 @@ public class Q2Activity extends AppCompatActivity {
                 return;
             } else if (initialAnswer.getText().toString().equals(("No"))) {
                 for (int i = 0; i < 4; i++) {
-                    mBundleData.setSurveyAnswers(7+i, 0);
+                    mBundleData.setSurveyAnswers(7+i, 1);
                 }
                 mBundleData.setQuestionStates(1, 0);
                 Intent intent = new Intent(Q2Activity.this, Q3Activity.class);
@@ -199,13 +207,13 @@ public class Q2Activity extends AppCompatActivity {
                 for (int i = 0; i < selectedIdArr.length; i++) {
                     if (selectedIdArr[i] == -1) {
                         skipped = true;
-                        mBundleData.setSurveyAnswers(7 + i, -1);
+                        mBundleData.setSurveyAnswers(7 + i, 0);
                     } else {
                         RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
                         if (radioButton.getText().toString().equals("Yes")) {
-                            mBundleData.setSurveyAnswers(7 + i, 1);
+                            mBundleData.setSurveyAnswers(7 + i, 2);
                         } else {
-                            mBundleData.setSurveyAnswers(7 + i, 0);
+                            mBundleData.setSurveyAnswers(7 + i, 1);
                         }
                     }
 
@@ -258,13 +266,13 @@ public class Q2Activity extends AppCompatActivity {
         for (int i = 0; i < selectedIdArr.length; i++) {
             if (selectedIdArr[i] == -1) {
                 skipped = true;
-                mBundleData.setSurveyAnswers(7 + i, -1);
+                mBundleData.setSurveyAnswers(7 + i, 0);
             } else {
                 RadioButton radioButton = (RadioButton) findViewById(selectedIdArr[i]);
                 if (radioButton.getText().toString().equals("Yes")) {
-                    mBundleData.setSurveyAnswers(7 + i, 1);
+                    mBundleData.setSurveyAnswers(7 + i, 2);
                 } else {
-                    mBundleData.setSurveyAnswers(7 + i, 0);
+                    mBundleData.setSurveyAnswers(7 + i, 1);
                 }
             }
 
