@@ -18,6 +18,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".QuestionnaireInstructionActivity">
+
+        </activity>
+        <activity android:name=".SpirometerConnectingActivity" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,17 +30,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SpirometerConnectingActivity" />
-        <activity android:name=".QuestionnaireInstructionActivity" />
+
         <activity android:name=".classes.PulseInstructionActivity" />
+
         <activity android:name=".PulseConnectingActivity">
 
         </activity>
 
         <activity android:name=".BlowActivity" />
-        <activity android:name=".Q1Activity" /> 
+        <activity android:name=".Q1Activity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q4Activity" />
+
         <activity android:name=".Q3Activity" />
         <activity android:name=".TestCompleteActivity" />
         <activity android:name=".PulseActivity" />
@@ -49,9 +55,8 @@
             android:name=".PO3"
             android:label="@string/title_activity_po3"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SpirometerInstructionActivity">
-
-        </activity>
+        <activity android:name=".SpirometerInstructionActivity"></activity>
+        <activity android:name=".ApplicationChooseActivity"></activity>
     </application>
 
 </manifest>
