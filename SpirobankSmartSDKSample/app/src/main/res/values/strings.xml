@@ -18,6 +18,8 @@
 
     <string name="questionnaire_instruction">Please complete a short survey.\n\nYou will be asked whether you have any new symptoms. \n\nWhen given a single YES or NO option whether you have any of the listed symptoms, you will be presented with a YES OR NO option for each of the symptoms. Please select YES or NO for each of the symptoms. </string>
 
+    <string name="pulse_instruction">You will be placing a pulse oximeter over either your index or middle finger for 60 seconds. The 60 seconds will begin once the device begins to record your heart rate. Please push and release the button on the pulse oximeter and press next. </string>
+
     <string name="q1">Do you have any of the following?\nA NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea? Yes or No</string>
 
     <string name="q2">Do you have any of the following?\nA NEW cough, or cough now producing sputum/mucus, new wheezing or new shortness of breath? Yes or No</string>
