@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.PulseInstructionActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -165,7 +166,7 @@ public class BlowDataUploadPage extends AppCompatActivity {
     Runnable runIntentToTestComplete= new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(BlowDataUploadPage.this, PulseConnectingActivity.class);
+            Intent intent = new Intent(BlowDataUploadPage.this, PulseInstructionActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             BlowDataUploadPage.this.startActivity(intent);
             finish();

@@ -1,4 +1,0 @@
-#Thu Aug 09 15:46:08 CDT 2018
-base.0=/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/transforms/dexMerger/debug/8
-path.0=classes.dex
-renamed.0=classes.dex

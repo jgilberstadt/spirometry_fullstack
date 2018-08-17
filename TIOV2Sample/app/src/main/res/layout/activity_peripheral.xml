@@ -51,18 +51,17 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/db_placeholder"
         />
-    
+
     <Button
         android:id="@+id/connectButton"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/subTitle"
-        android:layout_marginTop="4dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
         android:onClick="onConnectButtonPressed"
-        android:text="@string/connect_button_title"
-        />
+        android:text="@string/connect_button_title" />
     
     <Button
         android:id="@+id/disconnectButton"

@@ -29,9 +29,6 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
 
     Button startTest2;
 
-    ArrayList<String> arr;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +37,6 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
         startTest2 = (Button) findViewById(R.id.startTest2);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-        arr = mBundleData.getDeviceInfo();
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -57,7 +53,8 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
         startTest2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SpirometerInstructionActivity.this, BlowActivity.class);
+                Intent intent = new Intent(SpirometerInstructionActivity.this, BlowActivity2.class);
+                intent.putExtra("peripheralAddress", getIntent().getStringExtra("peripheralAddress"));
                 intent.putExtra("bundle-data", mBundleData);
                 SpirometerInstructionActivity.this.startActivity(intent);
                 finish();

@@ -129,7 +129,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
 
     public void startTest(View v) { // this is a same method as setOnclickListener button_save
 
-        Intent intent = new Intent(ApplicationChooseActivity.this, SpirometerInstructionActivity.class);
+        Intent intent = new Intent(ApplicationChooseActivity.this, SpirometerConnectingActivity.class);
         Log.d(TAG, "bundle-data" +mBundleData);
         intent.putExtra("bundle-data", mBundleData);
         startActivity(intent);

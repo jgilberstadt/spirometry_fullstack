@@ -22,8 +22,9 @@
 
         </activity>
         <activity android:name=".SpirometerConnectingActivity" />
+        <activity android:name=".LoginActivity" />
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".SpirometerConnectingActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,11 +32,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".classes.PulseInstructionActivity" />
+
         <activity android:name=".PulseConnectingActivity">
 
         </activity>
 
         <activity android:name=".BlowActivity" />
+        <activity android:name=".BlowActivity2" />
+
         <activity android:name=".Q1Activity" />
         <activity android:name=".Q2Activity" />
         <activity android:name=".Q4Activity" />
