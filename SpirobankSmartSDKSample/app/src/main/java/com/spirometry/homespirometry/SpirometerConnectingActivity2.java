@@ -7,26 +7,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
-import com.spirometry.spirobanksmartsdk.DeviceManager;
-import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
-import com.spirometry.homespirometry.R;
 
 import java.util.ArrayList;
 
 import shared.STTrace;
-import terminalIO.TIOAdvertisement;
 import terminalIO.TIOManager;
 import terminalIO.TIOManagerCallback;
 import terminalIO.TIOPeripheral;
@@ -44,7 +37,7 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
     TextView directionTextView;
     Button tryAgainButton;
 
-    Boolean localInfo = false;
+    //Boolean localInfo = false;
     int numberOfDisconnect = 0;
     BluetoothAdapter bluetoothadapter;
     Intent bluetoothIntent;
@@ -80,7 +73,10 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
 
         // ------------------------ //
         TIOManager.initialize(this.getApplicationContext());
+
+        // register activity as TIOManagerCallback in order to receive scan events
         TIOManager.sharedInstance().setListener(this);
+
         TIOManager.sharedInstance().startScan();
 
         // ----------------------- //
@@ -121,13 +117,13 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
             public void onClick(View v) {
                 bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(bluetoothIntent, 1);
-                TIOManager.sharedInstance().stopScan();
+                TIOManager.sharedInstance().startScan();
+                //TIOManager.sharedInstance().stopScan();
                 Log.d(TAG, "Start Discovery!12222");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
                 directionTextView.setVisibility(View.INVISIBLE);
                 tryAgainButton.setVisibility(View.INVISIBLE);
-                TIOManager.sharedInstance().startScan();
                 handlerWait.post(runWait);
                 tryAgainButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -183,11 +179,11 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
                 public void run() {
                     Log.d(TAG, "no connection");
                     TIOManager.sharedInstance().stopScan();
-                    if(localInfo == true){
+                   /* if(localInfo == true){
                         Log.d(TAG, "the device is connect, nothing to show");
-                        handleUpdateInfo.post(runUpdateInfo);
-                    }else {
-                        localInfo = false;
+                        //handleUpdateInfo.post(runUpdateInfo);
+                    }else { */
+                        //localInfo = false;
                         TIOManager.sharedInstance().stopScan();
                         tvConnecting.setVisibility(View.INVISIBLE);
                         tryAgainButton.setText("RE-CONNECT");
@@ -201,8 +197,8 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
                             directionTextView.setVisibility(View.VISIBLE);
                         }
                         numberOfDisconnect++;
-                        Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
-                    }
+                        //Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
+                   //}
                 }
             }, 9000);
         }
@@ -221,12 +217,13 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
 
     @Override
     public void tioManagerDidDiscoverPeripheral(TIOPeripheral peripheral) {
+        //localInfo = true;
+        Log.d(TAG, "yo discovered");
         this._peripheral = peripheral;
         this._peripheral.setShallBeSaved(false);
         TIOManager.sharedInstance().savePeripherals();
         Log.d("hyunrae", peripheral.toString());
         if (this._peripheral.isConnected()) {
-
         } else {
             this._peripheral.setListener(this);
             Log.d("hyunrae", this._peripheral.getAddress());
@@ -238,6 +235,8 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
     @Override
     public void tioManagerDidUpdatePeripheral(TIOPeripheral peripheral) {
         Log.d("hyunrae", "when is this run");
+        Log.d(TAG, "yo updated");
+        //localInfo = true;
         this._peripheral = peripheral;
         this._peripheral.setShallBeSaved(false);
         TIOManager.sharedInstance().savePeripherals();
@@ -259,8 +258,12 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
     @Override
     public void tioPeripheralDidConnect(TIOPeripheral peripheral) {
         STTrace.method("tioPeripheralDidConnect");
+        Log.d(TAG, "yo connected");
+
 
         if (!this._peripheral.shallBeSaved()) {
+            Log.d(TAG, "yo watthe");
+
             // save if connected for the first time
             this._peripheral.setShallBeSaved(true);
             TIOManager.sharedInstance().savePeripherals();
@@ -270,6 +273,7 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
             intent.putExtra("peripheralAddress", this._peripheral.getAddress());
             intent.putExtra("bundle-data", mBundleData);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -278,6 +282,8 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
         Log.d("hyunrae", "FAIL TO CONNECT");
 
         STTrace.method("tioPeripheralDidFailToConnect", errorMessage);
+        handlerWait.post(runWait);
+
 
     }
 
@@ -285,6 +291,8 @@ public class SpirometerConnectingActivity2 extends Activity implements TIOManage
     public void tioPeripheralDidDisconnect(TIOPeripheral peripheral, String errorMessage) {
         STTrace.method("tioPeripheralDidDisconnect", errorMessage);
         Log.d("hyunrae", "disconnected");
+        handlerWait.post(runWait);
+
     }
 
     @Override

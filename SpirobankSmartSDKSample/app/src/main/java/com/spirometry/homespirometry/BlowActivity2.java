@@ -118,6 +118,112 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
     }
 
 
+    //******************************************************************************
+    // TIOPeripheral implementation
+    //******************************************************************************
+
+
+    @Override
+    public void tioPeripheralDidConnect(TIOPeripheral peripheral) {
+        STTrace.method("tioPeripheralDidConnect");
+
+        if (!this._peripheral.shallBeSaved()) {
+            // save if connected for the first time
+            this._peripheral.setShallBeSaved(true);
+            TIOManager.sharedInstance().savePeripherals();
+
+            Log.d("bro hyunrae", "CONNECTED");
+            Intent intent = new Intent(BlowActivity2.this, SpirometerInstructionActivity.class);
+            intent.putExtra("bundle-data", mBundleData);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void tioPeripheralDidFailToConnect(TIOPeripheral peripheral, String errorMessage) {
+        Log.d("hyunrae", "FAIL TO CONNECT");
+        STTrace.method("tioPeripheralDidFailToConnect", errorMessage);
+    }
+
+    @Override
+    public void tioPeripheralDidDisconnect(TIOPeripheral peripheral, String errorMessage) {
+        STTrace.method("tioPeripheralDidDisconnect", errorMessage);
+        Log.d("hyunrae", "disconnected");
+        //numBlows--;
+    }
+
+    @Override
+    public void tioPeripheralDidReceiveUARTData(TIOPeripheral peripheral, byte[] data) {
+        try {
+            handlerVisibilityChange.post(runVisibilityChange);
+            numBlows++;
+            messageNumber--;
+            handlerTextViewNumberChange.post(runTextViewNumberChange);
+            handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
+            String text = new String(data, "CP-1252");
+            Log.d("hyunrae", "text "  + text);
+        } catch (Exception e) {
+            Log.d("hyunrae","nah" + e.toString());
+        }
+
+    }
+
+    @Override
+    public void tioPeripheralDidWriteNumberOfUARTBytes(TIOPeripheral peripheral, int bytesWritten) {
+        STTrace.method("tioPeripheralDidWriteNumberOfUARTBytes", Integer.toString(bytesWritten));
+        Log.d(TAG, "aaaaa");
+
+    }
+
+    @Override
+    public void tioPeripheralUARTWriteBufferEmpty(TIOPeripheral peripheral) {
+        STTrace.method("tioPeripheralUARTWriteBufferEmpty");
+        Log.d(TAG, "bbbbb");
+
+    }
+
+    @Override
+    public void tioPeripheralDidUpdateAdvertisement(TIOPeripheral peripheral) {
+        STTrace.method("tioPeripheralDidUpdateAdvertisement");
+        Log.d(TAG, "ccccc");
+
+    }
+
+    @Override
+    public void tioPeripheralDidUpdateRSSI(TIOPeripheral peripheral, int rssi) {
+        STTrace.method("tioPeripheralDidUpdateRSSI", Integer.toString(rssi));
+        Log.d(TAG, "ddddd");
+
+    }
+
+    @Override
+    public void tioPeripheralDidUpdateLocalUARTCreditsCount(TIOPeripheral peripheral, int creditsCount) {
+        STTrace.method("tioPeripheralDidUpdateLocalUARTCreditsCount", Integer.toString(creditsCount));
+        Log.d(TAG, "eeeee");
+
+    }
+
+    @Override
+    public void tioPeripheralDidUpdateRemoteUARTCreditsCount(TIOPeripheral peripheral, int creditsCount) {
+        STTrace.method("tioPeripheralDidUpdateRemoteUARTCreditsCount", Integer.toString(creditsCount));
+        Log.d(TAG, "fffff");
+
+
+    }
+
+    Handler handlerVisibilityChangeTwo = new Handler();
+    Runnable runVisibilityChangeTwo = new Runnable() {
+        @Override
+        public void run() {
+            loadingBlow.setVisibility(View.INVISIBLE);
+            blowDirection.setVisibility(View.VISIBLE);
+            blowMessage.setVisibility(View.VISIBLE);
+            numberCount.setVisibility(View.VISIBLE);
+            numberOutOf.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+        } //+++
+    };
+
     Handler handleUpdateListScan = new Handler();
     Runnable runUpdateListScan = new Runnable() {
         @Override
@@ -125,7 +231,6 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
             deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
         }
     };
-
 
     Handler handlerTextViewNumberChange = new Handler();
     Runnable runTextViewNumberChange = new Runnable() {
@@ -147,19 +252,6 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
             numberOutOf.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.INVISIBLE);
         }
-    };
-
-    Handler handlerVisibilityChangeTwo = new Handler();
-    Runnable runVisibilityChangeTwo = new Runnable() {
-        @Override
-        public void run() {
-            loadingBlow.setVisibility(View.INVISIBLE);
-            blowDirection.setVisibility(View.VISIBLE);
-            blowMessage.setVisibility(View.VISIBLE);
-            numberCount.setVisibility(View.VISIBLE);
-            numberOutOf.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-        } //+++
     };
 
     Handler handleIntentToTestComplete = new Handler();
@@ -221,95 +313,13 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
                 public void run() {
                     handlerVisibilityChangeTwo.post(runVisibilityChangeTwo);
                 }
-            }, 1000);        }
+            }, 2000);        }
     };
 
     public void onClickHelp(View view) {
         Intent intent = new Intent(BlowActivity2.this, HelpActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, 1);
-    }
-
-
-
-    //******************************************************************************
-    // TIOPeripheral implementation
-    //******************************************************************************
-
-    @Override
-    public void tioPeripheralDidConnect(TIOPeripheral peripheral) {
-        STTrace.method("tioPeripheralDidConnect");
-
-        if (!this._peripheral.shallBeSaved()) {
-            // save if connected for the first time
-            this._peripheral.setShallBeSaved(true);
-            TIOManager.sharedInstance().savePeripherals();
-
-            Log.d("hyunrae", "CONNECTED");
-            Intent intent = new Intent(BlowActivity2.this, SpirometerInstructionActivity.class);
-            intent.putExtra("bundle-data", mBundleData);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public void tioPeripheralDidFailToConnect(TIOPeripheral peripheral, String errorMessage) {
-        Log.d("hyunrae", "FAIL TO CONNECT");
-
-        STTrace.method("tioPeripheralDidFailToConnect", errorMessage);
-
-    }
-
-    @Override
-    public void tioPeripheralDidDisconnect(TIOPeripheral peripheral, String errorMessage) {
-        STTrace.method("tioPeripheralDidDisconnect", errorMessage);
-        Log.d("hyunrae", "disconnected");
-    }
-
-    @Override
-    public void tioPeripheralDidReceiveUARTData(TIOPeripheral peripheral, byte[] data) {
-        try {
-            String text = new String(data, "CP-1252");
-            Log.d("hyunrae", text);
-        } catch (Exception e) {
-            Log.d("hyunrae", e.toString());
-        }
-
-    }
-
-    @Override
-    public void tioPeripheralDidWriteNumberOfUARTBytes(TIOPeripheral peripheral, int bytesWritten) {
-        STTrace.method("tioPeripheralDidWriteNumberOfUARTBytes", Integer.toString(bytesWritten));
-
-    }
-
-    @Override
-    public void tioPeripheralUARTWriteBufferEmpty(TIOPeripheral peripheral) {
-        STTrace.method("tioPeripheralUARTWriteBufferEmpty");
-
-    }
-
-    @Override
-    public void tioPeripheralDidUpdateAdvertisement(TIOPeripheral peripheral) {
-        STTrace.method("tioPeripheralDidUpdateAdvertisement");
-
-    }
-
-    @Override
-    public void tioPeripheralDidUpdateRSSI(TIOPeripheral peripheral, int rssi) {
-        STTrace.method("tioPeripheralDidUpdateRSSI", Integer.toString(rssi));
-
-    }
-
-    @Override
-    public void tioPeripheralDidUpdateLocalUARTCreditsCount(TIOPeripheral peripheral, int creditsCount) {
-        STTrace.method("tioPeripheralDidUpdateLocalUARTCreditsCount", Integer.toString(creditsCount));
-    }
-
-    @Override
-    public void tioPeripheralDidUpdateRemoteUARTCreditsCount(TIOPeripheral peripheral, int creditsCount) {
-        STTrace.method("tioPeripheralDidUpdateRemoteUARTCreditsCount", Integer.toString(creditsCount));
-
     }
 
 }

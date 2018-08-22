@@ -13,13 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
@@ -29,14 +23,8 @@ import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 import com.spirometry.spirobanksmartsdk.Patient;
 import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
-import com.spirometry.homespirometry.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BlowActivity extends AppCompatActivity {
 

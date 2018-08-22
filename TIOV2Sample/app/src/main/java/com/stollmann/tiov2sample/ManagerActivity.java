@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -24,6 +25,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import static com.stollmann.tiov2sample.TIOV2Sample.TAG;
 
 public class ManagerActivity extends Activity implements TIOManagerCallback {
 
@@ -134,6 +137,7 @@ public class ManagerActivity extends Activity implements TIOManagerCallback {
 	@Override
 	public void tioManagerDidDiscoverPeripheral(TIOPeripheral peripheral) {
 		STTrace.method("tioManagerDidDiscoverPeripheral", peripheral.toString());
+		Log.d(TAG, "yo a");
 
 		// overrule default behaviour: peripheral shall be saved only after having been connected
 		peripheral.setShallBeSaved(false);
@@ -145,7 +149,8 @@ public class ManagerActivity extends Activity implements TIOManagerCallback {
 	@Override
 	public void tioManagerDidUpdatePeripheral(TIOPeripheral peripheral) {
 		STTrace.method("tioManagerDidUpdatePeripheral", peripheral.toString());
-	
+		Log.d(TAG, "yo b");
+
 		this.updatePeripheralsListView();
 	}
 
