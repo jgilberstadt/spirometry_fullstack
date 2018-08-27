@@ -54,7 +54,10 @@
 
         <receiver android:name=".AlarmNotificationReciever" />
 
-        <activity android:name=".FinalPageActivity" />
+        <activity android:name=".FinalPageActivity">
+
+        </activity>
+
         <activity android:name=".BlowDataUploadPage" />
         <activity
             android:name=".PO3"

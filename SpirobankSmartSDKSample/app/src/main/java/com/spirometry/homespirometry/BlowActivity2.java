@@ -157,6 +157,7 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
         try {
             handlerVisibilityChange.post(runVisibilityChange);
             numBlows++;
+            Log.d("hyunrae", "peter " );
             messageNumber--;
             handlerTextViewNumberChange.post(runTextViewNumberChange);
             handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
@@ -199,6 +200,7 @@ public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCal
     @Override
     public void tioPeripheralDidUpdateLocalUARTCreditsCount(TIOPeripheral peripheral, int creditsCount) {
         STTrace.method("tioPeripheralDidUpdateLocalUARTCreditsCount", Integer.toString(creditsCount));
+
         Log.d(TAG, "eeeee");
 
     }
