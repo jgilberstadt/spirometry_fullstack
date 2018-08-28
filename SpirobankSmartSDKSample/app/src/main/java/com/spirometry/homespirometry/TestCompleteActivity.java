@@ -246,6 +246,10 @@ public class TestCompleteActivity extends AppCompatActivity {
                 }
                 line += "!";
             }
+            line += "\n";
+            dOut.write(line.getBytes());
+
+            line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
             dOut.write(line.getBytes());
 
             dOut.close();

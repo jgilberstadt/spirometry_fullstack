@@ -53,7 +53,7 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
         startTest2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SpirometerInstructionActivity.this, BlowActivity2.class);
+                Intent intent = new Intent(SpirometerInstructionActivity.this, BlowActivity.class);
                 intent.putExtra("peripheralAddress", getIntent().getStringExtra("peripheralAddress"));
                 intent.putExtra("bundle-data", mBundleData);
                 SpirometerInstructionActivity.this.startActivity(intent);

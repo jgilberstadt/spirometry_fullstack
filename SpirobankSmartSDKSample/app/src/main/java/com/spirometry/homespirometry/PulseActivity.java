@@ -71,6 +71,12 @@ public class PulseActivity extends AppCompatActivity {
     CountDownTimer myCountDownTimer;
 
     LinkedList pulseData = new LinkedList<String[]>();
+    private int minHeartRate = Integer.MAX_VALUE;
+    private int maxHeartRate = Integer.MIN_VALUE;
+    private int lowestSat = Integer.MAX_VALUE;
+    private int timeAbnormal = 0;
+    private int timeMinRate = 0;
+    private int normOxygen = 97;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +91,6 @@ public class PulseActivity extends AppCompatActivity {
         if (mBundleData == null) {
             mBundleData = new MyParcelable();
         }
-
         deviceMac = getIntent().getStringExtra("mac");
 
         clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
@@ -99,10 +104,10 @@ public class PulseActivity extends AppCompatActivity {
         secondsRemaining = (TextView) findViewById(R.id.secondsRemaining);
 
         mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
-        Log.d("hyunrae", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
-
-        mPo3Control.getHistoryData(); // this will be function b
-        mPo3Control.startMeasure();  // function c (called after function b)
+//        Log.d("hyunrae", "deviceMac:" + deviceMac + "--mPo3Control:" + mPo3Control);
+//
+        mPo3Control.getHistoryData();
+        mPo3Control.startMeasure();
 
     }
 
@@ -167,9 +172,6 @@ public class PulseActivity extends AppCompatActivity {
                             wave[i] = jsonArray.getInt(i);
                         }
 
-                        Log.i(TAG, "2222" + message);
-                        Log.i(TAG, "2222" + oxygen);
-
                         pulseNumber.setTextSize(45);
                         Message wow = new Message();
                         wow.what =1;
@@ -201,6 +203,26 @@ public class PulseActivity extends AppCompatActivity {
                         }
 
                         String[] dataArr = {pulseRateString, Integer.toString(oxygen), pulseStrengthString, Float.toString(PI), waveString};
+
+                        if (oxygen < lowestSat) {
+                            lowestSat = oxygen;
+                            timeMinRate = 1;
+                        } else if (oxygen == lowestSat){
+                            timeMinRate++;
+                        }
+
+                        if (pulseRate > maxHeartRate) {
+                            maxHeartRate = pulseRate;
+                        }
+                        if (pulseRate < minHeartRate) {
+                            minHeartRate = pulseRate;
+                        }
+
+                        if (oxygen < normOxygen) {
+                            timeAbnormal++;
+                        }
+
+
                         pulseData.add(dataArr);
 
                         if(startTest == false){
@@ -217,6 +239,12 @@ public class PulseActivity extends AppCompatActivity {
                                     countDown.setText("Finished");
                                     secondsRemaining.setVisibility(View.GONE);
                                     mBundleData.setPulseData(pulseData);
+                                    mBundleData.setMinHeartrate(minHeartRate);
+                                    mBundleData.setMaxHeartrate(maxHeartRate);
+                                    mBundleData.setLowestSat(lowestSat);
+                                    mBundleData.setTimeAbnormal(timeAbnormal);
+                                    mBundleData.setTimeMinRate(timeMinRate);
+
                                     iHealthDevicesManager.getInstance().destroy();
                                     // if out of normal range or random
 

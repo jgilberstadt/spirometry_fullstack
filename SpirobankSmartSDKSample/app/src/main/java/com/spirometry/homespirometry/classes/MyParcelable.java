@@ -15,6 +15,11 @@ public class MyParcelable implements Parcelable {
     private String[][] blowDeviceResultArrayPefFev1;
     private int[] questionStates;
     private LinkedList pulseData;
+    private int lowestSat;
+    private int minHeartRate;
+    private int maxHeartRate;
+    private int timeAbnormal;
+    private int timeMinRate;
 
     public int describeContents() {
         return 0;
@@ -24,6 +29,12 @@ public class MyParcelable implements Parcelable {
         out.writeInt(mData);
         out.writeList(DeviceInfoArray);
         out.writeList(pulseData);
+        out.writeInt(lowestSat);
+        out.writeInt(minHeartRate);
+        out.writeInt(maxHeartRate);
+        out.writeInt(timeAbnormal);
+        out.writeInt(timeMinRate);
+
         //blowDeviceResultArray = new String[6][4];
         for (int i =0; i < 6; i++) {
             for(int j=0; j < 6 ; j++) {
@@ -82,6 +93,17 @@ public class MyParcelable implements Parcelable {
 
     public int[] getSurveyAnswerArr() { return surveyAnswers; }
 
+    public void setLowestSat(int i) { lowestSat = i; }
+    public int getLowestSat() { return lowestSat; }
+    public void setMinHeartrate(int i) { minHeartRate = i; }
+    public int getMinHeartrate() { return minHeartRate; }
+    public void setMaxHeartrate(int i) { maxHeartRate = i; }
+    public int getMaxHeartrate() { return maxHeartRate; }
+    public void setTimeAbnormal(int i) { timeAbnormal = i; }
+    public int getTimeAbnormal() { return timeAbnormal; }
+    public void setTimeMinRate(int i) { timeMinRate = i; }
+    public int getTimeMinRate() { return timeMinRate; }
+
     public static final Creator<MyParcelable> CREATOR
             = new Creator<MyParcelable>() {
         public MyParcelable createFromParcel(Parcel in) {
@@ -100,6 +122,12 @@ public class MyParcelable implements Parcelable {
 
         pulseData = new LinkedList<String[]>();
         in.readList(pulseData,null);
+
+        lowestSat = in.readInt();
+        minHeartRate = in.readInt();
+        maxHeartRate = in.readInt();
+        timeAbnormal = in.readInt();
+        timeMinRate = in.readInt();
 
         blowDeviceResultArray = new String[6][6];
         for (int i = 0; i < 6; i++) {

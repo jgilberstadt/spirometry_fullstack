@@ -16,6 +16,7 @@ import android.bluetooth.BluetoothAdapter.LeScanCallback;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.util.Log;
 
 /**
  *  The TIOManager is the fundamental class to provide TerminalIO functionality towards the application. It exists as one instance only per application (singleton),
@@ -321,6 +322,7 @@ public class TIOManager {
 	//******************************************************************************
 	
 	private void raiseDidDiscoverPeripheral(final TIOPeripheral peripheral) {
+		//Log.d("hyunrae", peripheral.getName());
 		if (this._listener == null)
 			return;
 		

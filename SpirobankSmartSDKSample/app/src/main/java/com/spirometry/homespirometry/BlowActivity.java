@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.PulseInstructionActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
@@ -378,7 +379,7 @@ public class BlowActivity extends AppCompatActivity {
         @Override
         public void run() {
             deviceManager.disconnect();
-            Intent intent = new Intent(BlowActivity.this, BlowDataUploadPage.class); //PulseConnectingActivity
+            Intent intent = new Intent(BlowActivity.this, PulseInstructionActivity.class); //PulseConnectingActivity
           //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             BlowActivity.this.startActivity(intent);

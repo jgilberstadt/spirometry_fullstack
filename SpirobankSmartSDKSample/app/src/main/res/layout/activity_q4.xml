@@ -50,7 +50,7 @@
                 android:id="@+id/initialRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="14dp"
                 android:orientation="vertical">
 
                 <com.spirometry.homespirometry.classes.ToggleableRadioButton

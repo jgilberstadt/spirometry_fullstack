@@ -95,7 +95,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             bundle.putString("type", deviceType);
             Message msg = new Message();
             if (manufactorData != null) {
-               // Log.d("hyunrae", "onScanDevice mac suffix = " + manufactorData.get(HsProfile.SCALE_WIFI_MAC_SUFFIX));
+                // Log.d("hyunrae", "onScanDevice mac suffix = " + manufactorData.get(HsProfile.SCALE_WIFI_MAC_SUFFIX));
             }
             deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
@@ -104,10 +104,10 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
             }else { //if(success)
                 Log.d(TAG, "onScanDevice: " + "Bro 3.3 Scanned Device Successfully");
-            //    Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
-            //    intent.putExtra("bundle-data", mBundleData);
-            //    intent.putExtra("mac", deviceMac);
-            //    startActivity(intent);
+                //    Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
+                //    intent.putExtra("bundle-data", mBundleData);
+                //    intent.putExtra("mac", deviceMac);
+                //    startActivity(intent);
             }
 
             Log.d("hyunrae2", Boolean.toString(success));
@@ -124,7 +124,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
             if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
                 Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro 3.4 Connected to device successfully");
-                Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PulseActivity.class);
                 intent.putExtra("bundle-data", mBundleData);
                 intent.putExtra("mac", deviceMac);
                 startActivity(intent);
@@ -165,9 +165,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
     public void onClickConnect(View view){
         //iHealthDevicesManager.getInstance().startDiscovery();
-      //  iHealthDevicesManager.getInstance().startDiscovery(1000);
+        //  iHealthDevicesManager.getInstance().startDiscovery(1000);
         iHealthDevicesManager.getInstance().stopDiscovery();
-       iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+        iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         Log.d(TAG, "onClickConnect " + "Connecting ....");
 
         progressBar.setVisibility(View.VISIBLE);

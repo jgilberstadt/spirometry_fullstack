@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.android.volley.*;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -478,7 +480,7 @@ public class PeripheralActivity extends Activity implements TIOPeripheralCallbac
 
 		// Adding request to request queue
 		TIOV2Sample.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
+	}
 
 
 }
