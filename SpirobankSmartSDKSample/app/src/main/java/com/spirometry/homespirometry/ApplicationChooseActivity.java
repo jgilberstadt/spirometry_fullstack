@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ApplicationChooseActivity extends AppCompatActivity {
     public static final String FILE_NAME = "timeKeeping.txt";
@@ -49,6 +52,15 @@ public class ApplicationChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_choose);
+
+      /*  Long temp = getDefaults("finalDateStore", getApplicationContext());
+        Log.d(TAG, "tempLong" + temp);
+        Date myDate = new Date(temp);
+        Log.d(TAG, "tempDate" + myDate);
+        Calendar getLastAppointmentDate =  toCalendar(myDate);
+        Log.d(TAG, "tempCalendar" + getLastAppointmentDate); */
+     //    int dayFinishedTime = getLastAppointmentDate.get(Calendar.DAY_OF_WEEK);
+      //  Log.d(TAG, "tempDay" + dayFinishedTime);
 
         mBundleData = new MyParcelable();
 
@@ -104,6 +116,17 @@ public class ApplicationChooseActivity extends AppCompatActivity {
 
     }
 
+    public static Calendar toCalendar(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
+
+    public static Long getDefaults(String key, Context context) {
+        SharedPreferences sharedP = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedP.getLong(key, 1);
+    }
+
     public void startTest(View v) { // this is a same method as setOnclickListener button_save
 
         Intent intent = new Intent(ApplicationChooseActivity.this, SpirometerConnectingActivity.class);
@@ -118,15 +141,201 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(ApplicationChooseActivity.this, R.style.Theme_Dialog);
         dialog.setContentView(R.layout.date_time_picker);
 
+        Long temp = getDefaults("finalDateStore", getApplicationContext());
+        Calendar minDate;
+        Calendar maxDate;
+        Log.d(TAG, "tempLong" + temp);
+        Date myDate = new Date(temp);
+        Log.d(TAG, "tempDate" + myDate);
+        Calendar getLastAppointmentDateforMin =  toCalendar(myDate);
+        Calendar getLastAppointmentDateforMax =  toCalendar(myDate);
+        Calendar todayDate = Calendar.getInstance();
+        Long todayDateCompare = todayDate.getTimeInMillis();
+        Long minDateCompare;
+
+        //int dayFinishedTime = getLastAppointmentDate.get(Calendar.DAY_OF_WEEK);
+
         dialog.findViewById(R.id.cancelBtn).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+
         timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
         datePicker = (DatePicker) dialog.findViewById(R.id.datePicker);
-        datePicker.setMinDate(System.currentTimeMillis()-1000);
+
+        Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(this, 0,myIntent, PendingIntent.FLAG_NO_CREATE);
+
+        //If there is not alarm set, then this will be happening
+        if(pendingIntent == null) {
+            Log.d(TAG, "No Pending Intent");
+            minDate =Calendar.getInstance();
+            maxDate = Calendar.getInstance();
+            minDateCompare = minDate.getTimeInMillis();
+
+        }else {
+             minDate = getLastAppointmentDateforMin;
+             maxDate = getLastAppointmentDateforMax;
+            minDateCompare = minDate.getTimeInMillis();
+
+        }
+        //Long temp = getDefaults("finalDateStore", getApplicationContext());
+        //Date myDate = new Date(temp);
+        //final Calendar getLastAppointmentDate =  toCalendar(myDate);
+        int dayFinishedTime = getLastAppointmentDateforMin.get(Calendar.DAY_OF_WEEK);
+        int todayIntTime = todayDate.get(Calendar.DAY_OF_WEEK);
+        Log.d(TAG, "a" + dayFinishedTime);
+        Log.d(TAG, "a1" + Calendar.SUNDAY);
+        Log.d(TAG, "minDate1m" + minDate);
+        Log.d(TAG, "maxDate1ma" + maxDate);
+
+        if(todayDateCompare <= minDateCompare && pendingIntent != null) {
+            if (dayFinishedTime == Calendar.SUNDAY) {
+                //minDate.add(Calendar.DAY_OF_YEAR, +0);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); //, you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +6);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+                //datePicker.setMinDate(System.currentTimeMillis()-1000);
+
+            } else if (dayFinishedTime == Calendar.MONDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -1);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +5);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (dayFinishedTime == Calendar.TUESDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -2);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +4);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (dayFinishedTime == Calendar.WEDNESDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -3);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +3);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (dayFinishedTime == Calendar.THURSDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -4);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +2);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (dayFinishedTime == Calendar.FRIDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -5);
+                maxDate.add(Calendar.DAY_OF_YEAR, +1);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+                Log.d(TAG, "minDate2m" + minDate);
+                Log.d(TAG, "maxDate2ma" + maxDate);
+                Log.d(TAG, "daysMax" + daysMax);
+                Log.d(TAG, "daysMin" + daysMin);
+
+            } else if (dayFinishedTime == Calendar.SATURDAY) {
+
+                minDate.add(Calendar.DAY_OF_YEAR, -6);
+                long daysMin = minDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin);
+                //maxDate.add(Calendar.DAY_OF_YEAR, +0);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+            }
+
+
+        }else{
+            //Assuming that the data record period is from Sunday - Saturday, each week updates
+/*This is for let's say you scheduled an appointment for Tuesday, and then you come back on Monday to change the date,
+    and it is to see if Sunday is an option to choose a date from. Which should not be possible.
+*/
+            if (todayIntTime == Calendar.SUNDAY) {
+                //minDate.add(Calendar.DAY_OF_YEAR, +0);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); //, you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +6);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+                //datePicker.setMinDate(System.currentTimeMillis()-1000);
+
+            } else if (todayIntTime == Calendar.MONDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -1);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +5);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (todayIntTime == Calendar.TUESDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -2);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +4);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (todayIntTime == Calendar.WEDNESDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -3);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +3);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (todayIntTime == Calendar.THURSDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -4);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                maxDate.add(Calendar.DAY_OF_YEAR, +2);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+
+            } else if (todayIntTime == Calendar.FRIDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -5);
+                maxDate.add(Calendar.DAY_OF_YEAR, +1);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin - 10000); // you have to subtract a little from the time for some reason
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+                Log.d(TAG, "minDate2m" + minDate);
+                Log.d(TAG, "maxDate2ma" + maxDate);
+                Log.d(TAG, "daysMax" + daysMax);
+                Log.d(TAG, "daysMin" + daysMin);
+
+            } else if (todayIntTime == Calendar.SATURDAY) {
+
+                //minDate.add(Calendar.DAY_OF_YEAR, -6);
+                long daysMin = todayDate.getTimeInMillis();
+                datePicker.setMinDate(daysMin);
+                //maxDate.add(Calendar.DAY_OF_YEAR, +0);
+                long daysMax = maxDate.getTimeInMillis();
+                datePicker.setMaxDate(daysMax);
+            }
+        }
+        //Log.d(TAG, "adsf" + datePicker);
+
 
         dialog.findViewById(R.id.confirmBtn).setOnClickListener( new View.OnClickListener() {
             @Override

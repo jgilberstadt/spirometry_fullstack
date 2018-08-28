@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
     abi="armeabi-v7a,armeabi"
+<<<<<<< HEAD
     api-level="23"
     build-mode="FULL"
     density="tvdpi"
@@ -13,11 +14,26 @@
     <task
         name="javac"
         duration="2371" />
+=======
+    api-level="25"
+    build-mode="COLD"
+    density="tvdpi"
+    format="10"
+    plugin-version="3.1.3"
+    timestamp="1534887167425"
+    token="1056697921411048087"
+    verifier="COLD_SWAP_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="0" />
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
+<<<<<<< HEAD
         duration="1047" />
     <task
         name="verifier"
@@ -75,11 +91,31 @@
             type="SPLIT" />
         <artifact
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+=======
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <build
+        build-mode="FULL"
+        timestamp="1534880070835"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
             type="SPLIT" />
         <artifact
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
             type="SPLIT" />
         <artifact
+<<<<<<< HEAD
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
             type="SPLIT" />
         <artifact
@@ -87,19 +123,52 @@
             type="SPLIT" />
         <artifact
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
+=======
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
             type="SPLIT" />
         <artifact
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
             type="SPLIT" />
         <artifact
+<<<<<<< HEAD
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+=======
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
             type="SPLIT" />
         <artifact
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
             type="SPLIT" />
         <artifact
+<<<<<<< HEAD
             location="C:\Users\Hyunrae Kim\Desktop\spirometry_android\TIOV2Sample\app\build\intermediates\instant-run-apk\debug\app-debug.apk"
+=======
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/instant-run-apk/debug/app-debug.apk"
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
             type="SPLIT_MAIN" />
     </build>
+    <build
+        build-mode="COLD"
+        ir-eligibility="COMPATIBLE"
+        timestamp="1534883387969"
+        verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
+            type="SPLIT" />
+    </build>
+    <build
+        build-mode="COLD"
+        timestamp="1534887167425"
+        verifier="COLD_SWAP_REQUESTED" />
 
 </instant-run>

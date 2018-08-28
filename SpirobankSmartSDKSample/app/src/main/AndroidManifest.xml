@@ -47,13 +47,18 @@
         <activity android:name=".Q4Activity" />
 
         <activity android:name=".Q3Activity" />
-        <activity android:name=".TestCompleteActivity" />
+        <activity android:name=".TestCompleteActivity">
+
+            </activity>
         <activity android:name=".PulseActivity" />
         <activity android:name=".HelpActivity" />
 
         <receiver android:name=".AlarmNotificationReciever" />
 
-        <activity android:name=".FinalPageActivity" />
+        <activity android:name=".FinalPageActivity">
+
+        </activity>
+
         <activity android:name=".BlowDataUploadPage" />
         <activity
             android:name=".PO3"

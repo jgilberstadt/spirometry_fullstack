@@ -241,7 +241,7 @@ public class PeripheralActivity extends Activity implements TIOPeripheralCallbac
 			Log.d("blow results", text);
 
 			// upload text to server
-			//upload_test(text);
+			//upload_test(test_result);
 
 			test_result = text;
 
@@ -251,6 +251,7 @@ public class PeripheralActivity extends Activity implements TIOPeripheralCallbac
 				text = "..." + text.substring(text.length() - (PeripheralActivity.MAX_RECEIVED_TEXT_LENGTH + 3));
 				this._receivedDataTextView.setText(text);
 			}
+
 
 			// scroll text view to bottom
 			this._receivedDataScrollView.post(new Runnable() {
@@ -281,6 +282,7 @@ public class PeripheralActivity extends Activity implements TIOPeripheralCallbac
 		STTrace.method("tioPeripheralDidUpdateAdvertisement");
 
 		// display peripheral properties
+		Log.d(TAG, "wazzzzuppp");
 		this._mainTitleTextView.setText(this._peripheral.getName() + "  " + this._peripheral.getAddress());
 		this._subTitleTextView.setText(this._peripheral.getAdvertisementDisplayString());
 	}

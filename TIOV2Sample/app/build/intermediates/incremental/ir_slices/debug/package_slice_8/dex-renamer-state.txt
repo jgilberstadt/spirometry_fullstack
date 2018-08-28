@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 #Wed Aug 15 11:46:58 CDT 2018
 base.0=C\:\\Users\\Hyunrae Kim\\Desktop\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\9
+=======
+#Mon Aug 20 15:51:05 CDT 2018
+base.0=/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/transforms/dexMerger/debug/8
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
 path.0=classes.dex
 renamed.0=classes.dex

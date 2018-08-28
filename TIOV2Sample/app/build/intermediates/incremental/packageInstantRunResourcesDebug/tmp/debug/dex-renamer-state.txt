@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 #Wed Aug 15 11:46:48 CDT 2018
+=======
+#Mon Aug 20 15:51:02 CDT 2018
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe

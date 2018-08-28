@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #Wed Aug 15 11:46:58 CDT 2018
+=======
+#Mon Aug 20 15:51:05 CDT 2018
+>>>>>>> 44505b446c355c2418cb2f493eaacf1b33dfbffe
 path.3=classes.dex
 path.2=classes.dex
 path.1=classes.dex
