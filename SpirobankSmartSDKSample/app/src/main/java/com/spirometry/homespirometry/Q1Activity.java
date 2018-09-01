@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,13 +21,18 @@ import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
 
 
-/**
- * Created by ASUS on 6/21/2018.
+/*
+    Please look at Q1 for documentation on understanding all the other questions. 
+
+
+
  */
 
 public class Q1Activity extends AppCompatActivity {
 
     MyParcelable mBundleData;
+
+    private static final String TAG = BlowActivity.class.getSimpleName();
 
     private RadioGroup initialRadioGroup;
     private RadioGroup radioGroup1;
@@ -55,6 +61,8 @@ public class Q1Activity extends AppCompatActivity {
         //for keeping the device awake on this activity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
+        // Each Radio Group represents a yes and no button option
         initialRadioGroup = (RadioGroup) findViewById(R.id.initialRadioGroup);
         radioGroup1 = (RadioGroup) findViewById(R.id.q1_rg);
         radioGroup2 = (RadioGroup) findViewById(R.id.q2_rg);
@@ -64,6 +72,8 @@ public class Q1Activity extends AppCompatActivity {
         radioGroup6 = (RadioGroup) findViewById(R.id.q6_rg);
         radioGroup7 = (RadioGroup) findViewById(R.id.q7_rg);
 
+
+        // Determining how much to scroll by and linking that to each button
         final ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
         final LinearLayout questionLayout = (LinearLayout) findViewById(R.id.q1_layout);
         final int marginSize = 50;
@@ -136,9 +146,10 @@ public class Q1Activity extends AppCompatActivity {
         });
     }
 
+    // This is if you move to another question but come back, get the values saved in the bundle, and select previous answers
     public void populatePreviousAnswers() {
         int previousState = mBundleData.getQuestionStates(0);
-        Log.d("hyunrae", Integer.toString(previousState));
+        Log.d(TAG, Integer.toString(previousState));
         if (previousState == 1) {
             questionState = 1;
             ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
@@ -172,6 +183,14 @@ public class Q1Activity extends AppCompatActivity {
 
     }
 
+    /* Handle 2 case (yes or no) and then another 2 case (user answers all questions / user does not answer all questions)
+        1. User says no, give all symptom values of no and move on
+        2. User says yes, populate with all the symptoms
+
+        1. User answers all symptoms, move on
+        2. User does not answer all symptoms, ask if the user is sure.
+
+     */
     public void onClickNext (View v){
         if (questionState == 0) {
             if (initialRadioGroup.getCheckedRadioButtonId() == -1) {

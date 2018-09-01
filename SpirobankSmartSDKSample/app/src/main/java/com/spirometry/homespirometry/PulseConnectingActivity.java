@@ -1,5 +1,10 @@
 package com.spirometry.homespirometry;
 
+/*
+    This activity comes after PulseInstructionActivity and connects the application to the pulse oximeter.
+    Once connected, the user will be taken to PulseActivity for measurement.
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -64,22 +69,26 @@ public class PulseConnectingActivity extends AppCompatActivity{
             mBundleData = new MyParcelable();
         }
 
+        // Initialize the device manager
         iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.ASSERT);
 
+        // Register callback. See below
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
 
-
         try {
+            // Get the key in the assets folder that allows us to use the iHealth SDK. When given a new key, you must upload it to the assets folder and update below accordingly.
             InputStream is = getAssets().open("com_spirometry_homespirometry_android.pem");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
+            // authenticate with the key
             boolean isPass = iHealthDevicesManager.getInstance().sdkAuthWithLicense(buffer);
-            Log.i("hyunrae", "isPass:    " + isPass);
+            Log.i(TAG, "isPass:    " + isPass);
+            // Start discovery for device. PO3 is the device type of a pulse oximeter.
             iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         } catch (IOException e) {
-            Log.d("hyunrae", e.toString());
+            Log.d(TAG, e.toString());
             e.printStackTrace();
         }
 
@@ -88,14 +97,14 @@ public class PulseConnectingActivity extends AppCompatActivity{
     private iHealthDevicesCallback miHealthDevicesCallback = new iHealthDevicesCallback() {
 
         @Override
+        // Once we get a mac from scanning, then try conecting to that device.
         public void onScanDevice(String mac, String deviceType, int rssi, Map manufactorData) {
-            Log.i("hyunrae", "onScanDevice - mac:" + mac + " - deviceType:" + deviceType + " - rssi:" + rssi + " -manufactorData:" + manufactorData);
+            Log.i(TAG, "onScanDevice - mac:" + mac + " - deviceType:" + deviceType + " - rssi:" + rssi + " -manufactorData:" + manufactorData);
             Bundle bundle = new Bundle();
             bundle.putString("mac", mac);
             bundle.putString("type", deviceType);
             Message msg = new Message();
             if (manufactorData != null) {
-                // Log.d("hyunrae", "onScanDevice mac suffix = " + manufactorData.get(HsProfile.SCALE_WIFI_MAC_SUFFIX));
             }
             deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
@@ -103,34 +112,32 @@ public class PulseConnectingActivity extends AppCompatActivity{
                 Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
 
             }else { //if(success)
-                Log.d(TAG, "onScanDevice: " + "Bro 3.3 Scanned Device Successfully");
-                //    Intent intent = new Intent(PulseConnectingActivity.this, PulseActivity.class);
-                //    intent.putExtra("bundle-data", mBundleData);
-                //    intent.putExtra("mac", deviceMac);
-                //    startActivity(intent);
+                Log.d(TAG, "onScanDevice: " + "Scanned Device Successfully");
             }
 
-            Log.d("hyunrae2", Boolean.toString(success));
+            Log.d(TAG, Boolean.toString(success));
         }
 
         @Override
+        // Callback for when the device is detected to connect or disconnect
         public void onDeviceConnectionStateChange(String mac, String deviceType, int status, int errorID, Map manufactorData) {
-            Log.e("hyunrae", "mac:" + mac + " deviceType:" + deviceType + " status:" + status + " errorid:" + errorID + " -manufactorData:" + manufactorData);
+            Log.e(TAG, "mac:" + mac + " deviceType:" + deviceType + " status:" + status + " errorid:" + errorID + " -manufactorData:" + manufactorData);
             Bundle bundle = new Bundle();
             bundle.putString("mac", mac);
             bundle.putString("type", deviceType);
             Message msg = new Message();
             msg.setData(bundle);
 
+            // Once connected, take it to PulseActivity and pass the deviceMac which will help us identify which device we are referencing in the next activity
             if (status == iHealthDevicesManager.DEVICE_STATE_CONNECTED) {
-                Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro 3.4 Connected to device successfully");
+                Log.d(TAG, "onDeviceConnectionStateChange: " + "Connected to device successfully");
                 Intent intent = new Intent(getApplicationContext(), PulseActivity.class);
                 intent.putExtra("bundle-data", mBundleData);
                 intent.putExtra("mac", deviceMac);
                 startActivity(intent);
 
             } else if (status == iHealthDevicesManager.DEVICE_STATE_DISCONNECTED) {
-                Log.d(TAG, "onDeviceConnectionStateChange: " + "Bro the Device Is Disconnected");
+                Log.d(TAG, "onDeviceConnectionStateChange: " + "Device Disconnected");
             }
         }
 
@@ -141,7 +148,6 @@ public class PulseConnectingActivity extends AppCompatActivity{
             bundle.putString("userstatus", userStatus + "");
             Message msg = new Message();
             msg.setData(bundle);
-            Log.d(TAG, "onUserStatus: " + "Bro2");
         }
 
         @Override
@@ -150,6 +156,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
         }
 
         @Override
+        // If this callback is reached, then it means we have not found any pulse oximeter.
         public void onScanFinish() {
             progressBar.setVisibility(View.GONE);
             directionTV.setText(R.string.pulse_not_found);
@@ -163,6 +170,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
         }
     };
 
+    // Linked to Connect button so that when pressed, it scans for the device once again.
     public void onClickConnect(View view){
         //iHealthDevicesManager.getInstance().startDiscovery();
         //  iHealthDevicesManager.getInstance().startDiscovery(1000);
