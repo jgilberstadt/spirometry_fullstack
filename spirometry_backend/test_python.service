@@ -1,0 +1,12 @@
+[Unit]
+Description=Test Python Service
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=dingwen
+ExecStart=python /home/dingwen/Documents/spirometry/test_service.py
+Restart=always
+RestartSec=1

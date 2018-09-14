@@ -1,0 +1,6 @@
+[Unit]
+Description=Timer that periodically triggers test_python.service
+
+[Timer]
+OnCalendar=*-*-* 11:00:00
+Persistent=true
