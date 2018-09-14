@@ -1,0 +1,40 @@
+ssh qoladmin@172.16.10.165
+Qol13579#
+
+To upload new app version:
+Upload apk file into /home/qoladmin/Documents/QOLAppAPK
+Then SSH into server
+cd /home/qoladmin/Documents/QOLAppAPK
+sudo cp QOLSurveyV7.apk /var/www/html/appDownload 
+Change the file name to the file you're trying to copy. 
+
+
+Data Base:
+DB: root
+phpMyAdmin: root
+password: mysql_db
+
+vpn01.seas.wustl.edu
+Group: seasvpn
+username: qolresearch
+password: xsw2#EDC
+
+
+directory of the answer texts:
+/var/www/html/uploads
+
+server error log:
+/var/log/apache2/error.log
+and error.log.1
+
+gmail: qolecp@gmail.com
+Qol13579#
+March19
+Recovery phone: 3149144800
+Email: dingwenli@wustl.edu
+
+
+Signing Key: 
+alias: ecpqolKey
+Keystore Password: xsw2#EDC
+Key Password: xsw2#EDC
