@@ -6,6 +6,10 @@ import mysql.connector
 import numpy as np
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, r2_score
+import os
+
+email_list = {'100':'qolecp@gmail.com','101':'qolecp@gmail.com','102':'qolecp@gmail.com','103':'qolecp@gmail.com','104':'qolecp@gmail.com','105':'qolecp@gmail.com','106':'qolecp@gmail.com'
+'107':'qolecp@gmail.com','108':'qolecp@gmail.com','109':'qolecp@gmail.com','110':'qolecp@gmail.com','111':'qolecp@gmail.com'}
 
 # report generated to be sent to CMI
 def generate(filename, patient_id):
@@ -242,6 +246,9 @@ def site_generate(filename, patient_id):
 
 	workbook.close()
 
+    # send report to sites
+    send_report_site(patient_id, filename)
+
 
 def calc_nl(patient_id):
     cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
@@ -265,7 +272,17 @@ def calc_nl(patient_id):
     insert_range_statement = "UPDATE meta_data SET normal_range = %s WHERE patient_id = %s VALUES (%s,%s)"
     cursor.execute(insert_range_statement,(nl_range, patient_id))
 
-def send_report(addr):
+# send reports to different sites
+def send_report_site(patient_id, filename):
+    site_id = patient_id[0:3]
+    email_addr = email_list[site_id]
+    # organize command line for sending emails
+    email_title = '"'+filename+'"'
+    commandline = '/usr/local/bin/sendEmail -f qolecp@gmail.com -t ' + email_addr + ' -u ' + email_title + '-m "See attachment"' + ' -a ' + filename + ' -s smtp.gmail.com:587 -o tls=yes -xu qolecp@gmail.com -xp Qol13579#'
+    os.system(commandline)
+
+# send reports to cmi
+def send_report_cmi(patient_id):
 
 def nl_sendback(patient_id):
 	cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
@@ -276,6 +293,3 @@ def nl_sendback(patient_id):
 
 	#nl_range = cursor[0].split('-')
 	nl_range = cursor[0]
-
-	
-

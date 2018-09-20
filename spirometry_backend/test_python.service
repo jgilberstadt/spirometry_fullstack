@@ -7,6 +7,6 @@ WantedBy=multi-user.target
 
 [Service]
 User=dingwen
-ExecStart=python /home/dingwen/Documents/spirometry/test_service.py
+ExecStart=sh execution.sh
 Restart=always
 RestartSec=1
