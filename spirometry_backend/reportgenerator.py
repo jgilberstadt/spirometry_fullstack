@@ -101,7 +101,7 @@ def generate(filename, patient_id):
 	max_fev_list = []
 	dates = []
 	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
-		fev_list = [float(fev11)*1000, float(fev12)*1000, float(fev13)*1000, float(fev14)*1000, float(fev15)*1000, float(fev16)*1000]
+		fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
 		max_fev = max(fev_list)
 		max_fev_list.append(max_fev)
 		d = datetime.datetime.strptime(test_date,"%Y-%m-%d")
@@ -113,9 +113,27 @@ def generate(filename, patient_id):
 		worksheet.write(row, col+3, fev14)
 		worksheet.write(row, col+4, fev15)
 		worksheet.write(row, col+5, fev16)
-		worksheet.write(row, col+6, max_fev / 1000.0)
+		worksheet.write(row, col+6, max_fev)
 
 		row += 1
+
+    # calculate overall max, %max, mean %mean
+    overall_max = max(max_fev_list)
+    overall_mean = sum(max_fev_list) / len(max_fev_list)
+
+    row = 30
+
+    for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
+        fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
+		max_fev = max(fev_list)
+        worksheet.write(row, col+7, overall_max)
+        worksheet.write(row, col+8, (max_fev-overall_max)/overall_max)
+        worksheet.write(row, col+9, overall_mean)
+        worksheet.write(row, col+10, (max_fev-overall_mean)/overall_mean)
+        worksheet.write(row, col+11, float(max_fev)*1000)
+        worksheet.write(row, col+12, test_date)
+        # how to get SHS date
+        #worksheet.write(row, col+13, )
 
 	date_list = [(date-dates[0]).days for date in dates]
 
