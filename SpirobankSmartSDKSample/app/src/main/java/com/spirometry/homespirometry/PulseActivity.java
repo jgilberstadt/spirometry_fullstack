@@ -291,6 +291,7 @@ public class PulseActivity extends AppCompatActivity {
                                         intent.putExtra("mac", deviceMac);
                                         startActivity(intent);
                                         finish();
+                                        //sample
                                     }
                                 }
                             }.start();
