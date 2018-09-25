@@ -23,6 +23,9 @@ public class MyParcelable implements Parcelable {
     // normal range
     private float minNRange;
     private float maxNRange;
+    private boolean symptomsExist;
+    private boolean varianceExists;
+
 
     public int describeContents() {
         return 0;
@@ -73,6 +76,12 @@ public class MyParcelable implements Parcelable {
 
     public void setQuestionStates(int index, int value) { questionStates[index] = value; }
     public int getQuestionStates(int index) { return questionStates[index]; }
+
+    public void setSymptomsExist(boolean value){symptomsExist = value;}
+    public boolean getSymptomsExist(){return symptomsExist;}
+
+    public void setVarianceExists(boolean value){varianceExists = value;}
+    public boolean getVarianceExists(){return varianceExists;}
 
    public void setBlowDataArray(int index, String[] blowPoints){
        blowDeviceResultArray[index] = blowPoints;
@@ -156,6 +165,8 @@ public class MyParcelable implements Parcelable {
         maxHeartRate = in.readInt();
         timeAbnormal = in.readInt();
         timeMinRate = in.readInt();
+        symptomsExist = false;
+        varianceExists = false;
 
         minNRange = in.readFloat();
         maxNRange = in.readFloat();

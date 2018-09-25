@@ -125,7 +125,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
                 if(truePassword.equals(etPassword.getText().toString())) {
                     // do stuff
-                    Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
+                    //Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, Q1Activity.class);
                     Log.d(TAG, "bundle-data" +mBundleData);
                     intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);

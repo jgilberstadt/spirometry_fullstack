@@ -281,10 +281,11 @@ public class PulseActivity extends AppCompatActivity {
 
                                     Random r = new Random();
                                     int subRandom = r.nextInt(5);
+                                    mBundleData.setVarianceExists((mBundleData.getMaxFev1() < mBundleData.getMinNRange())
+                                            || (mBundleData.getMaxFev1() > mBundleData.getMaxNRange()));
 
-                                    if (subRandom == 5
-                                            || (mBundleData.getMaxFev1() < mBundleData.getMinNRange())
-                                            || (mBundleData.getMaxFev1() > mBundleData.getMaxNRange())) {
+                                    //if fev is anomalous, or if random questionnaire is assigned
+                                    if (subRandom == 5 || mBundleData.getVarianceExists()) {
 
                                         Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
                                         intent.putExtra("bundle-data", mBundleData);
@@ -292,6 +293,8 @@ public class PulseActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                         //sample
+                                    }else{
+                                        Intent intent = new Intent(PulseActivity.this, TestCompleteActivity.class);
                                     }
                                 }
                             }.start();
