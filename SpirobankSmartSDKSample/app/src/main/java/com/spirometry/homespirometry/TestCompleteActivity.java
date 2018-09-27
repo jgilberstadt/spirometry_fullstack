@@ -79,9 +79,13 @@ public class TestCompleteActivity extends AppCompatActivity {
             if (mBundleData.getSymptomsExist()) {
                 varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                 varianceAndSymptoms.setVisibility(View.VISIBLE);
+
+                createFile("yesVarianceYesSymptoms", false);
             } else {
                 varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
+
+                createFile("yesVarianceNoSymptoms", false);
             }
         } else {
             nextAppointment = (TextView) findViewById(R.id.nextAppointment);
@@ -106,18 +110,6 @@ public class TestCompleteActivity extends AppCompatActivity {
             java.util.Date currentTime = getTestFinsihedTime.getTime();
             Log.d(TAG, "currentTime" + currentTime);
 
-
-     /*  SimpleDateFormat finishedT = new SimpleDateFormat("dd/MM/yyyy");
-        Log.d(TAG, " aaaa"  + getTestFinsihedTime);
-        String stringFinishedTime = finishedT.format(getTestFinsihedTime.getTime());
-        Log.d(TAG, "bbbb " + stringFinishedTime);
-        java.util.Date datee = null;
-        try {
-            datee = finishedT.parse(stringFinishedTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long startDate = datee.getTime(); */
 
             //Log.d("What time is it?"  + getTestFinsihedTime);
 
@@ -338,7 +330,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            createFile();
+            createFile("noVariance", false);
         }
 
     }
@@ -357,9 +349,9 @@ public class TestCompleteActivity extends AppCompatActivity {
         return sharedP.getLong(key, 1);
     }
 
-    public void createFile() {
+    public void createFile(String param, boolean addSurvey) {
         File file_path = getFilesDir();
-        String file_name = getManufacturerSerialNumber();
+        String file_name = param +"_"+ getManufacturerSerialNumber();
 
         file = new File(file_path, file_name);
 
@@ -374,14 +366,15 @@ public class TestCompleteActivity extends AppCompatActivity {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
             DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
-
             String line = "";
-            for (int i = 0; i < survey_arr.length; i++) {
-                line += survey_arr[i];
-            }
-            line += "\n";
-            dOut.write(line.getBytes());
 
+            if(addSurvey) {
+                for (int i = 0; i < survey_arr.length; i++) {
+                    line += survey_arr[i];
+                }
+                line += "\n";
+                dOut.write(line.getBytes());
+            }
             line = "";
             for (int i = 0; i < blow_arr.length; i++) {
                 for (int j = 0; j < blow_arr[0].length; j++) {
