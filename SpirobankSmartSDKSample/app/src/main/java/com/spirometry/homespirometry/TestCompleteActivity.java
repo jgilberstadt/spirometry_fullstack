@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +75,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_complete);
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
-        mBundleData.setVarianceExists(false);
+        mBundleData.setVarianceExists(true);
         mBundleData.setSymptomsExist(false);
         if (mBundleData.getVarianceExists()) {
             if (mBundleData.getSymptomsExist()) {
@@ -84,7 +86,8 @@ public class TestCompleteActivity extends AppCompatActivity {
             } else {
                 varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
-
+                //TODO: set notifications for the next 4 days here
+                startSurveyAlarm();
                 createFile("yesVarianceNoSymptoms", false);
             }
         } else {
@@ -351,7 +354,7 @@ public class TestCompleteActivity extends AppCompatActivity {
 
     public void createFile(String param, boolean addSurvey) {
         File file_path = getFilesDir();
-        String file_name = param +"_"+ getManufacturerSerialNumber();
+        String file_name = param + "_" + getManufacturerSerialNumber();
 
         file = new File(file_path, file_name);
 
@@ -368,7 +371,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
             String line = "";
 
-            if(addSurvey) {
+            if (addSurvey) {
                 for (int i = 0; i < survey_arr.length; i++) {
                     line += survey_arr[i];
                 }
@@ -553,6 +556,28 @@ public class TestCompleteActivity extends AppCompatActivity {
             Log.d(TAG, "start1" + String.valueOf(finalDate));
             Log.d(TAG, "start2" + String.valueOf(finalDate.getTimeInMillis()));
             manager.set(AlarmManager.RTC_WAKEUP, finalDate.getTimeInMillis(), pendingIntent);
+        }
+    }
+
+    private void startSurveyAlarm() {
+        for (int i = 1; i <= 4; i++) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.SECOND, 10*i);
+
+            long millisUntilNextAlarm = (c.getTimeInMillis() - System.currentTimeMillis());
+
+            Log.d(TAG, "Start Alarm!: ");
+            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+            myIntent.setData(Uri.parse("myalarms://"+i));
+            PendingIntent pendingIntent = PendingIntent.getActivity(TestCompleteActivity.this, i, myIntent, 0);
+
+
+            Log.d(TAG, "Start!!! ");
+            Log.d(TAG, "start1" + String.valueOf(millisUntilNextAlarm));
+            manager.set(AlarmManager.RTC_WAKEUP, millisUntilNextAlarm, pendingIntent);
+
         }
     }
 
