@@ -167,7 +167,7 @@ public class PulseActivity extends AppCompatActivity {
 //                        e.printStackTrace();
 //                    }
                     break;
-                    // This is only important case because we're getting live data
+                // This is only important case because we're getting live data
                 case PoProfile.ACTION_LIVEDA_PO:
                     try { // this one only tells on LOG.I, so not really important
                         JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
@@ -188,7 +188,7 @@ public class PulseActivity extends AppCompatActivity {
                         wow.what = 1;
 
                         Message dataMsg = new Message();
-                        dataMsg.what =1;
+                        dataMsg.what = 1;
 
                         // For displaying the heartrate and spo2 to the patient. NOTE: We might not want to display this to the patient
                         // This is due to the fact that doctors do not want to show too much data to the patient
@@ -201,7 +201,7 @@ public class PulseActivity extends AppCompatActivity {
                         StringBuilder builder = new StringBuilder();
                         for (int i = 0; i < wave.length; i++) {
                             builder.append(wave[i]);
-                            if (i != wave.length -1) {
+                            if (i != wave.length - 1) {
                                 builder.append(",");
                             }
                         }
@@ -223,7 +223,7 @@ public class PulseActivity extends AppCompatActivity {
                         if (oxygen < lowestSat) {
                             lowestSat = oxygen;
                             timeMinRate = 1;
-                        } else if (oxygen == lowestSat){
+                        } else if (oxygen == lowestSat) {
                             timeMinRate++;
                         }
 
@@ -241,13 +241,13 @@ public class PulseActivity extends AppCompatActivity {
                         pulseData.add(dataArr);
 
                         // For making sure the test lasts 60 seconds
-                        if(startTest == false){
+                        if (startTest == false) {
                             startTest = true;
 
                             myCountDownTimer = new CountDownTimer(60000, 1000) {
 
                                 public void onTick(long millisUntilFinished) {
-                                    int countDown = (int)(millisUntilFinished / 1000);
+                                    int countDown = (int) (millisUntilFinished / 1000);
                                     secondsRemaining.setText(String.valueOf(countDown));
                                 }
 
@@ -279,11 +279,23 @@ public class PulseActivity extends AppCompatActivity {
 //                                            // skip survey
 //                                    }
 
-                                    Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
-                                    intent.putExtra("bundle-data", mBundleData);
-                                    intent.putExtra("mac", deviceMac);
-                                    startActivity(intent);
-                                    finish();
+                                    Random r = new Random();
+                                    int subRandom = r.nextInt(5);
+                                    mBundleData.setVarianceExists((mBundleData.getMaxFev1() < mBundleData.getMinNRange())
+                                            || (mBundleData.getMaxFev1() > mBundleData.getMaxNRange()));
+
+                                    //if fev is anomalous, or if random questionnaire is assigned
+                                    if (subRandom == 5 || mBundleData.getVarianceExists()) {
+
+                                        Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
+                                        intent.putExtra("bundle-data", mBundleData);
+                                        intent.putExtra("mac", deviceMac);
+                                        startActivity(intent);
+                                        finish();
+                                        //sample
+                                    }else{
+                                        Intent intent = new Intent(PulseActivity.this, TestCompleteActivity.class);
+                                    }
                                 }
                             }.start();
                         }
@@ -298,7 +310,7 @@ public class PulseActivity extends AppCompatActivity {
                         JSONObject jsonObject = (JSONObject) jsonTokener.nextValue();
 
                         myCountDownTimer.cancel();
-                        if(!(PulseActivity.this).isFinishing()) {
+                        if (!(PulseActivity.this).isFinishing()) {
                             //show dialog
                             AlertDialog.Builder alert = new AlertDialog.Builder(PulseActivity.this);
 

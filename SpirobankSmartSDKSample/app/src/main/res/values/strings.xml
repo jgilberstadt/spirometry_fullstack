@@ -31,6 +31,8 @@
     <string name="ifYes"> Check each symptom that is NEW: </string>
 
     <string name="test_complete">Thank you. \n\nYour next appointment is scheduled for:</string>
+    <string name="you_will_be_contacted">Testing and Questionnaire Complete. \n \n Your Enrolling Center will contact you for follow up instructions.</string>
+    <string name="repeat_for_4_days">Please repeat all tests and questionnaire between 6am and noon for the next 4 days.</string>
 
     <string name="title_activity_po3">PO3</string>
     <string name="no_alarm_set">You Currently Do Not Have Any Appointment</string>

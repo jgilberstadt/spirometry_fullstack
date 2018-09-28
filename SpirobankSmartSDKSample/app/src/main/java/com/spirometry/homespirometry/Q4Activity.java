@@ -125,6 +125,7 @@ public class Q4Activity extends AppCompatActivity {
             RadioButton initialAnswer = (RadioButton) findViewById(initialRadioGroup.getCheckedRadioButtonId());
             if (initialAnswer.getText().toString().equals(("Yes"))) {
                 questionState = 1;
+                mBundleData.setSymptomsExist(true);
                 ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
                 answersSV.setVisibility(View.VISIBLE);
                 LinearLayout initialAnswers = (LinearLayout) findViewById(R.id.initialRadio);

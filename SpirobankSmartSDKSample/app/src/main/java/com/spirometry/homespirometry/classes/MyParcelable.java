@@ -20,6 +20,12 @@ public class MyParcelable implements Parcelable {
     private int maxHeartRate;
     private int timeAbnormal;
     private int timeMinRate;
+    // normal range
+    private float minNRange;
+    private float maxNRange;
+    private boolean symptomsExist;
+    private boolean varianceExists;
+
 
     public int describeContents() {
         return 0;
@@ -71,8 +77,26 @@ public class MyParcelable implements Parcelable {
     public void setQuestionStates(int index, int value) { questionStates[index] = value; }
     public int getQuestionStates(int index) { return questionStates[index]; }
 
+    public void setSymptomsExist(boolean value){symptomsExist = value;}
+    public boolean getSymptomsExist(){return symptomsExist;}
+
+    public void setVarianceExists(boolean value){varianceExists = value;}
+    public boolean getVarianceExists(){return varianceExists;}
+
    public void setBlowDataArray(int index, String[] blowPoints){
        blowDeviceResultArray[index] = blowPoints;
+    }
+
+    public float getMaxFev1() {
+        float max = 0;
+        for(String[] blow: blowDeviceResultArray){
+            Float fev1 = Float.parseFloat(blow[1]);
+            if (fev1 > max) {
+                max = fev1;
+            }
+        }
+        return max;
+
     }
 
     public void setBlowDataArrayPefFev1(int indexPefFev1, String[] blowPointsPefFev1){
@@ -104,6 +128,19 @@ public class MyParcelable implements Parcelable {
     public void setTimeMinRate(int i) { timeMinRate = i; }
     public int getTimeMinRate() { return timeMinRate; }
 
+    public void setMinNRange(float minNR) {
+        minNRange = minNR;
+    }
+    public void setMaxNRange(float maxNR) {
+        maxNRange = maxNR;
+    }
+    public float getMinNRange() {
+        return minNRange;
+    }
+    public float getMaxNRange() {
+        return maxNRange;
+    }
+
     public static final Creator<MyParcelable> CREATOR
             = new Creator<MyParcelable>() {
         public MyParcelable createFromParcel(Parcel in) {
@@ -128,6 +165,11 @@ public class MyParcelable implements Parcelable {
         maxHeartRate = in.readInt();
         timeAbnormal = in.readInt();
         timeMinRate = in.readInt();
+        symptomsExist = false;
+        varianceExists = false;
+
+        minNRange = in.readFloat();
+        maxNRange = in.readFloat();
 
         blowDeviceResultArray = new String[6][6];
         for (int i = 0; i < 6; i++) {
