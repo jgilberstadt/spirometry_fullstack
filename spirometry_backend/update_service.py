@@ -23,4 +23,4 @@ for (pid, first_date) in cursor:
         # report style 1 (CMI)
         rg.generate(pid+'_monthly_cmi',pid)
         # report style 2 (site)
-	rg.site_generate(pid+'_monthly_site',pid)
+	    rg.site_generate(pid+'_monthly_site',pid)

@@ -1,0 +1,2 @@
+:: WARNING Only use for Windows, modify paths appropriately
+py -2 "C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\spirometry_backend\update_service.py"
