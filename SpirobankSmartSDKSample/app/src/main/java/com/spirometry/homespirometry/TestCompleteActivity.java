@@ -77,6 +77,7 @@ public class TestCompleteActivity extends AppCompatActivity {
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
         mBundleData.setVarianceExists(true);
         mBundleData.setSymptomsExist(false);
+        // should handle the case of normal test vs. repeated test
         if (mBundleData.getVarianceExists()) {
             if (mBundleData.getSymptomsExist()) {
                 varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
@@ -87,7 +88,15 @@ public class TestCompleteActivity extends AppCompatActivity {
                 varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
                 //TODO: set notifications for the next 4 days here
-                startSurveyAlarm();
+                // get value from shared preference
+                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                int highScore = sharedPref.getInt(getString(R.string.shared_notification),0);
+                if(highScore>0) {
+                    startSurveyAlarm();
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt(getString(R.string.shared_notification), highScore-1);
+                    editor.commit();
+                }
                 createFile("yesVarianceNoSymptoms", false);
             }
         } else {

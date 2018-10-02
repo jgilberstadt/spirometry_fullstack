@@ -56,5 +56,7 @@
     <string name="Q3Activity"> Q3Activity help page. Come back and fill this out </string>
     <string name="Q4Activity"> Q4Activity help page. Come back and fill this out </string>
 
+    <string name="shared_notification">1</string>
+
 
 </resources>
