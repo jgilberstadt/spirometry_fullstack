@@ -1,38 +1,38 @@
 [
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_launcher.png.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/drawable-xhdpi/ic_launcher.png"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\menu_peripheral.xml.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\menu\\peripheral.xml"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/layout_activity_peripheral.xml.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/layout/activity_peripheral.xml"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_manager.xml.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\layout\\activity_manager.xml"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/layout_peripheral_cell.xml.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/layout/peripheral_cell.xml"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/menu_manager.xml.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/menu/manager.xml"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/layout_activity_manager.xml.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/layout/activity_manager.xml"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_launcher.png.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/drawable-xxhdpi/ic_launcher.png"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\layout_peripheral_cell.xml.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\layout\\peripheral_cell.xml"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_launcher.png.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/drawable-hdpi/ic_launcher.png"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_peripheral.xml.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\layout\\activity_peripheral.xml"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/menu_peripheral.xml.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/menu/peripheral.xml"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\menu_manager.xml.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\menu\\manager.xml"
     },
     {
-        "merged": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_launcher.png.flat",
-        "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/drawable-mdpi/ic_launcher.png"
+        "merged": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     }
 ]

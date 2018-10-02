@@ -1,102 +1,102 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-MERGED from [com.android.volley:volley:1.0.0] /Users/taehoonbang/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/1d1fadb90cc04abc653074dd85fc4f11/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:1-44:12
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+MERGED from [com.android.volley:volley:1.0.0] C:\Users\esimk\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\6c7115867b82fdef3ddedbe25d11e955\AndroidManifest.xml:2:1-11:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:1-44:12
 	package
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:3:5-40
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:3:5-40
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
 	android:versionName
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:5:5-30
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:5:5-30
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:2:11-69
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:4:5-28
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:4:5-28
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
 uses-sdk
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.volley:volley:1.0.0] /Users/taehoonbang/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/1d1fadb90cc04abc653074dd85fc4f11/AndroidManifest.xml:7:5-43
-MERGED from [com.android.volley:volley:1.0.0] /Users/taehoonbang/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/1d1fadb90cc04abc653074dd85fc4f11/AndroidManifest.xml:7:5-43
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:7:5-9:41
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.volley:volley:1.0.0] C:\Users\esimk\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\6c7115867b82fdef3ddedbe25d11e955\AndroidManifest.xml:7:5-43
+MERGED from [com.android.volley:volley:1.0.0] C:\Users\esimk\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\6c7115867b82fdef3ddedbe25d11e955\AndroidManifest.xml:7:5-43
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:7:5-9:41
 	android:targetSdkVersion
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:9:9-38
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:9:9-38
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:8:9-35
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:8:9-35
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml
 uses-permission#android.permission.BLUETOOTH
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:11:5-68
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:11:5-68
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:11:22-65
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:11:22-65
 uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:12:5-74
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:12:5-74
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:12:22-71
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:12:22-71
 uses-permission#android.permission.INTERNET
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:13:5-66
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:13:5-66
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:13:22-64
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:13:22-64
 uses-feature#android.hardware.bluetooth_le
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:15:5-17:35
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:15:5-17:35
 	android:required
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:17:9-32
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:17:9-32
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:16:9-53
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:16:9-53
 application
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:19:5-42:19
-MERGED from [com.android.volley:volley:1.0.0] /Users/taehoonbang/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/1d1fadb90cc04abc653074dd85fc4f11/AndroidManifest.xml:9:5-20
-MERGED from [com.android.volley:volley:1.0.0] /Users/taehoonbang/.gradle/caches/transforms-1/files-1.1/volley-1.0.0.aar/1d1fadb90cc04abc653074dd85fc4f11/AndroidManifest.xml:9:5-20
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:19:5-42:19
+MERGED from [com.android.volley:volley:1.0.0] C:\Users\esimk\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\6c7115867b82fdef3ddedbe25d11e955\AndroidManifest.xml:9:5-20
+MERGED from [com.android.volley:volley:1.0.0] C:\Users\esimk\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\6c7115867b82fdef3ddedbe25d11e955\AndroidManifest.xml:9:5-20
 	android:label
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:23:9-41
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:23:9-41
 	android:icon
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:22:9-45
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:22:9-45
 	android:allowBackup
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:21:9-35
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:21:9-35
 	android:theme
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:24:9-40
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:24:9-40
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:20:9-61
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:20:9-61
 activity#com.stollmann.tiov2sample.ManagerActivity
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:25:9-33:20
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:25:9-33:20
 	android:label
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:27:13-45
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:27:13-45
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:26:13-69
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:26:13-69
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:28:13-32:29
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:28:13-32:29
 action#android.intent.action.MAIN
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:29:17-69
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:29:17-69
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:29:25-66
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:29:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:31:17-77
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:31:17-77
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:31:27-74
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:31:27-74
 activity#com.stollmann.tiov2sample.PeripheralActivity
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:34:9-41:20
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:34:9-41:20
 	android:parentActivityName
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:37:13-57
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:37:13-57
 	android:label
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:36:13-62
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:36:13-62
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:35:13-72
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:35:13-72
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:38:13-40:51
+ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:38:13-40:51
 	android:value
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:40:17-48
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:40:17-48
 	android:name
-		ADDED from /Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/AndroidManifest.xml:39:17-63
+		ADDED from C:\Users\esimk\OneDrive - Washington University in St. Louis\School\IoMT Research\Home Spirometry\spirometry_android\TIOV2Sample\app\src\main\AndroidManifest.xml:39:17-63

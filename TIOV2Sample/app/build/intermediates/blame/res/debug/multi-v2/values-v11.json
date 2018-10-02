@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
+            "outputFile": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
             "map": [
                 {
-                    "source": "/Users/taehoonbang/Desktop/Aspirometer/spirometry_android/TIOV2Sample/app/src/main/res/values-v11/styles.xml",
+                    "source": "C:\\Users\\esimk\\OneDrive - Washington University in St. Louis\\School\\IoMT Research\\Home Spirometry\\spirometry_android\\TIOV2Sample\\app\\src\\main\\res\\values-v11\\styles.xml",
                     "from": {
                         "startLines": "6",
                         "startColumns": "4",
