@@ -89,12 +89,16 @@ public class TestCompleteActivity extends AppCompatActivity {
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
                 //TODO: set notifications for the next 4 days here
                 // get value from shared preference
+
                 SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                int highScore = sharedPref.getInt(getString(R.string.shared_notification),0);
-                if(highScore>0) {
+                int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if(testingPeriodDay<4) {
+                    editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
+                    editor.commit();
                     startSurveyAlarm();
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putInt(getString(R.string.shared_notification), highScore-1);
+                }else{
+                    editor.putInt(getString(R.string.testingPeriodDay), 0);
                     editor.commit();
                 }
                 createFile("yesVarianceNoSymptoms", false);
@@ -558,6 +562,8 @@ public class TestCompleteActivity extends AppCompatActivity {
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+        myIntent.putExtra("notificationTitle", "Spirometer Notification");
+        myIntent.putExtra("notificationBody","Today is your Appointment. Please finish your Spirometer Test");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
 
         if (isNotification) {
@@ -569,25 +575,25 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     private void startSurveyAlarm() {
-        for (int i = 1; i <= 4; i++) {
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.SECOND, 10*i);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.SECOND, 10);
 
-            long millisUntilNextAlarm = (c.getTimeInMillis() - System.currentTimeMillis());
+        Log.d(TAG, "Start Alarm!: ");
 
-            Log.d(TAG, "Start Alarm!: ");
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-            Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
-            myIntent.setData(Uri.parse("myalarms://"+i));
-            PendingIntent pendingIntent = PendingIntent.getActivity(TestCompleteActivity.this, i, myIntent, 0);
+        Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
 
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
 
-            Log.d(TAG, "Start!!! ");
-            Log.d(TAG, "start1" + String.valueOf(millisUntilNextAlarm));
-            manager.set(AlarmManager.RTC_WAKEUP, millisUntilNextAlarm, pendingIntent);
+        myIntent.putExtra("notificationTitle","Repeated Tests - Day "+testingPeriodDay+" of 4");
+        myIntent.putExtra("notificationBody","Please log in to repeat your test & questionnaire");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
 
-        }
+        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
     }
 
     public void onClickHelp(View view) {
