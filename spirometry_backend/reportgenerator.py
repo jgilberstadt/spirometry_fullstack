@@ -165,7 +165,7 @@ def generate(filename, patient_id, host='localhost'):
 	print "overall_max: {0}, overall_mean: {1}".format(overall_max, overall_mean)
 	row = 30
 
-	for i in xrange(max_fev_list):
+	for i in xrange(len(max_fev_list)):
 		# fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
 		# max_fev = max(fev_list)
 		worksheet.write(row, col+8, overall_max)
