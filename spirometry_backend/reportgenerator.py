@@ -168,10 +168,10 @@ def generate(filename, patient_id, host='localhost'):
 	for i in xrange(len(max_fev_list)):
 		# fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
 		# max_fev = max(fev_list)
-		worksheet.write(row, col+8, overall_max)
-		worksheet.write(row, col+9, (max_fev_list[i]-overall_max)/float(overall_max))
-		worksheet.write(row, col+10, overall_mean)
-		worksheet.write(row, col+11, (max_fev_list[i]-overall_mean)/float(overall_mean))
+		worksheet.write(row, col+8, round(overall_max, 2))
+		worksheet.write(row, col+9, round((max_fev_list[i]-overall_max)/float(overall_max), 2))
+		worksheet.write(row, col+10, round(overall_mean, 2))
+		worksheet.write(row, col+11, round((max_fev_list[i]-overall_mean)/float(overall_mean)))
 		worksheet.write(row, col+12, float(max_fev_list[i])*1000)
 		worksheet.write(row, col+13, dates[i].strftime("%Y-%m-%d"))
 		# how to get SHS date
