@@ -46,16 +46,30 @@ def generate(filename, patient_id, host='localhost'):
 	worksheet.write('E3', now.strftime("%Y-%m-%d"))
 
 	cursor = cnx.cursor(buffered=True)
-	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
+	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s limit 1"
 	cursor.execute(query, (patient_id,))
 
-	for (minRate, maxRate, lowestSat, timeAbnormal, timeMinRate) in cursor:
+
+	minRate, maxRate, lowestSat, timeAbnormal, timeMinRate = None
+	for (newMinRate, newMaxRate, newLowestSat, newTimeAbnormal, newTimeMinRate) in cursor:
 		print "minRate: {0}, maxRate: {1}, lowestSat: {2}, timeAbnormal: {3}, timeMinRate: {4}".format(
-			minRate, maxRate, lowestSat, timeAbnormal, timeMinRate)
+			newMinRate, newMaxRate, newLowestSat, newTimeAbnormal, newTimeMinRate)
+		minRate = newMinRate
+		maxRate = newMaxRate
+		lowestSat = newLowestSat
+		timeAbnormal = newTimeAbnormal
+		timeMinRate = newTimeMinRate
+		break
+		
 
 	cursor = cnx.cursor(buffered=True)
 	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
+
+	survey_text = None
+	for new_survey_text in cursor:
+		survey_text = new_survey_text
+		break
 
 	# generate supplemental data
 	worksheet.write('G2','Supplemental Data')
@@ -81,7 +95,7 @@ def generate(filename, patient_id, host='localhost'):
 
 	symptomString = ""
 	symptomArr = ["Cough", "RunnyNose", "Sore Throat", "Fever", "Shaking Chills", "Muscle Aches", "Recent Diarrhea", "Cough", "Cough now producing sputum/mucus", "New wheezing", "New shortness of breath", "Generalized weakness", "Lightheadedness", "Dizziness", "Shortness of breath at rest", "Shortness of breath on exertion", "Shortness of breath when lying flat", "New Shortness of breath that awakens you from sleep", "New swelling in your feet or legs"]
-
+	
 	for i in range (0, len(survey_text)):
 		if survey_text[i] == "1":
 			symptomString = symptomString + symptomArr[i] + ", "
