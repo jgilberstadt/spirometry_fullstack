@@ -138,7 +138,7 @@ def generate(filename, patient_id, host='localhost'):
 	worksheet.write('S30','Status')
 
 	row = 30
-	col = 1
+	col = 0
 	max_fev_list = []
 	dates = []
 	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
@@ -148,34 +148,35 @@ def generate(filename, patient_id, host='localhost'):
 		max_fev_list.append(max_fev)
 		d = datetime.datetime.strptime(test_date,"%Y-%m-%d")
 		dates.append(d)
-
-		worksheet.write(row, col, fev11)
-		worksheet.write(row, col+1, fev12)
-		worksheet.write(row, col+2, fev13)
-		worksheet.write(row, col+3, fev14)
-		worksheet.write(row, col+4, fev15)
-		worksheet.write(row, col+5, fev16)
-		worksheet.write(row, col+6, max_fev)
+		worksheet.write(row, col, patient_id)
+		worksheet.write(row, col+1, fev11)
+		worksheet.write(row, col+2, fev12)
+		worksheet.write(row, col+3, fev13)
+		worksheet.write(row, col+4, fev14)
+		worksheet.write(row, col+5, fev15)
+		worksheet.write(row, col+6, fev16)
+		worksheet.write(row, col+7, max_fev)
 
 		row += 1
 
 	# calculate overall max, %max, mean %mean
 	overall_max = max(max_fev_list)
 	overall_mean = sum(max_fev_list) / len(max_fev_list)
-
+	print "overall_max: {0}, overall_mean: {1}".format(overall_max, overall_mean)
 	row = 30
 
 	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
 		fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
 		max_fev = max(fev_list)
-		worksheet.write(row, col+7, overall_max)
-		worksheet.write(row, col+8, (max_fev-overall_max)/overall_max)
-		worksheet.write(row, col+9, overall_mean)
-		worksheet.write(row, col+10, (max_fev-overall_mean)/overall_mean)
-		worksheet.write(row, col+11, float(max_fev)*1000)
-		worksheet.write(row, col+12, test_date)
+		worksheet.write(row, col+8, overall_max)
+		worksheet.write(row, col+9, (max_fev-overall_max)/overall_max)
+		worksheet.write(row, col+10, overall_mean)
+		worksheet.write(row, col+11, (max_fev-overall_mean)/overall_mean)
+		worksheet.write(row, col+12, float(max_fev)*1000)
+		worksheet.write(row, col+13, test_date)
 		# how to get SHS date
 		# worksheet.write(row, col+13, )
+		row += 1
 
 	date_list = [(date-dates[0]).days for date in dates]
 
