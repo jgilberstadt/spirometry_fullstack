@@ -49,6 +49,8 @@ def generate(filename, patient_id, host='localhost'):
 	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
+	lowestSat = cursor[2]
+
 	cursor = cnx.cursor(buffered=True)
 	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
@@ -63,7 +65,7 @@ def generate(filename, patient_id, host='localhost'):
 	worksheet.write('H6','Duration Abnormal')
 	worksheet.write('H7','Duration Lowest')
 	worksheet.write('H8','Heart Rate')
-
+	
 	if lowestSat < 97:
 		worksheet.write('J5', lowestSat)
 		worksheet.write('J6', timeAbnormal)
