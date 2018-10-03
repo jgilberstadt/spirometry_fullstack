@@ -49,7 +49,9 @@ def generate(filename, patient_id, host='localhost'):
 	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
-	lowestSat = cursor[2]
+	for (minRate, maxRate, lowestSat, timeAbnormal, timeMinRate) in cursor:
+		print "minRate: {0}, maxRate: {1}, lowestSat: {2}, timeAbnormal: {3}, timeMinRate: {4}".format(
+			minRate, maxRate, lowestSat, timeAbnormal, timeMinRate)
 
 	cursor = cnx.cursor(buffered=True)
 	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
