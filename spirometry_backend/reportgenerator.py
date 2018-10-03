@@ -173,7 +173,7 @@ def generate(filename, patient_id, host='localhost'):
 		worksheet.write(row, col+10, overall_mean)
 		worksheet.write(row, col+11, (max_fev_list[i]-overall_mean)/float(overall_mean))
 		worksheet.write(row, col+12, float(max_fev_list[i])*1000)
-		worksheet.write(row, col+13, dates[i])
+		worksheet.write(row, col+13, str(dates[i]))
 		# how to get SHS date
 		# worksheet.write(row, col+13, )
 		row += 1
