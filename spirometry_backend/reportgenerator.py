@@ -45,11 +45,11 @@ def generate(filename, patient_id, host='localhost'):
 	now = datetime.datetime.now()
 	worksheet.write('E3', now.strftime("%Y-%m-%d"))
 
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
@@ -88,7 +88,7 @@ def generate(filename, patient_id, host='localhost'):
 		worksheet.write('I4', symptomString)
 
 
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 	query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date FROM small_test WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
@@ -194,11 +194,11 @@ def site_generate(filename, patient_id, host='localhost'):
 	now = datetime.datetime.now()
 	worksheet.write('E3', now.strftime("%Y-%m-%d"))
 
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
@@ -237,7 +237,7 @@ def site_generate(filename, patient_id, host='localhost'):
 		worksheet.write('I4', symptomString)
 
 
-		cursor = cnx.cursor()
+		cursor = cnx.cursor(buffered=True)
 		query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date FROM small_test WHERE patient_id = %s"
 		cursor.execute(query, (patient_id,))
 
@@ -286,7 +286,7 @@ def site_generate(filename, patient_id, host='localhost'):
 
 def calc_nl(patient_id, host='localhost'):
 	cnx = mysql.connector.connect(user='root',password='mysql_db',host=host,database='spirometry_db')
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 
 	query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16 FROM small_test WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
@@ -321,7 +321,7 @@ def send_report_cmi(patient_id):
 
 def nl_sendback(patient_id, host='localhost'):
 	cnx = mysql.connector.connect(user='root',password='mysql_db',host=host,database='spirometry_db')
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(buffered=True)
 
 	query = "SELECT normal_range FROM meta_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
