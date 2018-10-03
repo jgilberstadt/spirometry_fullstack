@@ -50,7 +50,11 @@ def generate(filename, patient_id, host='localhost'):
 	cursor.execute(query, (patient_id,))
 
 
-	minRate, maxRate, lowestSat, timeAbnormal, timeMinRate = None
+	minRate = None
+	maxRate= None
+	lowestSat= None
+	timeAbnormal = None
+	timeMinRate = None
 	for (newMinRate, newMaxRate, newLowestSat, newTimeAbnormal, newTimeMinRate) in cursor:
 		print "minRate: {0}, maxRate: {1}, lowestSat: {2}, timeAbnormal: {3}, timeMinRate: {4}".format(
 			newMinRate, newMaxRate, newLowestSat, newTimeAbnormal, newTimeMinRate)
