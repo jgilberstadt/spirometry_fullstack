@@ -1,4 +1,6 @@
 # script to generate report
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import xlsxwriter
 import datetime
