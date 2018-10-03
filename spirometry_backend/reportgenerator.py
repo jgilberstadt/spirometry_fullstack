@@ -90,7 +90,7 @@ def generate(filename, patient_id, host='localhost'):
 		worksheet.write('J5', lowestSat)
 		worksheet.write('J6', timeAbnormal)
 		worksheet.write('J7', timeMinRate)
-		worksheet.write('J8', minRate + " vs " + maxRate)
+		worksheet.write('J8', "{0} vs {1}".format(minRate, maxRate))
 	else:
 		worksheet.write('I5', '>97%')
 		worksheet.write('I6', 'NA')
