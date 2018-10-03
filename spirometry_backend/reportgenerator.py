@@ -141,7 +141,7 @@ def generate(filename, patient_id, host='localhost'):
 	dates = []
 	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
 		fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
-		print json.dumps(fev_list)
+		print "fev_list: {0}".format(json.dumps(fev_list))
 		max_fev = max(fev_list)
 		max_fev_list.append(max_fev)
 		d = datetime.datetime.strptime(test_date,"%Y-%m-%d")
