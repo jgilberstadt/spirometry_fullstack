@@ -165,15 +165,15 @@ def generate(filename, patient_id, host='localhost'):
 	print "overall_max: {0}, overall_mean: {1}".format(overall_max, overall_mean)
 	row = 30
 
-	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
-		fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
-		max_fev = max(fev_list)
+	for i in xrange(max_fev_list):
+		# fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
+		# max_fev = max(fev_list)
 		worksheet.write(row, col+8, overall_max)
-		worksheet.write(row, col+9, (max_fev-overall_max)/overall_max)
+		worksheet.write(row, col+9, (max_fev_list[i]-overall_max)/float(overall_max))
 		worksheet.write(row, col+10, overall_mean)
-		worksheet.write(row, col+11, (max_fev-overall_mean)/overall_mean)
-		worksheet.write(row, col+12, float(max_fev)*1000)
-		worksheet.write(row, col+13, test_date)
+		worksheet.write(row, col+11, (max_fev_list[i]-overall_mean)/float(overall_mean))
+		worksheet.write(row, col+12, float(max_fev_list[i])*1000)
+		worksheet.write(row, col+13, dates[i])
 		# how to get SHS date
 		# worksheet.write(row, col+13, )
 		row += 1
