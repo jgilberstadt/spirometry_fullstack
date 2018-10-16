@@ -95,11 +95,11 @@ public class TestCompleteActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 if(testingPeriodDay<4) {
                     editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
-                    editor.commit();
+                    editor.apply();
                     startSurveyAlarm();
                 }else{
                     editor.putInt(getString(R.string.testingPeriodDay), 0);
-                    editor.commit();
+                    editor.apply();
                 }
                 createFile("yesVarianceNoSymptoms", false);
             }
@@ -586,12 +586,17 @@ public class TestCompleteActivity extends AppCompatActivity {
         Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+        final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
 
-        myIntent.putExtra("notificationTitle","Repeated Tests - Day "+testingPeriodDay+" of 4");
+        Log.d(TAG, "test day: "+testingPeriodDay);
+
+        myIntent.putExtra("notificationTitle","Repeated Tests - 4 Day Testing Period");
         myIntent.putExtra("notificationBody","Please log in to repeat your test & questionnaire");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
 
+        Log.d(TAG,"test day: "+ myIntent.getStringExtra("notificationTitle"));
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
+        myIntent = null;
         manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
 
     }

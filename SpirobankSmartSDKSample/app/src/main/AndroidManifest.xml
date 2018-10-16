@@ -39,7 +39,8 @@
 
         </activity>
 
-        <activity android:name=".BlowActivity" />
+        <activity android:name=".BlowActivity"
+            android:launchMode="singleInstance"/>
         <activity android:name=".BlowActivity2" />
 
         <activity android:name=".Q1Activity" />
