@@ -93,6 +93,25 @@ require_once 'DB_Connect.php';
      }
 
      }
+    
+
+    public function storeFVCRecordsToPostgres($patient_id, $pef, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $fvc, $fev1_fvc, $fev6, $fef2575) {
+      $uuid = uniqid('',true);
+
+      // prepare a query for execution
+      pg_prepare($this->conn, "insert", "INSERT INTO fvc_tests(unique_id, patient_id, pef, fev11, fev12, fev13, fev14, fev15, fev16, fvc, fev1_fvc, fev6, fef2575) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)");
+      $result = pg_execute($this->conn, "insert", array($uuid, $patient_id, $pef, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $fvc, $fev1_fvc, $fev6, $fef2575));
+      // check for successful store
+      if ($result) {
+        pg_prepare($this->conn, "query2", "SELECT * FROM fvc_tests WHERE unique_id = $1");
+        $result = pg_execute($this->conn, "query2", array($uuid));
+        return $result;
+      } else {
+        return false;
+      }
+
+    }
+
 
 	/**
     * Storing new PefFEV1 test record
