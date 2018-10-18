@@ -23,6 +23,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
 
 import java.io.BufferedReader;
@@ -40,8 +44,10 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 
 public class TestCompleteActivity extends AppCompatActivity {
@@ -419,7 +425,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    sendFile(file.getPath());
+                    checkSurvey();
                 }
             }).start();
 
@@ -430,7 +436,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
 
-    public int sendFile(String selectedFilePath) {
+    public int sendFile(String selectedFilePath, String php_address) {
         Log.d("hyunrae", selectedFilePath);
 
         int serverResponseCode = 0;
@@ -439,7 +445,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
-        String php_address = "http://172.16.10.165/spirometry/store_data.php";
+        // String php_address = "http://172.16.10.165/spirometry/store_data.php";
 
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
@@ -615,5 +621,53 @@ public class TestCompleteActivity extends AppCompatActivity {
         } catch (Exception ignored) {
         }
         return serial;
+    }
+
+    public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
+
+        String tag_string_req = "req_confirm";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "confirmSurvey Response: " + response);
+                if (response.equals("true")) {
+                    // database contains survey
+                    Log.d("exists", "YES");
+                    File file = new File(selectedFilePath);
+                    file.delete();
+                } else {
+                    Log.d("exists", "NO");
+
+                    // database does not contain survey
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendFile(selectedFilePath, php_address);
+                        }
+                    }).start();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "checkSurveyExists Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("file_name", file_name);
+
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 }
