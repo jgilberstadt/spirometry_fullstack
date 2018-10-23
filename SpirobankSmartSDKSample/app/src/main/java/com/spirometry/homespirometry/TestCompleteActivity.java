@@ -371,9 +371,9 @@ public class TestCompleteActivity extends AppCompatActivity {
         return sharedP.getLong(key, 1);
     }
 
-    public void createFile(String param, boolean addSurvey) {
-        File file_path = getFilesDir();
-        String file_name = param + "_" + getManufacturerSerialNumber();
+    public void createFileRaw(String param, boolean addSurvey) {
+        final File file_path = getFilesDir();
+        final String file_name = param + "_" + getManufacturerSerialNumber();
 
         file = new File(file_path, file_name);
 
@@ -390,18 +390,13 @@ public class TestCompleteActivity extends AppCompatActivity {
             DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
             String line = "";
 
-            if (addSurvey) {
-                for (int i = 0; i < survey_arr.length; i++) {
-                    line += survey_arr[i];
-                }
-                line += "\n";
-                dOut.write(line.getBytes());
-            }
-            line = "";
             for (int i = 0; i < blow_arr.length; i++) {
+                /*
                 for (int j = 0; j < blow_arr[0].length; j++) {
                     line += blow_arr[i][j] + " ";
                 }
+                */
+                line += blow_arr[i][1];
                 line += "!";
             }
             line += "\n";
@@ -419,13 +414,80 @@ public class TestCompleteActivity extends AppCompatActivity {
             dOut.write(line.getBytes());
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
+            line += "\n";
             dOut.write(line.getBytes());
+
+            line = "";
+            if (addSurvey) {
+                for (int i = 0; i < survey_arr.length; i++) {
+                    line += survey_arr[i];
+                }
+                line += "\n";
+                dOut.write(line.getBytes());
+            }
+
+
+
 
             dOut.close();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    checkSurvey();
+                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+                }
+            }).start();
+
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    public void createFile(String param, boolean addSurvey) {
+        final File file_path = getFilesDir();
+        final String file_name = param + "_" + getManufacturerSerialNumber();
+
+        file = new File(file_path, file_name);
+
+        String[][] blow_arr = mBundleData.getBlowDataArray();
+
+        LinkedList<String[]> pulse_list = mBundleData.getPulseData();
+        ListIterator<String[]> it = pulse_list.listIterator();
+
+        int[] survey_arr = mBundleData.getSurveyAnswerArr();
+
+        try {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+            String line = "";
+
+            for (int i = 0; i < blow_arr.length; i++) {
+                line += blow_arr[i][1];
+                line += "!";
+            }
+            line += "\n";
+            dOut.write(line.getBytes());
+
+            line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
+            line += "\n";
+            dOut.write(line.getBytes());
+
+            line = "";
+            if (addSurvey) {
+                for (int i = 0; i < survey_arr.length; i++) {
+                    line += survey_arr[i];
+                }
+                line += "\n";
+                dOut.write(line.getBytes());
+            }
+
+
+            dOut.close();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data.php");
                 }
             }).start();
 

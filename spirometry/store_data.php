@@ -25,7 +25,8 @@ $db->storeMetadata($file_name); // check metadata for patient_id which right now
 
 $data = gzinflate(substr($ans_text, 2));
 $dataArr = explode("\n", $data);
-//$dataArr[0] = gzdeflate($dataArr[0], 9);
+// blow data
+$dataArr[0] = gzdeflate($dataArr[0], 9);
 $dataArr[1] = gzdeflate($dataArr[1], 9);
 $dataArr[2] = gzdeflate($dataArr[2], 9);
 
