@@ -21,18 +21,41 @@ if(strpos($file_name, 'yesVarianceYesSymptoms') {
 $ans_file = fopen($target_path, 'r') or die('Unable to open file');
 $ans_text = fread($ans_file, filesize($target_path));
 
-$db->storeMetadata($file_name); // check metadata for patient_id which right now is the tablet serial
-
-$data = gzinflate(substr($ans_text, 2));
+// extract data field for spiro, pulseox, survey
 $dataArr = explode("\n", $data);
-// blow data
-$dataArr[0] = gzdeflate($dataArr[0], 9);
-$dataArr[1] = gzdeflate($dataArr[1], 9);
-$dataArr[2] = gzdeflate($dataArr[2], 9);
+$patient_id = $dataArr[0];
+// blow
+$fev1_array = array();
+$pulse_boolean;
+$o2sat_boolean;
+$spiro_boolean;
+$blows = explode("!", $dataArr[1]);
+for($x=0; $x<6; $x++) {
+  array_push($fev1_array, $blows[$x]);
+}
+$pulseox = explode("!", $dataArr[2]);
+$lowestSat = $pulseox[0];
+$minHR = $pulseox[1];
+$maxHR = $pulseox[2];
+$timeAbnormal = $pulseox[3];
+$timeMinRate = $pulseox[4];
+if($minHR < 60 || $maxHR > 100) {
+  $pulse_boolean = 1;
+}
+else {
+  $pulse_boolean = 0;
+}
+if($lowestSat > 97) {
+  $o2sat_boolean = 0;
+}
+else if($lowestSat <= 97 && $lowestSat > 91) {
+  $o2sat_boolean = 1;
+}
+else {
+  $o2sat_boolean = 2;
+}
+$result = $db->storeFVCRecordsToPostgres($patient_id, $pef, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $fvc, $fev1_fevc, $fev6, $fef2575)
 
-$pulseData = explode("!", $dataArr[3]);
-
-$result = $db->storeData($file_name, $dataArr, $pulseData);
 
 if ($result) {
   return "success";
