@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +69,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     Calendar finalDate = Calendar.getInstance();
     TimePicker timePicker;
     DatePicker datePicker;
+    Handler mHandler;
 
     private AlarmManager m_alarmMgr;
 
@@ -79,6 +82,9 @@ public class TestCompleteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_complete);
+
+        mHandler = new Handler();
+
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
         mBundleData.setVarianceExists(true);
@@ -686,50 +692,69 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager != null ? connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI) : null;
 
-        String tag_string_req = "req_confirm";
+        //reduce data usage - only send file if wifi is connected
+        if (mWifi != null && mWifi.isConnected()) {
+            String tag_string_req = "req_confirm";
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "confirmSurvey Response: " + response);
-                if (response.equals("true")) {
-                    // database contains survey
-                    Log.d("exists", "YES");
-                    File file = new File(selectedFilePath);
-                    file.delete();
-                } else {
-                    Log.d("exists", "NO");
+            StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "confirmSurvey Response: " + response);
+                    if (response.equals("true")) {
+                        // database contains survey
+                        Log.d("exists", "YES");
+                        File file = new File(selectedFilePath);
+                        file.delete();
+                    } else {
+                        Log.d("exists", "NO");
 
-                    // database does not contain survey
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendFile(selectedFilePath, php_address);
-                        }
-                    }).start();
+                        // database does not contain survey
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendFile(selectedFilePath, php_address);
+                            }
+                        }).start();
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
+            }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "checkSurveyExists Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("file_name", file_name);
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "checkSurveyExists Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("file_name", file_name);
 
-                return params;
-            }
+                    return params;
+                }
 
-        };
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
+            };
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }else{
+            mHandler.post(new Runnable() {
+                public void run(){
+                    AlertDialog.Builder warning = new AlertDialog.Builder(TestCompleteActivity.this);
+                    warning.setMessage("Please connect to wi=fi later on to upload your answers.").setTitle("Wi-Fi not connected");
+                    AlertDialog warning_dialog = warning.create();
+                    warning_dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    warning_dialog.show();
+                }
+            });
+        }
     }
 }
