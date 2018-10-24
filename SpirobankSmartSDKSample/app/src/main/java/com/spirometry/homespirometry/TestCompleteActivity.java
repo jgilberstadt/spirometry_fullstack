@@ -397,12 +397,9 @@ public class TestCompleteActivity extends AppCompatActivity {
             String line = "";
 
             for (int i = 0; i < blow_arr.length; i++) {
-                /*
                 for (int j = 0; j < blow_arr[0].length; j++) {
                     line += blow_arr[i][j] + " ";
                 }
-                */
-                line += blow_arr[i][1];
                 line += "!";
             }
             line += "\n";
@@ -470,7 +467,22 @@ public class TestCompleteActivity extends AppCompatActivity {
             // get patient_id, test_date, normal range?, test counter.
             String line = "";
 
-            line += mBundleData.
+            line += mBundleData.getPid();
+            line += "!";
+            Date currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            line += sdf.format(currentTime);
+            line += "!";
+            if(mBundleData.getVarianceExists()) {
+                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+                line = line + "1!" + Integer.toString(testingPeriodDay);
+            }
+            else {
+                line += "0!0";
+            }
+            line += "\n";
+
 
             for (int i = 0; i < blow_arr.length; i++) {
                 line += blow_arr[i][1];

@@ -142,6 +142,12 @@ public class MyParcelable implements Parcelable {
     public float getMaxNRange() {
         return maxNRange;
     }
+    public void setPid(String pid) {
+        patient_id = pid;
+    }
+    public String getPid() {
+        return patient_id;
+    }
 
     public static final Creator<MyParcelable> CREATOR
             = new Creator<MyParcelable>() {
