@@ -466,7 +466,11 @@ public class TestCompleteActivity extends AppCompatActivity {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
             DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+
+            // get patient_id, test_date, normal range?, test counter.
             String line = "";
+
+            line += mBundleData.
 
             for (int i = 0; i < blow_arr.length; i++) {
                 line += blow_arr[i][1];

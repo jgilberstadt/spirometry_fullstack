@@ -23,7 +23,12 @@ $ans_text = fread($ans_file, filesize($target_path));
 
 // extract data field for spiro, pulseox, survey
 $dataArr = explode("\n", $data);
-$patient_id = $dataArr[0];
+$meta = explode("!",$dataArr[0]);
+$patient_id = $meta[0];
+$test_date = $meta[1];
+$spiro_boolean = $meta[2];
+$repeated_counter = $meta[3];
+
 // blow
 $fev1_array = array();
 $pulse_boolean;
@@ -54,7 +59,7 @@ else if($lowestSat <= 97 && $lowestSat > 91) {
 else {
   $o2sat_boolean = 2;
 }
-$result = $db->storeFVCRecordsToPostgres($patient_id, $pef, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $fvc, $fev1_fevc, $fev6, $fef2575)
+$result = $db->storeRecordsToPostgres($patient_id, $test_date, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minHR, $maxHR, $timeAbnormal, $timeMinRate);
 
 
 if ($result) {

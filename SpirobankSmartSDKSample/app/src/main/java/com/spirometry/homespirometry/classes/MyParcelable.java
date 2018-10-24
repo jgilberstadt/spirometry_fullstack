@@ -25,6 +25,8 @@ public class MyParcelable implements Parcelable {
     private float maxNRange;
     private boolean symptomsExist;
     private boolean varianceExists;
+    // patient id
+    private String patient_id;
 
 
     public int describeContents() {

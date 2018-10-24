@@ -95,6 +95,7 @@ require_once 'DB_Connect.php';
      }
     
 
+     /*
     public function storeFVCRecordsToPostgres($patient_id, $pef, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $fvc, $fev1_fvc, $fev6, $fef2575) {
       $uuid = uniqid('',true);
 
@@ -109,6 +110,19 @@ require_once 'DB_Connect.php';
       } else {
         return false;
       }
+
+    }
+    */
+
+    public function storeRecordsToPostgres($patient_id, $test_date, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16,$pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate) {
+
+      // prepare a query for execution
+      pg_prepare($this->conn, "insert", "INSERT INTO small_test(patient_id, test_date, fev11, fev12, fev13, fev14, fev15, fev16) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)");
+      $result = pg_execute($this->conn, "insert", array($patient_id,$test_date,$fev11,$fev12,$fev13,$fev14,$fev15,$fev16));
+      pg_prepare($this->conn, "insert2", "INSERT INTO pulse_data(patient_id, minRate, maxRate, lowestSat, timeAbnormal, timeMinRate, pulse_boolean, o2sat_boolean, spiro_boolean, counter4tests) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10")
+      $result = pg_execute()($this->conn, "insert2", array($patient_id, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter))
+      // check for successful store
+      
 
     }
 
