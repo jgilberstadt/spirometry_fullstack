@@ -70,7 +70,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
         }
 
         // Initialize the device manager
-        iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.ASSERT);
+        iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.VERBOSE);
 
         // Register callback. See below
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
