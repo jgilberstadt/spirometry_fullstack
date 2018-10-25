@@ -431,7 +431,7 @@ public class TestCompleteActivity extends AppCompatActivity {
 
 
 
-
+            dOut.flush();
             dOut.close();
             new Thread(new Runnable() {
                 @Override
@@ -447,6 +447,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void createFile(String param, boolean addSurvey) {
+        Log.d("createFile","started creating file");
         final File file_path = getFilesDir();
         final String file_name = param + "_" + getManufacturerSerialNumber();
 
@@ -504,8 +505,9 @@ public class TestCompleteActivity extends AppCompatActivity {
                 dOut.write(line.getBytes());
             }
 
-
+            dOut.flush();
             dOut.close();
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -708,11 +710,8 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager != null ? connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI) : null;
-
         //reduce data usage - only send file if wifi is connected
-        if (mWifi != null && mWifi.isConnected()) {
+        if (isConnectedViaWifi()) {
             String tag_string_req = "req_confirm";
 
             StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {

@@ -91,6 +91,11 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
         contactHospital.setVisibility(View.INVISIBLE);
 
+        if(isConnectedViaWifi()){
+            Log.d("path", String.valueOf(getFilesDir().getAbsolutePath()));
+            //TODO: upload unsent files from past tests here
+        }
+
 //        new CountDownTimer(7000,1000){
 //            @Override
 //            public void onTick(long millisUntilFinished){
@@ -116,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isConnectedViaWifi()) {
+                if (!isConnectedViaWifiOrMobile()) {
                     buildDialog(LoginActivity.this).show();
                     return;
                 }
@@ -161,12 +166,19 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 //    }
 
     // check whether WiFi is connected
-    private boolean isConnectedViaWifi() {
+    private boolean isConnectedViaWifiOrMobile() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
         return mWifi.isConnected() || mobile.isConnected();
+    }
+
+    private boolean isConnectedViaWifi() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        return mWifi.isConnected();
     }
 
     Handler handleUpdateListScan = new Handler();
