@@ -2,7 +2,7 @@
 require_once 'DB_Functions.php';
 $db = new DB_Functions();
 
-$target_path = 'uploads/';
+$target_path = '/var/www/hs_uploads/';
 $target_path = $target_path . basename($_FILES['uploaded_file']['name']);
 
 if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $target_path)) {
@@ -12,9 +12,9 @@ echo 'The file '. basename( $_FILES['uploaded_file']['name']).
 echo "There was an error uploading the file, please try again!";
 }
 $file_name = basename( $_FILES['uploaded_file']['name']); // file name is patient id
-if(strpos($file_name, 'yesVarianceYesSymptoms') {
+if(strpos($file_name, 'yesVarianceYesSymptoms')) {
 	// send email to enrolling center
-} elseif(strpos($file_name, 'yesVarianceNoSymptoms') {
+} elseif(strpos($file_name, 'yesVarianceNoSymptoms')) {
     // store questionnaire and store test results
 }
 
@@ -22,7 +22,7 @@ $ans_file = fopen($target_path, 'r') or die('Unable to open file');
 $ans_text = fread($ans_file, filesize($target_path));
 
 // extract data field for spiro, pulseox, survey
-$dataArr = explode("\n", $data);
+$dataArr = explode("\n", $ans_text);
 $meta = explode("!",$dataArr[0]);
 $patient_id = $meta[0];
 $test_date = $meta[1];
@@ -59,7 +59,7 @@ else if($lowestSat <= 97 && $lowestSat > 91) {
 else {
   $o2sat_boolean = 2;
 }
-$result = $db->storeRecordsToPostgres($patient_id, $test_date, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minHR, $maxHR, $timeAbnormal, $timeMinRate);
+$result = $db->storeRecordsToPostgres($patient_id, $test_date, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minHR, $maxHR, $lowestSat, $timeAbnormal, $timeMinRate);
 
 
 if ($result) {

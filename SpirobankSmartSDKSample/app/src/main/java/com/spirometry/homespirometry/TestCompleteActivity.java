@@ -393,7 +393,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         try {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
-            DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+            ///DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
             String line = "";
 
             for (int i = 0; i < blow_arr.length; i++) {
@@ -403,7 +403,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "!";
             }
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
             line = "";
             while (it.hasNext()) {
@@ -414,11 +414,11 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "!";
             }
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
             line = "";
             if (addSurvey) {
@@ -426,19 +426,38 @@ public class TestCompleteActivity extends AppCompatActivity {
                     line += survey_arr[i];
                 }
                 line += "\n";
-                dOut.write(line.getBytes());
+                fOut.write(line.getBytes());
             }
 
+            fOut.close();
 
-
-            dOut.flush();
-            dOut.close();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWifi = connManager != null ? connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI) : null;
+            //reduce data usage - only send file if wifi is connected
+            if (mWifi != null && mWifi.isConnected()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+                    }
+                }).start();
+            }
+            else{
+                mHandler.post(new Runnable() {
+                    public void run(){
+                        AlertDialog.Builder warning = new AlertDialog.Builder(TestCompleteActivity.this);
+                        warning.setMessage("Please connect to wi=fi later on to upload your answers.").setTitle("Wi-Fi not connected");
+                        AlertDialog warning_dialog = warning.create();
+                        warning_dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        warning_dialog.show();
                 }
-            }).start();
+            });
+            }
 
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -447,7 +466,6 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void createFile(String param, boolean addSurvey) {
-        Log.d("createFile","started creating file");
         final File file_path = getFilesDir();
         final String file_name = param + "_" + getManufacturerSerialNumber();
 
@@ -463,7 +481,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         try {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
-            DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+            //DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
 
             // get patient_id, test_date, normal range?, test counter.
             String line = "";
@@ -490,11 +508,11 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "!";
             }
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
             line = "";
             if (addSurvey) {
@@ -502,16 +520,15 @@ public class TestCompleteActivity extends AppCompatActivity {
                     line += survey_arr[i];
                 }
                 line += "\n";
-                dOut.write(line.getBytes());
+                fOut.write(line.getBytes());
             }
 
-            dOut.flush();
-            dOut.close();
 
+            fOut.close();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data.php");
+                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
                 }
             }).start();
 
@@ -522,7 +539,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
 
-    public int sendFile(String selectedFilePath, String php_address) {
+    public int sendFile(String selectedFilePath, String file_name, String php_address) {
         Log.d("hyunrae", selectedFilePath);
 
         int serverResponseCode = 0;
@@ -536,7 +553,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        File selectedFile = new File(selectedFilePath);
+        File selectedFile = new File(selectedFilePath, file_name);
 
         if (!selectedFile.isFile()) {
             return 0;
@@ -710,8 +727,8 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
-        //reduce data usage - only send file if wifi is connected
-        if (isConnectedViaWifi()) {
+
+
             String tag_string_req = "req_confirm";
 
             StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {
@@ -721,7 +738,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                     if (response.equals("true")) {
                         // database contains survey
                         Log.d("exists", "YES");
-                        File file = new File(selectedFilePath);
+                        File file = new File(selectedFilePath, file_name);
                         file.delete();
                     } else {
                         Log.d("exists", "NO");
@@ -730,7 +747,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                sendFile(selectedFilePath, php_address);
+                                sendFile(selectedFilePath, file_name, php_address);
                             }
                         }).start();
                     }
@@ -755,21 +772,6 @@ public class TestCompleteActivity extends AppCompatActivity {
 
             };
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        }else{
-            mHandler.post(new Runnable() {
-                public void run(){
-                    AlertDialog.Builder warning = new AlertDialog.Builder(TestCompleteActivity.this);
-                    warning.setMessage("Please connect to wi=fi later on to upload your answers.").setTitle("Wi-Fi not connected");
-                    AlertDialog warning_dialog = warning.create();
-                    warning_dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    warning_dialog.show();
-                }
-            });
-        }
+
     }
 }

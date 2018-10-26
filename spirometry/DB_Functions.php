@@ -1,6 +1,5 @@
 <?php
 
-require_once 'Config.php';
 require_once 'DB_Connect.php';
 
  class DB_Functions {
@@ -118,10 +117,19 @@ require_once 'DB_Connect.php';
 
       // prepare a query for execution
       pg_prepare($this->conn, "insert", "INSERT INTO spiro_data(patient_id, test_date, fev11, fev12, fev13, fev14, fev15, fev16, spiro_boolean, counter4tests) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)");
-      $result = pg_execute($this->conn, "insert", array($patient_id,$test_date,$fev11,$fev12,$fev13,$fev14,$fev15,$fev16));
-      pg_prepare($this->conn, "insert2", "INSERT INTO pulse_data(patient_id, minRate, maxRate, lowestSat, timeAbnormal, timeMinRate, pulse_boolean, o2sat_boolean) VALUES($1, $2, $3, $4, $5, $6, $7, $8)")
-      $result = pg_execute()($this->conn, "insert2", array($patient_id, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter))
+
+      $result = pg_execute($this->conn, "insert", array($patient_id,$test_date,$fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $spiro_boolean, $repeated_counter));
+
+      pg_prepare($this->conn, "insert2", "INSERT INTO pulse_data(patient_id, minRate, maxRate, lowestSat, timeAbnormal, timeMinRate, pulse_boolean, o2sat_boolean) VALUES($1, $2, $3, $4, $5, $6, $7, $8)");
+      
+      $result = pg_execute($this->conn, "insert2", array($patient_id, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $pulse_boolean, $o2sat_boolean));
       // check for successful store
+      if($result) {
+        return $result;
+      }
+      else {
+        return false;
+      }
       
 
     }
