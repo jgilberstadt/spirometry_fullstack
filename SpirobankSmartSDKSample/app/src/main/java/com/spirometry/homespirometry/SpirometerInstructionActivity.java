@@ -54,7 +54,7 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SpirometerInstructionActivity.this, BlowActivity.class);
-                intent.putExtra("peripheralAddress", getIntent().getStringExtra("peripheralAddress"));
+                //intent.putExtra("peripheralAddress", getIntent().getStringExtra("peripheralAddress"));
                 intent.putExtra("bundle-data", mBundleData);
                 SpirometerInstructionActivity.this.startActivity(intent);
                 finish();
@@ -65,6 +65,7 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
+            /*
             Log.d(TAG, "Some sort of device connected");
             if (deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 discoveredDeviceInfo = deviceInfo;
@@ -72,6 +73,8 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
             } else {
                 Log.d(TAG, "Your Specific Device is not Connected");
             }
+            */
+            discoveredDeviceInfo = deviceInfo;
         }
 
         @Override

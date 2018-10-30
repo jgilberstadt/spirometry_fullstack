@@ -98,7 +98,8 @@ public class PulseActivity extends AppCompatActivity {
         if (mBundleData == null) {
             mBundleData = new MyParcelable();
         }
-        deviceMac = getIntent().getStringExtra("mac");
+        //deviceMac = getIntent().getStringExtra("mac");
+        deviceMac = "94E36D555D31";
 
         // See below for the callback definition
         clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
@@ -110,6 +111,8 @@ public class PulseActivity extends AppCompatActivity {
         pulseNumber = (TextView) findViewById(R.id.pulseNumber);
         countDown = (TextView) findViewById(R.id.countDown);
         secondsRemaining = (TextView) findViewById(R.id.secondsRemaining);
+
+        Log.d("mac addr", deviceMac);
 
         // Use the deviceMac from the last activity and get the device
         mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);

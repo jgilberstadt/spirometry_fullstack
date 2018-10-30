@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -31,7 +32,7 @@ import com.spirometry.spirobanksmartsdk.DeviceManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class LoginActivity extends AppCompatActivity implements Serializable {
+public class LoginActivity extends AppCompatActivity {
 
     Button submitButton;
     EditText etPassword;
@@ -132,10 +133,12 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                     // do stuff
                     // set patient id
                     mBundleData.setPid(truePassword);
-                    //Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
-                    Intent intent = new Intent(LoginActivity.this, Q1Activity.class);
-                    Log.d(TAG, "bundle-data" +mBundleData);
-                    intent.putExtra("bundle-data", mBundleData);
+                    NewParcelable bb = new NewParcelable();
+                    bb.setPatient_id(truePassword);
+                    Intent intent = new Intent(LoginActivity.this, TestCompleteActivity.class);
+                   //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
+                    Log.d(TAG, "bundle-data" +bb);
+                    intent.putExtra("bundle-data", bb);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();

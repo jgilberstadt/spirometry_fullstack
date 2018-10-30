@@ -11,8 +11,8 @@ public class MyParcelable implements Parcelable {
     //private DeviceInfo discoveredDeviceInfo;
     private ArrayList DeviceInfoArray;
     private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
-    private String[][] blowDeviceResultArray;
-    private String[][] blowDeviceResultArrayPefFev1;
+    private String blowDeviceResultArray;
+    private String blowDeviceResultArrayPefFev1;
     private int[] questionStates;
     private LinkedList pulseData;
     private int lowestSat;
@@ -43,18 +43,9 @@ public class MyParcelable implements Parcelable {
         out.writeInt(timeAbnormal);
         out.writeInt(timeMinRate);
 
-        //blowDeviceResultArray = new String[6][4];
-        for (int i =0; i < 6; i++) {
-            for(int j=0; j < 6 ; j++) {
-                out.writeString(blowDeviceResultArray[i][j]);
-            }
-        }
-
-        for (int i =0; i < 1; i++) {
-            for(int j=0; j < 4 ; j++) {
-                out.writeString(blowDeviceResultArrayPefFev1[i][j]);
-            }
-        }
+        out.writeString(blowDeviceResultArray);
+        out.writeString(blowDeviceResultArrayPefFev1);
+        out.writeString(patient_id);
 
         for (int i = 0; i < 19; i++) {
             out.writeInt(surveyAnswers[i]);
@@ -85,35 +76,38 @@ public class MyParcelable implements Parcelable {
     public void setVarianceExists(boolean value){varianceExists = value;}
     public boolean getVarianceExists(){return varianceExists;}
 
-   public void setBlowDataArray(int index, String[] blowPoints){
-       blowDeviceResultArray[index] = blowPoints;
+   public void setBlowDataArray(String arr){
+       blowDeviceResultArray = arr;
     }
 
     public float getMaxFev1() {
         float max = 0;
-        for(String[] blow: blowDeviceResultArray){
-            Float fev1 = Float.parseFloat(blow[1]);
+        /*
+        for(String blow: blowDeviceResultArray){
+            String[] params = blow.split(" ");
+            Float fev1 = Float.parseFloat(params[1]);
             if (fev1 > max) {
                 max = fev1;
             }
         }
+        */
         return max;
 
     }
 
-    public void setBlowDataArrayPefFev1(int indexPefFev1, String[] blowPointsPefFev1){
-        blowDeviceResultArrayPefFev1[indexPefFev1] = blowPointsPefFev1;
+    public void setBlowDataArrayPefFev1(String arr){
+        blowDeviceResultArrayPefFev1 = arr;
     }
 
     public ArrayList getDeviceInfo(){
         return DeviceInfoArray;
     }
 
-    public String[][] getBlowDataArray() {
+    public String getBlowDataArray() {
         return blowDeviceResultArray;
     }
 
-    public String[][] getBlowDataArrayPefFev1() {
+    public String getBlowDataArrayPefFev1() {
         return blowDeviceResultArrayPefFev1;
     }
 
@@ -179,19 +173,8 @@ public class MyParcelable implements Parcelable {
         minNRange = in.readFloat();
         maxNRange = in.readFloat();
 
-        blowDeviceResultArray = new String[6][6];
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {  //            for (int j = 0; j < 4; j++) {
-                blowDeviceResultArray[i][j] = in.readString();
-            }
-        }
-
-        blowDeviceResultArrayPefFev1 = new String[1][4];
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 4; j++) {  //            for (int j = 0; j < 4; j++) {
-                blowDeviceResultArrayPefFev1[i][j] = in.readString();
-            }
-        }
+        blowDeviceResultArray = in.readString();
+        blowDeviceResultArrayPefFev1 = in.readString();
 
         surveyAnswers = new int[19];
         for (int i = 0; i < 19; i++) {
@@ -206,18 +189,6 @@ public class MyParcelable implements Parcelable {
 
     public MyParcelable(){
         pulseData = new LinkedList<String[]>();
-        blowDeviceResultArray = new String[6][6]; // use to be 4
-        for (int i = 0; i<6; i++) {
-            for (int j = 0; j < 6; j++) {
-                blowDeviceResultArray[i][j] = "";
-            }
-        }
-        blowDeviceResultArrayPefFev1 = new String[1][4]; // use to be 4
-        for (int i = 0; i<1; i++) {
-            for (int j = 0; j < 4; j++) {
-                blowDeviceResultArrayPefFev1[i][j] = "";
-            }
-        }
 
         surveyAnswers = new int[19];
         for (int i = 0; i < 19; i++) {

@@ -109,7 +109,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
             if (!success) {
-                Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
+                //Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
 
             }else { //if(success)
                 Log.d(TAG, "onScanDevice: " + "Scanned Device Successfully");
@@ -174,7 +174,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
     public void onClickConnect(View view){
         //iHealthDevicesManager.getInstance().startDiscovery();
         //  iHealthDevicesManager.getInstance().startDiscovery(1000);
-        iHealthDevicesManager.getInstance().stopDiscovery();
+        //iHealthDevicesManager.getInstance().stopDiscovery();
         iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         Log.d(TAG, "onClickConnect " + "Connecting ....");
 

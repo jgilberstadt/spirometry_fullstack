@@ -62,7 +62,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
      //    int dayFinishedTime = getLastAppointmentDate.get(Calendar.DAY_OF_WEEK);
       //  Log.d(TAG, "tempDay" + dayFinishedTime);
 
-        mBundleData = new MyParcelable();
+        mBundleData = getIntent().getParcelableExtra("bundle-data");
 
         timeKeepingText = (TextView) findViewById(R.id.timeKeepingText);
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);

@@ -69,6 +69,10 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
         arr = mBundleData.getDeviceInfo();
 
+        DeviceInfo lastDeviceConnected = deviceManager.getLastConnectedDeviceInfo(getApplicationContext());
+        deviceManager.connect(getApplicationContext(), lastDeviceConnected);
+
+
         bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
 
         if (!bluetoothadapter.isEnabled()) {
@@ -149,7 +153,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             Log.d("hyunrae", deviceInfo.getSerialNumber());
             Log.d("hyunrae", deviceInfo.getAddress());
                     //I did this so that you don't reconnect with different device
-                    if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB") || deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
+                    /*if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB") || deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                    //     localInfo = "success";
                         discoveredDeviceInfo = deviceInfo;
                         progressBar.setVisibility(View.VISIBLE);
@@ -161,8 +165,14 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                         Log.d(TAG, "Your Specific Device is not Connected");
                         progressBar.setVisibility(View.VISIBLE);
                         tvConnecting.setVisibility(View.VISIBLE);
-                    }
-                }
+                    }*/
+            discoveredDeviceInfo = deviceInfo;
+            progressBar.setVisibility(View.VISIBLE);
+            tvConnecting.setVisibility(View.VISIBLE);
+            tryAgainButton.setVisibility(View.INVISIBLE);
+            handleUpdateListScan.post(runUpdateListScan);
+            Log.d(TAG, "Your Specific Device Connected");
+        }
 
         @Override
         public void deviceConnected(Device device) {
@@ -275,7 +285,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
             }
         }
-    }, 9000);
+    }, 5000);
         }
     };
 

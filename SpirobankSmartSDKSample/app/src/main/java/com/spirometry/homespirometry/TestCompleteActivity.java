@@ -44,6 +44,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,6 +87,8 @@ public class TestCompleteActivity extends AppCompatActivity {
         mHandler = new Handler();
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
+        Log.d("pid", mBundleData.getPid());
+
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
         mBundleData.setVarianceExists(true);
         mBundleData.setSymptomsExist(false);
@@ -383,7 +386,8 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         file = new File(file_path, file_name);
 
-        String[][] blow_arr = mBundleData.getBlowDataArray();
+        //String[][] blow_arr = mBundleData.getBlowDataArray();
+        String blow_arr = mBundleData.getBlowDataArray();
 
         LinkedList<String[]> pulse_list = mBundleData.getPulseData();
         ListIterator<String[]> it = pulse_list.listIterator();
@@ -396,12 +400,14 @@ public class TestCompleteActivity extends AppCompatActivity {
             ///DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
             String line = "";
 
-            for (int i = 0; i < blow_arr.length; i++) {
-                for (int j = 0; j < blow_arr[0].length; j++) {
+            /*
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 6; j++) {
                     line += blow_arr[i][j] + " ";
                 }
                 line += "!";
             }
+            */
             line += "\n";
             fOut.write(line.getBytes());
 
@@ -471,12 +477,22 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         file = new File(file_path, file_name);
 
-        String[][] blow_arr = mBundleData.getBlowDataArray();
+        Log.d("result", mBundleData.getBlowDataArray());
+
+        String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
 
         LinkedList<String[]> pulse_list = mBundleData.getPulseData();
         ListIterator<String[]> it = pulse_list.listIterator();
 
         int[] survey_arr = mBundleData.getSurveyAnswerArr();
+
+        // fake pulse-ox data for testing
+        mBundleData.setPid("101001");
+        mBundleData.setLowestSat(95);
+        mBundleData.setMinHeartrate(70);
+        mBundleData.setMaxHeartrate(90);
+        mBundleData.setTimeAbnormal(100);
+        mBundleData.setTimeMinRate(73);
 
         try {
             file.createNewFile();
@@ -501,10 +517,14 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "0!0";
             }
             line += "\n";
+            fOut.write(line.getBytes());
+            line = "";
 
-
-            for (int i = 0; i < blow_arr.length; i++) {
-                line += blow_arr[i][1];
+            for (int i = 0; i < 6; i++) {
+                String each_blow = blow_arr[i];
+                String[] params = each_blow.split(" ");
+                Log.d("fev1:", params[1]);
+                line += params[1];
                 line += "!";
             }
             line += "\n";
