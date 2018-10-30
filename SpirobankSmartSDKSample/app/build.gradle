@@ -38,4 +38,8 @@ dependencies {
     implementation files('libs/pl2303driver.jar')
     implementation files('libs/smartlinklib3.6.4_product.jar')
     implementation files('libs/iHealthLibrary_2.4.4.10_test.jar')
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
 }
+apply plugin: 'com.google.gms.google-services'

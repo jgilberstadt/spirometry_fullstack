@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "14211682110",
+    "firebase_url": "https://home-spirometry.firebaseio.com",
+    "project_id": "home-spirometry",
+    "storage_bucket": "home-spirometry.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14211682110:android:58e621446dcd9197",
+        "android_client_info": {
+          "package_name": "com.spirometry.homespirometry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14211682110-eis6uq7jhr3qdkeb1uitp20u4ije1him.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCI1WlbbXG0-IgGtaEYvX35svekCXzGA0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
