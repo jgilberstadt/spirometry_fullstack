@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.PulseInstructionActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
@@ -43,7 +44,7 @@ public class BlowActivity extends AppCompatActivity {
     TextView postingResult;
 
     //This is a MyParcelable object that contains data / objects to be passed between activities
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     Patient patient;
 
@@ -76,7 +77,7 @@ public class BlowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-        arr = mBundleData.getDeviceInfo();
+        //arr = mBundleData.getDeviceInfo();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
@@ -106,10 +107,8 @@ public class BlowActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         numberOutOf = (TextView) findViewById(R.id.numberOutOf);
         buttonReBlow = (Button) findViewById(R.id.buttonReBlow);
-        nextButton = (Button) findViewById(R.id.nextbutton);
         postingResult = (TextView) findViewById(R.id.postingResult);
 
-        nextButton.setVisibility(View.INVISIBLE);
 
         findViewById(R.id.buttonReBlow).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +131,6 @@ public class BlowActivity extends AppCompatActivity {
             nextButton.setVisibility(View.VISIBLE);
         }
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
-                //Intent intent = new Intent(BlowActivity.this, PulseInstructionActivity.class); //PulseConnectingActivity
-                //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
-                intent.putExtra("bundle-data", mBundleData);
-                startActivity(intent);
-            }
-        });
 
     }
 
@@ -387,6 +376,12 @@ public class BlowActivity extends AppCompatActivity {
 
             mBundleData.setBlowDataArray(blowDeviceResultArray);
             Log.d("result", mBundleData.getBlowDataArray());
+
+            //Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
+            Intent intent = new Intent(BlowActivity.this, PulseInstructionActivity.class); //PulseConnectingActivity
+            //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
+            intent.putExtra("bundle-data", mBundleData);
+            startActivity(intent);
 
         }
     };

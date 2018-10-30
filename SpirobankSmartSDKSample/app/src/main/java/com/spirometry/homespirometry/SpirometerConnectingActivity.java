@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -25,12 +26,12 @@ import java.util.ArrayList;
 
 public class SpirometerConnectingActivity extends AppCompatActivity{
 
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
     String success = "Success!";
     private static final String TAG = SpirometerConnectingActivity.class.getSimpleName();
     DeviceManager deviceManager;
     Device currDevice;
-    ArrayList<String> arr;
+    //ArrayList<String> arr;
     DeviceInfo selectedDeviceInfo;
     //ArrayList<String> infoList = new ArrayList<>();
     TextView tvConnecting;
@@ -67,7 +68,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
         mBundleData = getIntent().getParcelableExtra("bundle-data"); // we don't need to get an array, we just need to get the whole thing which is just
 
-        arr = mBundleData.getDeviceInfo();
+        //arr = mBundleData.getDeviceInfo();
 
         DeviceInfo lastDeviceConnected = deviceManager.getLastConnectedDeviceInfo(getApplicationContext());
         deviceManager.connect(getApplicationContext(), lastDeviceConnected);
@@ -270,6 +271,8 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
            }else {
                 localInfo = false;
                 deviceManager.disconnect();
+               DeviceInfo lastDeviceConnected = deviceManager.getLastConnectedDeviceInfo(getApplicationContext());
+               deviceManager.connect(getApplicationContext(), lastDeviceConnected);
                 tvConnecting.setVisibility(View.INVISIBLE);
                 tryAgainButton.setText("RE-CONNECT");
                 tryAgainButton.setVisibility(View.VISIBLE);

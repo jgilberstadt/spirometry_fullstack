@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 
 /*
@@ -30,7 +31,7 @@ import com.spirometry.homespirometry.R;
 
 public class Q1Activity extends AppCompatActivity {
 
-    MyParcelable mBundleData;
+    NewParcelable mBundleData;
 
     private static final String TAG = BlowActivity.class.getSimpleName();
 
@@ -53,7 +54,7 @@ public class Q1Activity extends AppCompatActivity {
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         if (mBundleData == null) {
-            mBundleData = new MyParcelable();
+            mBundleData = new NewParcelable();
         }
 
         populatePreviousAnswers();
@@ -228,7 +229,7 @@ public class Q1Activity extends AppCompatActivity {
             RadioButton initialAnswer = (RadioButton)findViewById(initialRadioGroup.getCheckedRadioButtonId());
             if (initialAnswer.getText().toString().equals(("Yes"))) {
                 questionState = 1;
-                mBundleData.setSymptomsExist(true);
+                mBundleData.setSymptomsExist(1);
                 ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
                 answersSV.setVisibility(View.VISIBLE);
                 LinearLayout initialAnswers = (LinearLayout) findViewById(R.id.initialRadio);

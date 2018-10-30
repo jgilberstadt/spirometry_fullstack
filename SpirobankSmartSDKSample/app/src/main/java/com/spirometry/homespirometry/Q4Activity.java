@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 
 /**
@@ -24,7 +25,7 @@ import com.spirometry.homespirometry.classes.MyParcelable;
 
 public class Q4Activity extends AppCompatActivity {
 
-    MyParcelable mBundleData;
+    NewParcelable mBundleData;
 
     private RadioGroup initialRadioGroup;
     private RadioGroup radioGroup1;
@@ -125,7 +126,7 @@ public class Q4Activity extends AppCompatActivity {
             RadioButton initialAnswer = (RadioButton) findViewById(initialRadioGroup.getCheckedRadioButtonId());
             if (initialAnswer.getText().toString().equals(("Yes"))) {
                 questionState = 1;
-                mBundleData.setSymptomsExist(true);
+                mBundleData.setSymptomsExist(1);
                 ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
                 answersSV.setVisibility(View.VISIBLE);
                 LinearLayout initialAnswers = (LinearLayout) findViewById(R.id.initialRadio);

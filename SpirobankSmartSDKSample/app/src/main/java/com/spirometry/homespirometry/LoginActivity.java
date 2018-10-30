@@ -58,28 +58,13 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar spiroProgressBar;
     String truePassword = "123456";
 
-    String deviceInfoStringAddress;
-    String deviceInfoStringName;
-    String deviceInfoStringProtocol;
-    String deviceInfoStringSerialNumber;
-    String deviceInfoStringAdvertisementDataName;
-
-    ArrayList<String> deviceInfoArray = new ArrayList<>();
-
-    ArrayList<String> infoList = new ArrayList<>();
-    Device currDevice;
-    String fullInfo = "", result = "", infoDisconnect = "", strProgress ="";
-    Context myContext;
-    final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
-
-   // NotificationManager notificationmanager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
     DeviceManager deviceManager;
     DeviceInfo discoveredDeviceInfo;
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     private long mLastClickTime = 0;
     private Dialog warningDialog;
@@ -89,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mBundleData = new MyParcelable();
+        mBundleData = new NewParcelable();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -113,26 +98,6 @@ public class LoginActivity extends AppCompatActivity {
             uploadPastFiles(dir);
         }
 
-//        new CountDownTimer(7000,1000){
-//            @Override
-//            public void onTick(long millisUntilFinished){
-//                submitButton.setVisibility(View.INVISIBLE);
-//                etPassword.setVisibility(View.INVISIBLE);
-//                spirometerImage.setVisibility(View.VISIBLE);
-//                spiroCheck.setVisibility(View.VISIBLE);
-//                //spiroProgressBar.setVisibility(View.VISIBLE);
-//                }
-//            @Override
-//            public void onFinish(){
-//                //set the new Content of your activity
-//                submitButton.setVisibility(View.VISIBLE);
-//                etPassword.setVisibility(View.VISIBLE);
-//                spirometerImage.setVisibility(View.GONE);
-//                //spiroCheck.setVisibility(View.GONE);
-//                //spiroProgressBar.setVisibility(View.GONE);
-//            }
-//        }.start();
-
 
         //we want to create a login request, when the user actually clicks the login button, so onClickListener
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -148,13 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                 if(truePassword.equals(etPassword.getText().toString())) {
                     // do stuff
                     // set patient id
-                    mBundleData.setPid(truePassword);
-                    NewParcelable bb = new NewParcelable();
-                    bb.setPatient_id(truePassword);
-                    Intent intent = new Intent(LoginActivity.this, TestCompleteActivity.class);
+                    mBundleData.setPatient_id(truePassword);
+                    Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
                    //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
-                    Log.d(TAG, "bundle-data" +bb);
-                    intent.putExtra("bundle-data", bb);
+                    Log.d(TAG, "bundle-data" +mBundleData);
+                    intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();

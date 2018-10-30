@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 /**
  * Created by ASUS on 6/28/2018.
@@ -15,7 +16,7 @@ import com.spirometry.homespirometry.R;
 
 public class QuestionnaireInstructionActivity  extends AppCompatActivity {
 
-    MyParcelable mBundleData;
+    NewParcelable mBundleData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

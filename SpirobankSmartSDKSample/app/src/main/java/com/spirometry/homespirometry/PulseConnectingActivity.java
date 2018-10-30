@@ -27,6 +27,7 @@ import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.BuildConfig;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 
 import org.json.JSONArray;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 
 public class PulseConnectingActivity extends AppCompatActivity{
-    MyParcelable mBundleData;
+    private NewParcelable mBundleData;
     private static final String TAG = PulseConnectingActivity.class.getSimpleName();
 
     private String deviceMac;
@@ -66,7 +67,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         if (mBundleData == null) {
-            mBundleData = new MyParcelable();
+            mBundleData = new NewParcelable();
         }
 
         // Initialize the device manager

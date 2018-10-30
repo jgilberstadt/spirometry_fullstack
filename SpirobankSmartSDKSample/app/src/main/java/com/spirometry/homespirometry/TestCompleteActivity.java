@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -58,7 +59,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     public static final String FILE_NAME = "timeKeeping.txt";
 
     String[][] arraya; //6 data storing 4 String Values; +-
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
     private static final String TAG = BlowActivity.class.getSimpleName();
     TextView nextAppointment;
     TextView varianceAndSymptoms;
@@ -87,14 +88,13 @@ public class TestCompleteActivity extends AppCompatActivity {
         mHandler = new Handler();
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-        Log.d("pid", mBundleData.getPid());
 
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
-        mBundleData.setVarianceExists(true);
-        mBundleData.setSymptomsExist(false);
+        mBundleData.setVarianceExists(1);
+        mBundleData.setSymptomsExist(0);
         // should handle the case of normal test vs. repeated test
-        if (mBundleData.getVarianceExists()) {
-            if (mBundleData.getSymptomsExist()) {
+        if (mBundleData.getVarianceExists()==1) {
+            if (mBundleData.getSymptomsExist()==1) {
                 varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                 varianceAndSymptoms.setVisibility(View.VISIBLE);
 
@@ -388,11 +388,13 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         //String[][] blow_arr = mBundleData.getBlowDataArray();
         String blow_arr = mBundleData.getBlowDataArray();
+        String pulsedata = mBundleData.getPulseData();
 
-        LinkedList<String[]> pulse_list = mBundleData.getPulseData();
-        ListIterator<String[]> it = pulse_list.listIterator();
+        //LinkedList<String[]> pulse_list = mBundleData.getPulseData();
+        //ListIterator<String[]> it = pulse_list.listIterator();
+        String[] it = pulsedata.split("\n");
 
-        int[] survey_arr = mBundleData.getSurveyAnswerArr();
+        //int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
         try {
             file.createNewFile();
@@ -411,6 +413,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             line += "\n";
             fOut.write(line.getBytes());
 
+            /*
             line = "";
             while (it.hasNext()) {
                 String[] dataPoint = it.next();
@@ -421,11 +424,13 @@ public class TestCompleteActivity extends AppCompatActivity {
             }
             line += "\n";
             fOut.write(line.getBytes());
+            */
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
             line += "\n";
             fOut.write(line.getBytes());
 
+            /*
             line = "";
             if (addSurvey) {
                 for (int i = 0; i < survey_arr.length; i++) {
@@ -434,6 +439,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "\n";
                 fOut.write(line.getBytes());
             }
+            */
 
             fOut.close();
 
@@ -480,19 +486,24 @@ public class TestCompleteActivity extends AppCompatActivity {
         Log.d("result", mBundleData.getBlowDataArray());
 
         String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
+        String[] pulsedata = mBundleData.getPulseData().split("\n");
 
+        /*
         LinkedList<String[]> pulse_list = mBundleData.getPulseData();
         ListIterator<String[]> it = pulse_list.listIterator();
+        */
 
         int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
         // fake pulse-ox data for testing
+        /*
         mBundleData.setPid("101001");
         mBundleData.setLowestSat(95);
         mBundleData.setMinHeartrate(70);
         mBundleData.setMaxHeartrate(90);
         mBundleData.setTimeAbnormal(100);
         mBundleData.setTimeMinRate(73);
+        */
 
         try {
             file.createNewFile();
@@ -502,13 +513,13 @@ public class TestCompleteActivity extends AppCompatActivity {
             // get patient_id, test_date, normal range?, test counter.
             String line = "";
 
-            line += mBundleData.getPid();
+            line += mBundleData.getPatient_id();
             line += "!";
             Date currentTime = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             line += sdf.format(currentTime);
             line += "!";
-            if(mBundleData.getVarianceExists()) {
+            if(mBundleData.getVarianceExists()==1) {
                 SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
                 final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
                 line = line + "1!" + Integer.toString(testingPeriodDay);
@@ -534,6 +545,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             line += "\n";
             fOut.write(line.getBytes());
 
+
             line = "";
             if (addSurvey) {
                 for (int i = 0; i < survey_arr.length; i++) {
@@ -542,6 +554,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "\n";
                 fOut.write(line.getBytes());
             }
+
 
 
             fOut.close();

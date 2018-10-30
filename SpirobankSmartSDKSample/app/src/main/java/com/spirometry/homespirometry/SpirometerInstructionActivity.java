@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -21,7 +22,7 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
     private static final String TAG = SpirometerInstructionActivity.class.getSimpleName();
 
     //This is a MyParcelable object that contains data / objects to be passed between activities
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     DeviceManager deviceManager;
     DeviceInfo discoveredDeviceInfo;
