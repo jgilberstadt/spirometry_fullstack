@@ -277,7 +277,7 @@ public class PulseActivity extends AppCompatActivity {
 
                                     Random r = new Random();
                                     int subRandom = r.nextInt(5);
-                                    boolean var1 = (getMaxFev1(mBundleData.getPulseData()) < mBundleData.getMinNRange()) || (getMaxFev1(mBundleData.getPulseData()) > mBundleData.getMaxNRange());
+                                    boolean var1 = (getMaxFev1(mBundleData.getBlowDataArray()) < mBundleData.getMinNRange()) || (getMaxFev1(mBundleData.getBlowDataArray()) > mBundleData.getMaxNRange());
 
                                     mBundleData.setVarianceExists(var1?1:0);
 

@@ -98,7 +98,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                 varianceAndSymptoms.setVisibility(View.VISIBLE);
 
-                createFile("yesVarianceYesSymptoms", false);
+                createFile("yesVarianceYesSymptoms", true);
             } else {
                 varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
@@ -116,7 +116,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                     editor.putInt(getString(R.string.testingPeriodDay), 0);
                     editor.apply();
                 }
-                createFile("yesVarianceNoSymptoms", false);
+                createFile("yesVarianceNoSymptoms", true);
             }
         } else {
             nextAppointment = (TextView) findViewById(R.id.nextAppointment);
@@ -486,7 +486,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         Log.d("result", mBundleData.getBlowDataArray());
 
         String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
-        String[] pulsedata = mBundleData.getPulseData().split("\n");
+        //String[] pulsedata = mBundleData.getPulseData().split("\n");
 
         int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
