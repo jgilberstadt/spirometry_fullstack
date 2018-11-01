@@ -226,7 +226,7 @@ public class PulseActivity extends AppCompatActivity {
                         String dataArr = pulseRateString + " " + Integer.toString(oxygen) + " " + pulseStrengthString + " " + Float.toString(PI) + " " + waveString + "\n";
 
                         // Different pieces of data that we want to store separately and need to maintain
-                        if (oxygen < lowestSat) {
+                        if (oxygen < lowestSat && oxygen > 70) {
                             lowestSat = oxygen;
                             timeMinRate = 1;
                         } else if (oxygen == lowestSat) {
@@ -274,17 +274,6 @@ public class PulseActivity extends AppCompatActivity {
 
                                     // if out of normal range or random
 
-//                                    Random r = new Random();
-//                                    int subRandom = r.nextInt(5);
-//                                    int finalRandom = r.nextInt(subRandom);
-//
-//                                    Boolean administerSurvey = finalRandom == 0;
-//
-//                                    if (administerSurvey) {
-//                                        // administer survey
-//                                    } else {
-//                                            // skip survey
-//                                    }
 
                                     Random r = new Random();
                                     int subRandom = r.nextInt(5);

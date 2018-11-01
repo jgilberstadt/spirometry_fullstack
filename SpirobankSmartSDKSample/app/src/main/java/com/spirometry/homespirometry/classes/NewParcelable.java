@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 public class NewParcelable implements Parcelable {
     private String patient_id;
+    private String firebase_token;
     private String blowDeviceResultArray;
     private String blowDeviceResultArrayPefFev1;
     private String pulseData;
@@ -26,6 +27,8 @@ public class NewParcelable implements Parcelable {
 
     public void setPatient_id(String pid) { patient_id = pid; }
     public String getPatient_id() { return patient_id; }
+    public void setToken(String tk) {firebase_token = tk; }
+    public String getToken() { return firebase_token; }
     public void setBlowDataArrayPefFev1(String arr){
         blowDeviceResultArrayPefFev1 = arr;
     }
@@ -75,6 +78,7 @@ public class NewParcelable implements Parcelable {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(patient_id);
+        out.writeString(firebase_token);
         out.writeString(blowDeviceResultArray);
         out.writeString(blowDeviceResultArrayPefFev1);
         out.writeString(pulseData);
@@ -98,6 +102,7 @@ public class NewParcelable implements Parcelable {
 
     private NewParcelable(Parcel in) {
         patient_id = in.readString();
+        firebase_token = in.readString();
         blowDeviceResultArray = in.readString();
         blowDeviceResultArrayPefFev1 = in.readString();
         pulseData = in.readString();

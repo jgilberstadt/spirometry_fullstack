@@ -96,6 +96,9 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 }
                // deviceManager.disconnect();
                 deviceManager.stopDiscovery();
+                DeviceInfo lastDeviceConnected = deviceManager.getLastConnectedDeviceInfo(getApplicationContext());
+                deviceManager.connect(getApplicationContext(), lastDeviceConnected);
+
                 Log.d(TAG, "Start Discovery!33333");
                 progressBar.setVisibility(View.VISIBLE);
                 tvConnecting.setVisibility(View.VISIBLE);
@@ -266,7 +269,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             Log.d(TAG, "no connection");
             deviceManager.stopDiscovery();
            if(localInfo == true){
-                Log.d(TAG, "the device is connect, nothing to show");
+                Log.d(TAG, "the device is connectted, nothing to show");
                handleUpdateInfo.post(runUpdateInfo);
            }else {
                 localInfo = false;
@@ -288,14 +291,14 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
             }
         }
-    }, 5000);
+    }, 9000);
         }
     };
 
     public void onClickHelp(View view) {
         Intent intent = new Intent(SpirometerConnectingActivity.this, HelpActivity.class);
-        //startActivity(intent);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
+        //startActivityForResult(intent, 1);
     }
 
 }

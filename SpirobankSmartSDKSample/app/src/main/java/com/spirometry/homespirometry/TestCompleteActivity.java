@@ -488,22 +488,8 @@ public class TestCompleteActivity extends AppCompatActivity {
         String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
         String[] pulsedata = mBundleData.getPulseData().split("\n");
 
-        /*
-        LinkedList<String[]> pulse_list = mBundleData.getPulseData();
-        ListIterator<String[]> it = pulse_list.listIterator();
-        */
-
         int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
-        // fake pulse-ox data for testing
-        /*
-        mBundleData.setPid("101001");
-        mBundleData.setLowestSat(95);
-        mBundleData.setMinHeartrate(70);
-        mBundleData.setMaxHeartrate(90);
-        mBundleData.setTimeAbnormal(100);
-        mBundleData.setTimeMinRate(73);
-        */
 
         try {
             file.createNewFile();
@@ -554,6 +540,12 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "\n";
                 fOut.write(line.getBytes());
             }
+
+            line = mBundleData.getBlowDataArrayPefFev1() + "\n";
+            fOut.write(line.getBytes());
+
+            line = mBundleData.getPulseData() + "\n";
+            fOut.write(line.getBytes());
 
 
 
