@@ -532,10 +532,14 @@ public class TestCompleteActivity extends AppCompatActivity {
             fOut.write(line.getBytes());
 
 
-            line = "";
             if (addSurvey) {
+                line = "";
+                line = line + mBundleData.getQuestionStates(0) + "!" + mBundleData.getQuestionStates(1) + "!" + mBundleData.getQuestionStates(2) + "!" + mBundleData.getQuestionStates(3);
+                line += "\n";
+                fOut.write(line.getBytes());
+                line = "";
                 for (int i = 0; i < survey_arr.length; i++) {
-                    line += survey_arr[i];
+                    line = line + survey_arr[i] + "!";
                 }
                 line += "\n";
                 fOut.write(line.getBytes());
