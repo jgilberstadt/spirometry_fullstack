@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'com.spirometry.homespirometry'
         minSdkVersion 18
@@ -28,12 +27,12 @@ android {
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.1'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.volley:volley:1.0.0'
-    compile project(':spirobanksmartsdk')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.android.volley:volley:1.0.0'
+    implementation project(':spirobanksmartsdk')
     implementation files('libs/d2xx.jar')
     implementation files('libs/pl2303driver.jar')
     implementation files('libs/smartlinklib3.6.4_product.jar')
