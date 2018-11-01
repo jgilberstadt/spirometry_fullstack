@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +28,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.Device;
@@ -82,6 +87,23 @@ public class LoginActivity extends AppCompatActivity {
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        Log.d("fcmtoken", token);
+                        Toast.makeText(LoginActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
         submitButton = (Button) findViewById(R.id.submitButton);
         etPassword = (EditText) findViewById(R.id.etPassword);
         spirometerImage = (ImageView) findViewById(R.id.spirometerImage);
