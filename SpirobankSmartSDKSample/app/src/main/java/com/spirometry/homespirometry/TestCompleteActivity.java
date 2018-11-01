@@ -711,7 +711,8 @@ public class TestCompleteActivity extends AppCompatActivity {
     private void startSurveyAlarm() {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 3);
+        c.add(Calendar.DAY_OF_YEAR, 1);
+        c.set(Calendar.HOUR_OF_DAY, 9);
 
         Log.d(TAG, "Start Alarm!: ");
 
