@@ -9,10 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +25,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -36,10 +45,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 
 public class TestCompleteActivity extends AppCompatActivity {
@@ -47,7 +59,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     public static final String FILE_NAME = "timeKeeping.txt";
 
     String[][] arraya; //6 data storing 4 String Values; +-
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
     private static final String TAG = BlowActivity.class.getSimpleName();
     TextView nextAppointment;
     TextView varianceAndSymptoms;
@@ -59,6 +71,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     Calendar finalDate = Calendar.getInstance();
     TimePicker timePicker;
     DatePicker datePicker;
+    Handler mHandler;
 
     private AlarmManager m_alarmMgr;
 
@@ -71,21 +84,39 @@ public class TestCompleteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_complete);
+
+        mHandler = new Handler();
+
         mBundleData = getIntent().getParcelableExtra("bundle-data");
+
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
-        mBundleData.setVarianceExists(false);
-        mBundleData.setSymptomsExist(false);
-        if (mBundleData.getVarianceExists()) {
-            if (mBundleData.getSymptomsExist()) {
+        mBundleData.setVarianceExists(1);
+        mBundleData.setSymptomsExist(0);
+        // should handle the case of normal test vs. repeated test
+        if (mBundleData.getVarianceExists()==1) {
+            if (mBundleData.getSymptomsExist()==1) {
                 varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                 varianceAndSymptoms.setVisibility(View.VISIBLE);
 
-                createFile("yesVarianceYesSymptoms", false);
+                createFile("yesVarianceYesSymptoms", true);
             } else {
                 varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
                 varianceAndNoSymptoms.setVisibility(View.VISIBLE);
+                //TODO: set notifications for the next 4 days here
+                // get value from shared preference
 
-                createFile("yesVarianceNoSymptoms", false);
+                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if(testingPeriodDay<4) {
+                    editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
+                    editor.apply();
+                    startSurveyAlarm();
+                }else{
+                    editor.putInt(getString(R.string.testingPeriodDay), 0);
+                    editor.apply();
+                }
+                createFile("yesVarianceNoSymptoms", true);
             }
         } else {
             nextAppointment = (TextView) findViewById(R.id.nextAppointment);
@@ -349,42 +380,40 @@ public class TestCompleteActivity extends AppCompatActivity {
         return sharedP.getLong(key, 1);
     }
 
-    public void createFile(String param, boolean addSurvey) {
-        File file_path = getFilesDir();
-        String file_name = param +"_"+ getManufacturerSerialNumber();
+    public void createFileRaw(String param, boolean addSurvey) {
+        final File file_path = getFilesDir();
+        final String file_name = param + "_" + getManufacturerSerialNumber();
 
         file = new File(file_path, file_name);
 
-        String[][] blow_arr = mBundleData.getBlowDataArray();
+        //String[][] blow_arr = mBundleData.getBlowDataArray();
+        String blow_arr = mBundleData.getBlowDataArray();
+        String pulsedata = mBundleData.getPulseData();
 
-        LinkedList<String[]> pulse_list = mBundleData.getPulseData();
-        ListIterator<String[]> it = pulse_list.listIterator();
+        //LinkedList<String[]> pulse_list = mBundleData.getPulseData();
+        //ListIterator<String[]> it = pulse_list.listIterator();
+        String[] it = pulsedata.split("\n");
 
-        int[] survey_arr = mBundleData.getSurveyAnswerArr();
+        //int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
         try {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
-            DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+            ///DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
             String line = "";
 
-            if(addSurvey) {
-                for (int i = 0; i < survey_arr.length; i++) {
-                    line += survey_arr[i];
-                }
-                line += "\n";
-                dOut.write(line.getBytes());
-            }
-            line = "";
-            for (int i = 0; i < blow_arr.length; i++) {
-                for (int j = 0; j < blow_arr[0].length; j++) {
+            /*
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 6; j++) {
                     line += blow_arr[i][j] + " ";
                 }
                 line += "!";
             }
+            */
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
 
+            /*
             line = "";
             while (it.hasNext()) {
                 String[] dataPoint = it.next();
@@ -394,16 +423,141 @@ public class TestCompleteActivity extends AppCompatActivity {
                 line += "!";
             }
             line += "\n";
-            dOut.write(line.getBytes());
+            fOut.write(line.getBytes());
+            */
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
-            dOut.write(line.getBytes());
+            line += "\n";
+            fOut.write(line.getBytes());
 
-            dOut.close();
+            /*
+            line = "";
+            if (addSurvey) {
+                for (int i = 0; i < survey_arr.length; i++) {
+                    line += survey_arr[i];
+                }
+                line += "\n";
+                fOut.write(line.getBytes());
+            }
+            */
+
+            fOut.close();
+
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWifi = connManager != null ? connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI) : null;
+            //reduce data usage - only send file if wifi is connected
+            if (mWifi != null && mWifi.isConnected()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+                    }
+                }).start();
+            }
+            else{
+                mHandler.post(new Runnable() {
+                    public void run(){
+                        AlertDialog.Builder warning = new AlertDialog.Builder(TestCompleteActivity.this);
+                        warning.setMessage("Please connect to wi=fi later on to upload your answers.").setTitle("Wi-Fi not connected");
+                        AlertDialog warning_dialog = warning.create();
+                        warning_dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        warning_dialog.show();
+                }
+            });
+            }
+
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    public void createFile(String param, boolean addSurvey) {
+        final File file_path = getFilesDir();
+        final String file_name = param + "_" + getManufacturerSerialNumber();
+
+        file = new File(file_path, file_name);
+
+        Log.d("result", mBundleData.getBlowDataArray());
+
+        String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
+        //String[] pulsedata = mBundleData.getPulseData().split("\n");
+
+        int[] survey_arr = mBundleData.getSurveyAnswerArr();
+
+
+        try {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            //DeflaterOutputStream dOut = new DeflaterOutputStream(fOut);
+
+            // get patient_id, test_date, normal range?, test counter.
+            String line = "";
+
+            line += mBundleData.getPatient_id();
+            line += "!";
+            Date currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            line += sdf.format(currentTime);
+            line += "!";
+            if(mBundleData.getVarianceExists()==1) {
+                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+                line = line + "1!" + Integer.toString(testingPeriodDay);
+            }
+            else {
+                line += "0!0";
+            }
+            line += "\n";
+            fOut.write(line.getBytes());
+            line = "";
+
+            for (int i = 0; i < 6; i++) {
+                String each_blow = blow_arr[i];
+                String[] params = each_blow.split(" ");
+                Log.d("fev1:", params[1]);
+                line += params[1];
+                line += "!";
+            }
+            line += "\n";
+            fOut.write(line.getBytes());
+
+            line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
+            line += "\n";
+            fOut.write(line.getBytes());
+
+
+            if (addSurvey) {
+                line = "";
+                line = line + mBundleData.getQuestionStates(0) + "!" + mBundleData.getQuestionStates(1) + "!" + mBundleData.getQuestionStates(2) + "!" + mBundleData.getQuestionStates(3);
+                line += "\n";
+                fOut.write(line.getBytes());
+                line = "";
+                for (int i = 0; i < survey_arr.length; i++) {
+                    line = line + survey_arr[i] + "!";
+                }
+                line += "\n";
+                fOut.write(line.getBytes());
+            }
+
+            line = mBundleData.getBlowDataArrayPefFev1() + "\n";
+            fOut.write(line.getBytes());
+
+            line = mBundleData.getPulseData() + "\n";
+            fOut.write(line.getBytes());
+
+
+
+            fOut.close();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    sendFile(file.getPath());
+                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
                 }
             }).start();
 
@@ -414,7 +568,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
 
-    public int sendFile(String selectedFilePath) {
+    public int sendFile(String selectedFilePath, String file_name, String php_address) {
         Log.d("hyunrae", selectedFilePath);
 
         int serverResponseCode = 0;
@@ -423,12 +577,12 @@ public class TestCompleteActivity extends AppCompatActivity {
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
-        String php_address = "http://172.16.10.165/spirometry/store_data.php";
+        // String php_address = "http://172.16.10.165/spirometry/store_data.php";
 
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        File selectedFile = new File(selectedFilePath);
+        File selectedFile = new File(selectedFilePath, file_name);
 
         if (!selectedFile.isFile()) {
             return 0;
@@ -546,6 +700,8 @@ public class TestCompleteActivity extends AppCompatActivity {
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+        myIntent.putExtra("notificationTitle", "Spirometer Notification");
+        myIntent.putExtra("notificationBody","Today is your Appointment. Please finish your Spirometer Test");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
 
         if (isNotification) {
@@ -554,6 +710,34 @@ public class TestCompleteActivity extends AppCompatActivity {
             Log.d(TAG, "start2" + String.valueOf(finalDate.getTimeInMillis()));
             manager.set(AlarmManager.RTC_WAKEUP, finalDate.getTimeInMillis(), pendingIntent);
         }
+    }
+
+    private void startSurveyAlarm() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.DAY_OF_YEAR, 1);
+        c.set(Calendar.HOUR_OF_DAY, 9);
+
+        Log.d(TAG, "Start Alarm!: ");
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+
+        Log.d(TAG, "test day: "+testingPeriodDay);
+
+        myIntent.putExtra("notificationTitle","Repeated Tests - 4 Day Testing Period");
+        myIntent.putExtra("notificationBody","Please log in to repeat your test & questionnaire");
+
+        Log.d(TAG,"test day: "+ myIntent.getStringExtra("notificationTitle"));
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(TestCompleteActivity.this, 0, myIntent, 0);
+        myIntent = null;
+        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
     }
 
     public void onClickHelp(View view) {
@@ -570,5 +754,54 @@ public class TestCompleteActivity extends AppCompatActivity {
         } catch (Exception ignored) {
         }
         return serial;
+    }
+
+    public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
+
+
+            String tag_string_req = "req_confirm";
+
+            StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_FILE_EXIST, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "confirmSurvey Response: " + response);
+                    if (response.equals("true")) {
+                        // database contains survey
+                        Log.d("exists", "YES");
+                        File file = new File(selectedFilePath, file_name);
+                        file.delete();
+                    } else {
+                        Log.d("exists", "NO");
+
+                        // database does not contain survey
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendFile(selectedFilePath, file_name, php_address);
+                            }
+                        }).start();
+                    }
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "checkSurveyExists Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("file_name", file_name);
+
+                    return params;
+                }
+
+            };
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 }

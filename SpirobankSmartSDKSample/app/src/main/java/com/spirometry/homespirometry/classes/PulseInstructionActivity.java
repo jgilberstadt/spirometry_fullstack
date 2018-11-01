@@ -13,7 +13,7 @@ import com.spirometry.homespirometry.QuestionnaireInstructionActivity;
 import com.spirometry.homespirometry.R;
 
 public class PulseInstructionActivity extends AppCompatActivity {
-    MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -32,8 +32,8 @@ public class AlarmNotificationReciever extends BroadcastReceiver {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.spiro)
-                .setContentTitle("Spirometer Notification")
-                .setContentText("Today is your Appointment. Please finish your Spirometer Test")
+                .setContentTitle(intent.getStringExtra("notificationTitle"))
+                .setContentText(intent.getStringExtra("notificationBody"))
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentInfo("Info")
                 .setContentIntent(pendingIntent);

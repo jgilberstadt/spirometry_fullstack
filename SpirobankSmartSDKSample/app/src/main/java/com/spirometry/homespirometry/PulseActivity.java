@@ -36,6 +36,7 @@ import com.ihealth.communication.manager.iHealthDevicesCallback;
 import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +66,7 @@ public class PulseActivity extends AppCompatActivity {
 
     private static final String TAG = PulseActivity.class.getSimpleName();
 
-    MyParcelable mBundleData;
+    NewParcelable mBundleData;
     private int clientId;
     private Po3Control mPo3Control;
     private String deviceMac;
@@ -77,7 +78,8 @@ public class PulseActivity extends AppCompatActivity {
 
     CountDownTimer myCountDownTimer;
 
-    LinkedList pulseData = new LinkedList<String[]>();
+    //LinkedList pulseData = new LinkedList<String[]>();
+    String pulseData = "";
     private int minHeartRate = Integer.MAX_VALUE;
     private int maxHeartRate = Integer.MIN_VALUE;
     private int lowestSat = Integer.MAX_VALUE;
@@ -96,9 +98,10 @@ public class PulseActivity extends AppCompatActivity {
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         if (mBundleData == null) {
-            mBundleData = new MyParcelable();
+            mBundleData = new NewParcelable();
         }
-        deviceMac = getIntent().getStringExtra("mac");
+        //deviceMac = getIntent().getStringExtra("mac");
+        deviceMac = "94E36D555D31";
 
         // See below for the callback definition
         clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
@@ -110,6 +113,8 @@ public class PulseActivity extends AppCompatActivity {
         pulseNumber = (TextView) findViewById(R.id.pulseNumber);
         countDown = (TextView) findViewById(R.id.countDown);
         secondsRemaining = (TextView) findViewById(R.id.secondsRemaining);
+
+        Log.d("mac addr", deviceMac);
 
         // Use the deviceMac from the last activity and get the device
         mPo3Control = iHealthDevicesManager.getInstance().getPo3Control(deviceMac);
@@ -217,10 +222,11 @@ public class PulseActivity extends AppCompatActivity {
                             pulseStrengthString = "0" + pulseStrength;
                         }
 
-                        String[] dataArr = {pulseRateString, Integer.toString(oxygen), pulseStrengthString, Float.toString(PI), waveString};
+                        //String[] dataArr = {pulseRateString, Integer.toString(oxygen), pulseStrengthString, Float.toString(PI), waveString};
+                        String dataArr = pulseRateString + " " + Integer.toString(oxygen) + " " + pulseStrengthString + " " + Float.toString(PI) + " " + waveString + "\n";
 
                         // Different pieces of data that we want to store separately and need to maintain
-                        if (oxygen < lowestSat) {
+                        if (oxygen < lowestSat && oxygen > 70) {
                             lowestSat = oxygen;
                             timeMinRate = 1;
                         } else if (oxygen == lowestSat) {
@@ -238,7 +244,8 @@ public class PulseActivity extends AppCompatActivity {
                             timeAbnormal++;
                         }
 
-                        pulseData.add(dataArr);
+                        //pulseData.add(dataArr);
+                        pulseData += dataArr;
 
                         // For making sure the test lasts 60 seconds
                         if (startTest == false) {
@@ -267,25 +274,15 @@ public class PulseActivity extends AppCompatActivity {
 
                                     // if out of normal range or random
 
-//                                    Random r = new Random();
-//                                    int subRandom = r.nextInt(5);
-//                                    int finalRandom = r.nextInt(subRandom);
-//
-//                                    Boolean administerSurvey = finalRandom == 0;
-//
-//                                    if (administerSurvey) {
-//                                        // administer survey
-//                                    } else {
-//                                            // skip survey
-//                                    }
 
                                     Random r = new Random();
                                     int subRandom = r.nextInt(5);
-                                    mBundleData.setVarianceExists((mBundleData.getMaxFev1() < mBundleData.getMinNRange())
-                                            || (mBundleData.getMaxFev1() > mBundleData.getMaxNRange()));
+                                    boolean var1 = (getMaxFev1(mBundleData.getBlowDataArray()) < mBundleData.getMinNRange()) || (getMaxFev1(mBundleData.getBlowDataArray()) > mBundleData.getMaxNRange());
+
+                                    mBundleData.setVarianceExists(var1?1:0);
 
                                     //if fev is anomalous, or if random questionnaire is assigned
-                                    if (subRandom == 5 || mBundleData.getVarianceExists()) {
+                                    if (subRandom == 5 || mBundleData.getVarianceExists()==1) {
 
                                         Intent intent = new Intent(PulseActivity.this, QuestionnaireInstructionActivity.class);
                                         intent.putExtra("bundle-data", mBundleData);
@@ -295,6 +292,9 @@ public class PulseActivity extends AppCompatActivity {
                                         //sample
                                     }else{
                                         Intent intent = new Intent(PulseActivity.this, TestCompleteActivity.class);
+                                        intent.putExtra("bundle-data", mBundleData);
+                                        intent.putExtra("mac", deviceMac);
+                                        startActivity(intent);
                                     }
                                 }
                             }.start();
@@ -401,6 +401,19 @@ public class PulseActivity extends AppCompatActivity {
 
         ;
     };
+
+    public float getMaxFev1(String blowDataArray) {
+        float max = 0;
+
+        String [] single_blows = blowDataArray.split("\n");
+        for(String sb:single_blows) {
+            float fev1 = Float.parseFloat(sb.split(" ")[1]);
+            if(fev1 > max) { max = fev1; }
+        }
+
+        return max;
+
+    }
 
 }
 

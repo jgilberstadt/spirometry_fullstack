@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -32,7 +33,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     TextView timeKeepingText;
     TextView dateTimeRepresent;
@@ -53,16 +54,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_choose);
 
-      /*  Long temp = getDefaults("finalDateStore", getApplicationContext());
-        Log.d(TAG, "tempLong" + temp);
-        Date myDate = new Date(temp);
-        Log.d(TAG, "tempDate" + myDate);
-        Calendar getLastAppointmentDate =  toCalendar(myDate);
-        Log.d(TAG, "tempCalendar" + getLastAppointmentDate); */
-     //    int dayFinishedTime = getLastAppointmentDate.get(Calendar.DAY_OF_WEEK);
-      //  Log.d(TAG, "tempDay" + dayFinishedTime);
-
-        mBundleData = new MyParcelable();
+        mBundleData = getIntent().getParcelableExtra("bundle-data");
 
         timeKeepingText = (TextView) findViewById(R.id.timeKeepingText);
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);

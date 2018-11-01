@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.PulseInstructionActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
@@ -39,10 +40,11 @@ public class BlowActivity extends AppCompatActivity {
     ImageView imageView;
     TextView numberOutOf;
     Button buttonReBlow;
+    Button nextButton;
     TextView postingResult;
 
     //This is a MyParcelable object that contains data / objects to be passed between activities
-    private MyParcelable mBundleData;
+    private NewParcelable mBundleData;
 
     Patient patient;
 
@@ -56,6 +58,8 @@ public class BlowActivity extends AppCompatActivity {
     String deviceInfoStringAdvertisementDataName;
     ArrayList<String> deviceInfoArray = new ArrayList<>();
     ArrayList<String> arr;
+    String blowDeviceResultArray = "";
+    String blowDeviceResultArrayPefFev1 = "";
 
     ArrayList<String> infoList = new ArrayList<>();
     Device currDevice;
@@ -73,7 +77,7 @@ public class BlowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-        arr = mBundleData.getDeviceInfo();
+        //arr = mBundleData.getDeviceInfo();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
@@ -105,6 +109,7 @@ public class BlowActivity extends AppCompatActivity {
         buttonReBlow = (Button) findViewById(R.id.buttonReBlow);
         postingResult = (TextView) findViewById(R.id.postingResult);
 
+
         findViewById(R.id.buttonReBlow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,39 +126,33 @@ public class BlowActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if(numBlows > 6) {
+            nextButton.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
+            //Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
             //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
             //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
+
+            /*
             if (deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
                 //if you find the device, then send the bluetooth information over.
                 Log.d(TAG, "When HardCode Device Matches: " + deviceInfo);
-      /*          discoveredDeviceInfo = deviceInfo;
-                deviceInfoStringAddress = discoveredDeviceInfo.getAddress();
-                deviceInfoStringName = discoveredDeviceInfo.getName();
-                deviceInfoStringProtocol = discoveredDeviceInfo.getProtocol();
-                deviceInfoStringSerialNumber = discoveredDeviceInfo.getSerialNumber();
-                deviceInfoStringAdvertisementDataName = discoveredDeviceInfo.getAdvertisementDataName(); */
 
                 handleUpdateListScan.post(runUpdateListScan); // I need this in next activity to connect
-                // deviceInfoArray[0] = deviceInfoStringAdvertisementDataName;
-        /*        deviceInfoArray.add(deviceInfoStringAddress);
-                deviceInfoArray.add(deviceInfoStringName);
-                deviceInfoArray.add(deviceInfoStringProtocol);
-                deviceInfoArray.add(deviceInfoStringSerialNumber);
-                deviceInfoArray.add(deviceInfoStringAdvertisementDataName);
-
-                mBundleData.setDeviceInfoArray(deviceInfoArray); */
-         //       Log.d("deviceInfo", "Hello: " + discoveredDeviceInfo.toString());
-               /* deviceManager.connect(getApplicationContext(), discoveredDeviceInfo);
-                handleUpdateInfo.post(runUpdateInfo);*/ //I put this inside the handlerUpdateListScan
             } else {
                 Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
             }
+            */
+
+            handleUpdateListScan.post(runUpdateListScan);
         }
 
         @Override
@@ -221,7 +220,7 @@ public class BlowActivity extends AppCompatActivity {
     DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
-            Log.d("hyunrae", "a");
+            //Log.d("hyunrae", "a");
             value = numBlows;
             handlerVisibilityChange.post(runVisibilityChange);
         }
@@ -238,9 +237,12 @@ public class BlowActivity extends AppCompatActivity {
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
             String evol = String.valueOf(resultsPefFev1.geteVol_mL() );
 
-            String [] resultArrayPefFev1 = {pef, fev1, peftime, evol};
+            //String [] resultArrayPefFev1 = {pef, fev1, peftime, evol};
+            String resultArrayPefFev1 = pef + " " + fev1 + " " + peftime + " " + evol + "\n";
+            blowDeviceResultArrayPefFev1 += resultArrayPefFev1;
+            mBundleData.setBlowDataArrayPefFev1(blowDeviceResultArrayPefFev1);
 
-            mBundleData.setBlowDataArrayPefFev1(0, resultArrayPefFev1);
+            //mBundleData.setBlowDataArrayPefFev1(resultArrayPefFev1);
 
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
@@ -266,8 +268,11 @@ public class BlowActivity extends AppCompatActivity {
             String fev6 = String.valueOf(resultsFvc.getFev6_cl() / (float) 100);
             String fef2575 = String.valueOf(resultsFvc.getFef2575_cLs()  / (float) 100);
 
-            String [] resultArray = {pef, fev1, fvc, fev1_fvc, fev6, fef2575};
+            //String [] resultArray = {pef, fev1, fvc, fev1_fvc, fev6, fef2575};
+            String resultArray = pef + " " + fev1 + " " + fvc + " " + fev1_fvc + " " + fev6 + " " + fef2575 + "\n";
+            blowDeviceResultArray += resultArray;
 
+            /*
             Log.d("overallNumBlows",  "" + overallNumBlows);
             Log.d("1pef",  "" + resultArray[0]);
             Log.d("fev1",  "" + resultArray[1]);
@@ -275,10 +280,11 @@ public class BlowActivity extends AppCompatActivity {
             Log.d("fev1_fvc",  "" + resultArray[3]);
             Log.d("fev6",  "" + resultArray[4]);
             Log.d("fef2575",  "" + resultArray[5]);
+            */
           //  Log.d("resultArray",  "" + resultArray[3]);
 
 
-            mBundleData.setBlowDataArray(overallNumBlows, resultArray);
+            //mBundleData.setBlowDataArray(resultArray);
 
             Log.d(TAG, "wow2: " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100));
 
@@ -293,8 +299,8 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void testRestarted(Device device) {
-            Log.d("hyunrae", "dddd");
-            Log.d("peter", " " + numBlows);
+            //Log.d("hyunrae", "dddd");
+            //Log.d("peter", " " + numBlows);
             if(numBlows >=6) {
                 currDevice.stopTest(getApplicationContext());
                 Log.d("done with all 7 tests", "done with all 7 tests");
@@ -366,12 +372,17 @@ public class BlowActivity extends AppCompatActivity {
     Runnable runIntentToTestComplete= new Runnable() {
         @Override
         public void run() {
-            deviceManager.disconnect();
+            //deviceManager.disconnect();
+
+            mBundleData.setBlowDataArray(blowDeviceResultArray);
+            Log.d("result", mBundleData.getBlowDataArray());
+
+            //Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
             Intent intent = new Intent(BlowActivity.this, PulseInstructionActivity.class); //PulseConnectingActivity
-          //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
+            //  Intent intent = new Intent(BlowActivity.this, PulseConnectingActivity.class);
             intent.putExtra("bundle-data", mBundleData);
-            BlowActivity.this.startActivity(intent);
-            finish();
+            startActivity(intent);
+
         }
     };
 

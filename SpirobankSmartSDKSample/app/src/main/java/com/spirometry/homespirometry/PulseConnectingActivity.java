@@ -27,6 +27,7 @@ import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.BuildConfig;
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 
 import org.json.JSONArray;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 
 public class PulseConnectingActivity extends AppCompatActivity{
-    MyParcelable mBundleData;
+    private NewParcelable mBundleData;
     private static final String TAG = PulseConnectingActivity.class.getSimpleName();
 
     private String deviceMac;
@@ -66,11 +67,11 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         if (mBundleData == null) {
-            mBundleData = new MyParcelable();
+            mBundleData = new NewParcelable();
         }
 
         // Initialize the device manager
-        iHealthDevicesManager.getInstance().init(PulseConnectingActivity.this);
+        iHealthDevicesManager.getInstance().init(this, Log.VERBOSE, Log.VERBOSE);
 
         // Register callback. See below
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
@@ -109,7 +110,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
             deviceMac = mac;
             Boolean success = iHealthDevicesManager.getInstance().connectDevice("test", mac, deviceType);
             if (!success) {
-                Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
+                //Toast.makeText(PulseConnectingActivity.this, "Haven’t permission to connect this device or the mac is not valid", Toast.LENGTH_LONG).show();
 
             }else { //if(success)
                 Log.d(TAG, "onScanDevice: " + "Scanned Device Successfully");
@@ -174,7 +175,7 @@ public class PulseConnectingActivity extends AppCompatActivity{
     public void onClickConnect(View view){
         //iHealthDevicesManager.getInstance().startDiscovery();
         //  iHealthDevicesManager.getInstance().startDiscovery(1000);
-        iHealthDevicesManager.getInstance().stopDiscovery();
+        //iHealthDevicesManager.getInstance().stopDiscovery();
         iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         Log.d(TAG, "onClickConnect " + "Connecting ....");
 
