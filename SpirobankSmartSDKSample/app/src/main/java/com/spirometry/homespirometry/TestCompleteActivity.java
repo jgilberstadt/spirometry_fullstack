@@ -483,10 +483,23 @@ public class TestCompleteActivity extends AppCompatActivity {
 
         file = new File(file_path, file_name);
 
-        Log.d("result", mBundleData.getBlowDataArray());
+        // fake data
+        //mBundleData.setBlowDataArray("1.85 1.47 1.97 1.52 1.53 2.18\n");
+        /*
+        mBundleData.setPatient_id("123456");
+        mBundleData.setVarianceExists(1);
+        mBundleData.setLowestSat(95);
+        mBundleData.setMinHeartrate(30);
+        mBundleData.setMaxHeartrate(100);
+        mBundleData.setTimeAbnormal(600);
+        mBundleData.setTimeMinRate(140);
+        */
+
+
+        //Log.d("result", mBundleData.getBlowDataArray());
 
         String[] blow_arr = mBundleData.getBlowDataArray().split("\n");
-        //String[] pulsedata = mBundleData.getPulseData().split("\n");
+        String[] pulsedata = mBundleData.getPulseData().split("\n");
 
         int[] survey_arr = mBundleData.getSurveyAnswerArr();
 
@@ -518,10 +531,12 @@ public class TestCompleteActivity extends AppCompatActivity {
             line = "";
 
             for (int i = 0; i < 6; i++) {
+
                 String each_blow = blow_arr[i];
                 String[] params = each_blow.split(" ");
                 Log.d("fev1:", params[1]);
                 line += params[1];
+
                 line += "!";
             }
             line += "\n";
@@ -529,6 +544,12 @@ public class TestCompleteActivity extends AppCompatActivity {
 
             line = mBundleData.getLowestSat() + "!" + mBundleData.getMinHeartrate() + "!" + mBundleData.getMaxHeartrate() + "!" + mBundleData.getTimeAbnormal() + "!" + mBundleData.getTimeMinRate();
             line += "\n";
+            fOut.write(line.getBytes());
+
+            line = mBundleData.getBlowDataArrayPefFev1() + "\n";
+            fOut.write(line.getBytes());
+
+            line = mBundleData.getPulseData() + "\n";
             fOut.write(line.getBytes());
 
 
@@ -541,16 +562,9 @@ public class TestCompleteActivity extends AppCompatActivity {
                 for (int i = 0; i < survey_arr.length; i++) {
                     line = line + survey_arr[i] + "!";
                 }
-                line += "\n";
+                //line += "\n";
                 fOut.write(line.getBytes());
             }
-
-            line = mBundleData.getBlowDataArrayPefFev1() + "\n";
-            fOut.write(line.getBytes());
-
-            line = mBundleData.getPulseData() + "\n";
-            fOut.write(line.getBytes());
-
 
 
             fOut.close();
