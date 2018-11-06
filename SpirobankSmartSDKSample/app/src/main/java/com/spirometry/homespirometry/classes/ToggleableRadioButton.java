@@ -1,17 +1,14 @@
 package com.spirometry.homespirometry.classes;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 /**
  * Created by micha on 2/26/2018.
  */
 
-public class ToggleableRadioButton extends RadioButton {
+public class ToggleableRadioButton extends android.support.v7.widget.AppCompatRadioButton {
 
 
     public ToggleableRadioButton(Context context) {
@@ -26,10 +23,6 @@ public class ToggleableRadioButton extends RadioButton {
         super(context, attrs, defStyleAttr);
     }
 
-    @TargetApi(VERSION_CODES.LOLLIPOP)
-    public ToggleableRadioButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
     @Override
     public void toggle() {
         if(isChecked()) {
