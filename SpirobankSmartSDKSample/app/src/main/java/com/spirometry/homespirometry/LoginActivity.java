@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,11 +29,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
-import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -40,23 +43,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button submitButton;
-    EditText etPassword;
+    EditText patientId;
     ImageView spirometerImage;
     TextView spiroCheck;
     TextView contactHospital;
     ProgressBar spiroProgressBar;
     String truePassword = "123456";
+
+    Boolean patientIdResult = false;
 
 
     DeviceManager deviceManager;
@@ -83,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         submitButton = (Button) findViewById(R.id.submitButton);
-        etPassword = (EditText) findViewById(R.id.etPassword);
+        patientId = (EditText) findViewById(R.id.etPassword);
         spirometerImage = (ImageView) findViewById(R.id.spirometerImage);
         int imageResource = getResources().getIdentifier("@drawable/spiro", null, this.getPackageName());
         spirometerImage.setImageResource(imageResource);
@@ -109,8 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 mLastClickTime = SystemClock.elapsedRealtime();
-
-                if(truePassword.equals(etPassword.getText().toString())) {
+                if(sendPatientId(patientId.getText().toString())) {
                     // do stuff
                     // set patient id
                     mBundleData.setPatient_id(truePassword);
@@ -124,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                     correctPasswordCheck++;
                     if(correctPasswordCheck >=4){
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(patientId.getWindowToken(), 0);
                         contactHospital.setVisibility(View.VISIBLE);
                     }
 
@@ -132,6 +134,58 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean sendPatientId(final String patientId) {
+        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean isValid = jObj.getBoolean("patient_is_valid");
+                    String normal_range = jObj.getString("normal_range");
+                    Log.d("sendPatientId", "is patient valid: " + isValid);
+
+                    if(!isValid) {
+                        patientIdResult = false;
+                    }else {
+                        try {
+                            String[] minMaxRanges = normal_range.split(",");
+                            mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
+                            mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
+                            patientIdResult = true;
+                        } catch (Exception e) {
+                            patientIdResult = false;
+                        }
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("patient_id", patientId);
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(strReq, "patientIdRequest");
+        return patientIdResult;
+    }
+
 
     private void uploadPastFiles(File dir) {
         if (dir.exists()) {

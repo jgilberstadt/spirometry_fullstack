@@ -10,4 +10,5 @@ public class UrlConfig {
     public static String URL_PEFFEV1_UPLOAD = "http://172.16.10.165/spirometry/test_peffev1_upload.php";
     public static String URL_VITOL_UPLOAD = "http://172.16.10.165/spirometry/vitol_upload.php";
     public static String URL_CHECK_FILE_EXIST = "http://10.28.16.164/spirometry/check_upload.php";
+    public static String URL_CHECK_PATIENT_EXIST = "http://10.28.16.164/spirometry/login.php";
 }
