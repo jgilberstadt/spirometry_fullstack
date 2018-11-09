@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -52,7 +50,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     Button submitButton;
-    EditText patientId;
+    EditText patientIdView;
     ImageView spirometerImage;
     TextView spiroCheck;
     TextView contactHospital;
@@ -86,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         submitButton = (Button) findViewById(R.id.submitButton);
-        patientId = (EditText) findViewById(R.id.etPassword);
+        patientIdView = (EditText) findViewById(R.id.etPassword);
         spirometerImage = (ImageView) findViewById(R.id.spirometerImage);
         int imageResource = getResources().getIdentifier("@drawable/spiro", null, this.getPackageName());
         spirometerImage.setImageResource(imageResource);
@@ -112,54 +110,46 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if(sendPatientId(patientId.getText().toString())) {
-                    // do stuff
-                    // set patient id
-                    mBundleData.setPatient_id(truePassword);
-                    Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
-                   //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
-                    Log.d(TAG, "bundle-data" +mBundleData);
-                    intent.putExtra("bundle-data", mBundleData);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
-                    correctPasswordCheck++;
-                    if(correctPasswordCheck >=4){
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(patientId.getWindowToken(), 0);
-                        contactHospital.setVisibility(View.VISIBLE);
-                    }
-
-                }
+                spiroProgressBar.setVisibility(View.VISIBLE);
+                sendPatientId(patientIdView);
             }
         });
     }
 
-    private boolean sendPatientId(final String patientId) {
+    private void sendPatientId(final EditText patientIdView) {
+        final String patientId = patientIdView.getText().toString();
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean isValid = jObj.getBoolean("patient_is_valid");
-                    String normal_range = jObj.getString("normal_range");
-                    Log.d("sendPatientId", "is patient valid: " + isValid);
-
-                    if(!isValid) {
-                        patientIdResult = false;
+                    boolean error = jObj.getBoolean("error");
+                    if(error) {
+                        showWrongPasswordToast(patientIdView);
                     }else {
                         try {
+                            String normal_range = jObj.getJSONObject("user").getString("normal_range");
+                            Log.d("sendPatientId", "is patient invalid: " + error);
                             String[] minMaxRanges = normal_range.split(",");
                             mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                             mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
-                            patientIdResult = true;
+                            Toast.makeText(getApplicationContext(), minMaxRanges[0]+" "+minMaxRanges[1], Toast.LENGTH_LONG).show();
+                            // do stuff
+                            // set patient id
+                            mBundleData.setPatient_id(truePassword);
+                            Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
+                            //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
+                            Log.d(TAG, "bundle-data" +mBundleData);
+                            intent.putExtra("bundle-data", mBundleData);
+                            startActivity(intent);
                         } catch (Exception e) {
-                            patientIdResult = false;
+                            showWrongPasswordToast(patientIdView);
                         }
                     }
                 } catch (JSONException e) {
                     // JSON error
+                    showWrongPasswordToast(patientIdView);
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -168,6 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                showWrongPasswordToast(patientIdView);
                 Log.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
@@ -183,7 +174,18 @@ public class LoginActivity extends AppCompatActivity {
 
         };
         AppController.getInstance().addToRequestQueue(strReq, "patientIdRequest");
-        return patientIdResult;
+        spiroProgressBar.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void showWrongPasswordToast(EditText patientIdView) {
+        Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
+        correctPasswordCheck++;
+        if(correctPasswordCheck >=4){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(patientIdView.getWindowToken(), 0);
+            contactHospital.setVisibility(View.VISIBLE);
+        }
     }
 
 
