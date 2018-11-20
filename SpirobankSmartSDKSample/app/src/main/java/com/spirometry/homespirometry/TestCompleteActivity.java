@@ -64,6 +64,7 @@ public class TestCompleteActivity extends AppCompatActivity {
     TextView nextAppointment;
     TextView varianceAndSymptoms;
     TextView varianceAndNoSymptoms;
+    EditText symptomIndicatorText;
     Button changeAppointment;
     TextView dateRepresent;
     TextView timeRepresent;
@@ -754,6 +755,30 @@ public class TestCompleteActivity extends AppCompatActivity {
         } catch (Exception ignored) {
         }
         return serial;
+    }
+    private void sendSymptomIndicator(final EditText symptomIndicatorText) {
+        final String symptomIndicator  = symptomIndicatorTextText.getText().toString();
+        StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Network Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Symptoms: ", symptomIndicator);
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(strReq, "symptomIndicatorRequest");
+        spiroProgressBar.setVisibility(View.INVISIBLE);
     }
 
     public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
