@@ -450,7 +450,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+                        checkSurvey(file_path.getPath(), file_name, "https://hstest.wustl.edu/spirometry/store_data_plain.php");
                     }
                 }).start();
             }
@@ -571,7 +571,7 @@ public class TestCompleteActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    checkSurvey(file_path.getPath(), file_name, "http://10.28.16.164/spirometry/store_data_plain.php");
+                    checkSurvey(file_path.getPath(), file_name, "https://hstest.wustl.edu/spirometry/store_data_plain.php");
                 }
             }).start();
 

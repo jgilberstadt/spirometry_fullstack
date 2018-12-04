@@ -142,7 +142,8 @@ public class LoginActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        checkSurvey(file.getPath(), file.getName(), "http://10.28.16.164/spirometry/store_data_plain.php");
+                       // checkSurvey(file.getPath(), file.getName(), "http://10.28.16.164/spirometry/store_data_plain.php");
+                        checkSurvey(file.getPath(), file.getName(), "https://hstest.wustl.edu/spirometry/store_data_plain.php");
                     }
                 }).start();
             }
