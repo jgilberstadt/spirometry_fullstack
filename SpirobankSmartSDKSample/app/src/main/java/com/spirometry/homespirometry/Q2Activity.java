@@ -124,10 +124,10 @@ public class Q2Activity extends AppCompatActivity {
                 int noId = res.getIdentifier("c" + (i+1) + "2", "id", getApplicationContext().getPackageName());
 
                 int answer = mBundleData.getSurveyAnswers(7+i);
-                if (answer == 0) {
+                if (answer == 1) {
                     RadioButton checkAnswer = (RadioButton) findViewById(noId);
                     checkAnswer.setChecked(true);
-                } else if (answer == 1) {
+                } else if (answer == 2) {
                     RadioButton checkAnswer = (RadioButton) findViewById(yesId);
                     checkAnswer.setChecked(true);
                 }

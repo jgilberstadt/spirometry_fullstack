@@ -117,7 +117,7 @@ public class Q3Activity extends AppCompatActivity {
     }
 
     public void populatePreviousAnswers() {
-        int previousState = mBundleData.getQuestionStates(3);
+        int previousState = mBundleData.getQuestionStates(2);
         Log.d("hyunrae", Integer.toString(previousState));
         if (previousState == 1) {
             questionState = 1;
@@ -135,10 +135,10 @@ public class Q3Activity extends AppCompatActivity {
                 int noId = res.getIdentifier("c" + (i+1) + "2", "id", getApplicationContext().getPackageName());
 
                 int answer = mBundleData.getSurveyAnswers(11+i);
-                if (answer == 0) {
+                if (answer == 1) {
                     RadioButton checkAnswer = (RadioButton) findViewById(noId);
                     checkAnswer.setChecked(true);
-                } else if (answer == 1) {
+                } else if (answer == 2) {
                     RadioButton checkAnswer = (RadioButton) findViewById(yesId);
                     checkAnswer.setChecked(true);
                 }
@@ -175,7 +175,7 @@ public class Q3Activity extends AppCompatActivity {
                         for (int i = 0; i < 5; i++) {
                             mBundleData.setSurveyAnswers(11 + i, 0);
                         }
-                        mBundleData.setQuestionStates(3, -1);
+                        mBundleData.setQuestionStates(2, -1);
                         Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
                         intent.putExtra("bundle-data", mBundleData);
                         startActivity(intent);
@@ -199,7 +199,7 @@ public class Q3Activity extends AppCompatActivity {
                 for (int i = 0; i < 5; i++) {
                     mBundleData.setSurveyAnswers(11 + i, 1);
                 }
-                mBundleData.setQuestionStates(3, -1);
+                mBundleData.setQuestionStates(2, 0);
                 Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
                 intent.putExtra("bundle-data", mBundleData);
                 startActivity(intent);
@@ -249,14 +249,14 @@ public class Q3Activity extends AppCompatActivity {
                     yesBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mBundleData.setQuestionStates(3, -1);
+                            mBundleData.setQuestionStates(2, 1);
                             Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
                             intent.putExtra("bundle-data", mBundleData);
                             startActivity(intent);
                         }
                     });
                 } else {
-                    mBundleData.setQuestionStates(3, -1);
+                    mBundleData.setQuestionStates(2, 1);
                     Intent intent = new Intent(Q3Activity.this, Q4Activity.class);
                     intent.putExtra("bundle-data", mBundleData);
                     startActivity(intent);

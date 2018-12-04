@@ -100,8 +100,8 @@ public class PulseActivity extends AppCompatActivity {
         if (mBundleData == null) {
             mBundleData = new NewParcelable();
         }
-        //deviceMac = getIntent().getStringExtra("mac");
-        deviceMac = "94E36D555D31";
+        deviceMac = getIntent().getStringExtra("mac");
+        //deviceMac = "94E36D555D31";
 
         // See below for the callback definition
         clientId = iHealthDevicesManager.getInstance().registerClientCallback(mIHealthDeviceCallback);
