@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -770,8 +771,9 @@ public class TestCompleteActivity extends AppCompatActivity {
         }
         return serial;
     }
+    /*
     private void sendSymptomIndicator(final EditText symptomIndicatorText) {
-        final String symptomIndicator  = symptomIndicatorTextText.getText().toString();
+        final String symptomIndicator  = symptomIndicatorText.getText().toString();
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -794,6 +796,7 @@ public class TestCompleteActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, "symptomIndicatorRequest");
         spiroProgressBar.setVisibility(View.INVISIBLE);
     }
+    */
 
     public void checkSurvey(final String selectedFilePath, final String file_name, final String php_address) {
 
