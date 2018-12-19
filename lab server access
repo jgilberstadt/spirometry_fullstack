@@ -1,6 +1,8 @@
 ssh qoladmin@172.16.10.165
 Qol13579#
 
+ssh wustlkey@10.28.16.164
+
 To upload new app version:
 Upload apk file into /home/qoladmin/Documents/QOLAppAPK
 Then SSH into server
