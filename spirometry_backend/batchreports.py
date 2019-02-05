@@ -14,6 +14,7 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
     dbc = config('database.ini' if db_config_path == None else db_config_path, 'postgresql')
     cnx = psycopg2.connect(**dbc)
     cursor = cnx.cursor()
+
     query = "SELECT nl_end_date, start_study_date, patient_id, p_value FROM patient_data"
     cursor.execute(query, ())
 
@@ -25,6 +26,7 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
 
         # Every two weeks during the training period, only need to send the datasheet to 
         # the CMI for this one
+
         if(nl_end_date is None and timedelta.day < 30):
             if(timedelta.day % 14 == 0):
                 rgObj = ReportGenerator(patient_id, viewing_month="1")
@@ -66,7 +68,7 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
 
 
         # check for monitoring period
-        elif(timedelta.day >= 30):
+        elif(nl_end_date is not None and timedelta.day >= 30):
             if(timedelta.day % 30 == 0):
                 current_month = timedelta.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
@@ -75,11 +77,10 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
             elif(timedelta.day % 30 == 1):
                 current_month = timedelta.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
-                rgObj.generateCMIDatasheet()
+                rgObj.generateSiteReport()
                 rgObj.sendReports()
 
     
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Batch script to generate reports.')
     parser.add_argument('-a', '--all', dest='run_all_reports', action='store_true',

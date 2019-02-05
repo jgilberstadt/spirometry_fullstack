@@ -1,313 +1,1162 @@
 # script to generate report
-import matplotlib.pyplot as plt
-import xlsxwriter
-import datetime
-import mysql.connector
-import numpy as np
-from sklearn import linear_model
-from sklearn.metrics import mean_squared_error, r2_score
+from email.utils import COMMASPACE, formatdate
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from os.path import basename
+import smtplib
+import patientdata
+from monitoringmonths import MonitoringMonthList
+from dbconfig import config
+import bisect
+import argparse
 import os
-
-email_list = {'100':'qolecp@gmail.com','101':'qolecp@gmail.com','102':'qolecp@gmail.com','103':'qolecp@gmail.com','104':'qolecp@gmail.com','105':'qolecp@gmail.com','106':'qolecp@gmail.com'
-'107':'qolecp@gmail.com','108':'qolecp@gmail.com','109':'qolecp@gmail.com','110':'qolecp@gmail.com','111':'qolecp@gmail.com'}
-
-# report generated to be sent to CMI
-def generate(filename, patient_id):
-    cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
-
-	workbook = xlsxwriter.Workbook(filename+'.xlsx')
-	worksheet = workbook.add_worksheet()
-
-	worksheet.write('B2', 'Patient Study Number')
-	worksheet.write('B3', 'Date')
-	worksheet.write('B4', 'Monitoring Month')
-	worksheet.write('B5', 'NL Range')
-	worksheet.write('B6', 'Variance')
-	worksheet.write('B7', 'Lowest FEV1')
-
-	worksheet.write('E2', 'WU1')
-	now = datetime.datetime.now()
-	worksheet.write('E3', now.strftime("%Y-%m-%d"))
-
-    cursor = cnx.cursor()
-	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
-	cursor.execute(query, (patient_id,))
-
-    cursor = cnx.cursor()
-    query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
-    cursor.execute(query, (patient_id,))
-
-	# generate supplemental data
-	worksheet.write('G2','Supplemental Data')
-	worksheet.write('I2','NL')
-	worksheet.write('J2','ABNL')
-	worksheet.write('G3','Questionnaire')
-	worksheet.write('G4','Oximetry')
-	worksheet.write('H5','O2 Sat')
-	worksheet.write('H6','Duration Abnormal')
-    worksheet.write('H7','Duration Lowest')
-	worksheet.write('H8','Heart Rate')
-
-    if lowestSat < 97:
-        worksheet.write('J5', lowestSat)
-        worksheet.write('J6', timeAbnormal)
-        worksheet.write('J7', timeMinRate)
-        worksheet.write('J8', minRate + " vs " + maxRate)
-    else:
-        worksheet.write('I5', '>97%')
-        worksheet.write('I6', 'NA')
-        worksheet.write('I7', 'NA')
-        worksheet.write('I8', 'NL')
-
-    symptomString = ""
-    symptomArr = ["Cough", "RunnyNose", "Sore Throat", "Fever", "Shaking Chills", "Muscle Aches", "Recent Diarrhea", "Cough", "Cough now producing sputum/mucus", "New wheezing", "New shortness of breath", "Generalized weakness", "Lightheadedness", "Dizziness", "Shortness of breath at rest", "Shortness of breath on exertion", "Shortness of breath when lying flat", "New Shortness of breath that awakens you from sleep", "New swelling in your feet or legs"]
-
-    for i in range (0, len(survey_text)):
-        if survey_text[i] == "1":
-            symptomString = symptomString + symptomArr[i] + ", "
-
-    if symptomString != "":
-        worksheet.write('I3', 'Negative')
-    else:
-        worksheet.write('I4', symptomString)
+# from sklearn.metrics import mean_squared_error, r2_score
+from sklearn import linear_model
+import numpy as np
+import psycopg2
+import datetime
+import json
+from xlsxwriter.utility import xl_rowcol_to_cell, xl_cell_to_rowcol
+import xlsxwriter
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.ticker as ticker
+import matplotlib.pyplot as plt
 
 
-	cursor = cnx.cursor()
-	query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date FROM small_test WHERE patient_id = %s"
-	cursor.execute(query, (patient_id,))
+email_list = {
+	'100': 'qolecp@gmail.com',
+	'101': 'qolecp@gmail.com',
+	'102': 'qolecp@gmail.com',
+	'103': 'qolecp@gmail.com',
+	'104': 'qolecp@gmail.com',
+	'105': 'qolecp@gmail.com',
+	'106': 'qolecp@gmail.com',
+	'107': 'qolecp@gmail.com',
+	'108': 'qolecp@gmail.com',
+	'109': 'qolecp@gmail.com',
+	'110': 'qolecp@gmail.com',
+	'111': 'qolecp@gmail.com'
+}
 
-    worksheet.write('A30','PTN')
-	worksheet.write('B30','FEV11')
-	worksheet.write('C30','FEV12')
-	worksheet.write('D30','FEV13')
-	worksheet.write('E30','FEV14')
-	worksheet.write('F30','FEV15')
-	worksheet.write('G30','FEV16')
-	worksheet.write('H30','FEV1MAX')
-	worksheet.write('I30','MAX')
-	worksheet.write('J30','%MAX')
-	worksheet.write('K30','Mean')
-	worksheet.write('L30','%Mean')
-	worksheet.write('M30','FEV1*K')
-	worksheet.write('N30','Date')
-	worksheet.write('O30','SHS Date')
-	worksheet.write('P30','Days')
-	worksheet.write('Q30','DTx')
-	worksheet.write('R30','MonthsPTx')
-	worksheet.write('S30','Status')
-
-	row = 30
-	col = 1
-	max_fev_list = []
-	dates = []
-	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
-		fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
-		max_fev = max(fev_list)
-		max_fev_list.append(max_fev)
-		d = datetime.datetime.strptime(test_date,"%Y-%m-%d")
-		dates.append(d)
-
-        worksheet.write(row, col, fev11)
-		worksheet.write(row, col+1, fev12)
-		worksheet.write(row, col+2, fev13)
-		worksheet.write(row, col+3, fev14)
-		worksheet.write(row, col+4, fev15)
-		worksheet.write(row, col+5, fev16)
-		worksheet.write(row, col+6, max_fev)
-
-		row += 1
-
-    # calculate overall max, %max, mean %mean
-    overall_max = max(max_fev_list)
-    overall_mean = sum(max_fev_list) / len(max_fev_list)
-
-    row = 30
-
-    for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
-        fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
-		max_fev = max(fev_list)
-        worksheet.write(row, col+7, overall_max)
-        worksheet.write(row, col+8, (max_fev-overall_max)/overall_max)
-        worksheet.write(row, col+9, overall_mean)
-        worksheet.write(row, col+10, (max_fev-overall_mean)/overall_mean)
-        worksheet.write(row, col+11, float(max_fev)*1000)
-        worksheet.write(row, col+12, test_date)
-        # how to get SHS date
-        #worksheet.write(row, col+13, )
-
-	date_list = [(date-dates[0]).days for date in dates]
-
-	# create linear regression object
-	regr = linear_model.LinearRegression()
-	regr.fit(np.array(date_list).reshape(-1,1), np.array(max_fev_list).reshape(-1,1))
-	predicted = regr.predict(np.array(date_list).reshape(-1,1))
-
-	#plt.legend(loc='best')
-	#plt.xticks(np.arange(25),devices)
-	fig, ax = plt.subplots(figsize=((10,6)))
-	plt.plot([date_list[0],date_list[-1]],[predicted[0],predicted[-1]],"k--")
-	plt.scatter(date_list, max_fev_list, marker='s')
-	plt.xlabel('Days',fontsize = 22)
-	plt.ylabel('FEV1(ml)', fontsize = 22)
-
-	plt.title('Monitoring Month', loc="center", fontsize=22)
-
-	# plt.show()
-
-	fig.savefig(filename+'.png')
-
-	worksheet.insert_image('B9', filename+'.png', {'x_scale':0.5, 'y_scale':0.5})
-
-	workbook.close()
-
-# report generated to be sent to the site
-def site_generate(filename, patient_id):
-	cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
-
-	workbook = xlsxwriter.Workbook(filename+'.xlsx')
-	worksheet = workbook.add_worksheet()
-
-	worksheet.write('B2', 'Patient Study Number')
-	worksheet.write('B3', 'Date')
-	worksheet.write('B4', 'Monitoring Month')
-	worksheet.write('B5', 'NL Range')
-	worksheet.write('B6', 'Variance')
-	worksheet.write('B7', 'Lowest FEV1')
-
-	worksheet.write('E2', 'WU1')
-	now = datetime.datetime.now()
-	worksheet.write('E3', now.strftime("%Y-%m-%d"))
-
-	cursor = cnx.cursor()
-	query = "SELECT minRate, maxRate, lowestSat, timeAbnormal, timeMinRate FROM pulse_data WHERE patient_id = %s"
-	cursor.execute(query, (patient_id,))
-
-	cursor = cnx.cursor()
-	query = "SELECT survey_text FROM survey_data WHERE patient_id = %s"
-	cursor.execute(query, (patient_id,))
-
-	# generate supplemental data
-	worksheet.write('G2','Supplemental Data')
-	worksheet.write('I2','NL')
-	worksheet.write('J2','ABNL')
-	worksheet.write('G3','Questionnaire')
-	worksheet.write('G4','Oximetry')
-	worksheet.write('H5','O2 Sat')
-	worksheet.write('H6','Duration Abnormal')
-	worksheet.write('H7','Duration Lowest')
-	worksheet.write('H8','Heart Rate')
-
-	if lowestSat < 97:
-		worksheet.write('J5', lowestSat)
-		worksheet.write('J6', timeAbnormal)
-		worksheet.write('J7', timeMinRate)
-		worksheet.write('J8', minRate + " vs " + maxRate)
-	else:
-		worksheet.write('I5', '>97%')
-		worksheet.write('I6', 'NA')
-		worksheet.write('I7', 'NA')
-		worksheet.write('I8', 'NL')
-
-	symptomString = ""
-	symptomArr = ["Cough", "RunnyNose", "Sore Throat", "Fever", "Shaking Chills", "Muscle Aches", "Recent Diarrhea", "Cough", "Cough now producing sputum/mucus", "New wheezing", "New shortness of breath", "Generalized weakness", "Lightheadedness", "Dizziness", "Shortness of breath at rest", "Shortness of breath on exertion", "Shortness of breath when lying flat", "New Shortness of breath that awakens you from sleep", "New swelling in your feet or legs"]
-
-	for i in range (0, len(survey_text)):
-		if survey_text[i] == "1":
-			symptomString = symptomString + symptomArr[i] + ", "
-
-	if symptomString != "":
-		worksheet.write('I3', 'Negative')
-	else:
-		worksheet.write('I4', symptomString)
+cmi_email_address = 'qolecp@gmail.com'
 
 
+class ReportGenerator:
+	def __init__(self, patient_id, viewing_month=None, delete_files=True, db_config_path=None, email_config_path=None):
+		"""The ReportGenerator constructor
+		
+		Arguments:
+			patient_id {str} -- The patient id for the reports that will be generated
+		
+		Keyword Arguments:
+			viewing_month {str} -- an integer representation for the month for which to generate the reports. (default: {None})
+			delete_files {bool} -- Specifies whether or not to delete the files from the server after everything is done. (default: {True})
+			db_config_path {str} -- A path to the database credentials .ini config file. (default: {None})
+			email_config_path {str} -- A path to the email credentails .json config file (default: {None})
+		"""
+
+		# These lists will store the files used in creating the reports so we know what to delete later
+		# self.workbooks will also inform us on which reports to send and to whom we should send them. It is composed of tuples.
+		# The tuples should store the filename and extension as the first value and the type of the report (either 'cmi' or 'site')
+		# as the second value.
+		self.workbooks = []
+		# self.images just stores the filename and extension so we know to delete them later.
+		self.images = []
+		# This bool specifies whether or not to delete the files from the server after everything is done
+		self.delete_files = delete_files
+
+		# Connect to the Postgres database
+		self.db_config_path = db_config_path
+		self.email_config_path = email_config_path
+		# get the database credentials from the .ini config file
+		dbc = config('database.ini' if self.db_config_path == None else self.db_config_path, 'postgresql')
+		self.cnx = psycopg2.connect(**dbc)
+
+		self.patient_id = patient_id
+		# Get the relevant data from the Postgres database and store it in our class
+		self.patient_data = getPatientData(
+			self.cnx, self.patient_id, get_spiro_data=True, get_survey_data=True, get_pulse_data=True)
+		# Genertate the MonitoringMonths helper class for the given viewing period
+		self.monitoring_months = getMonitoringMonths(
+			self.cnx, self.patient_id, viewing_month)
+		self.viewing_month = self.monitoring_months.get_viewing_month()
+
+		# Set some globals that we will need later
+		setGlobals()
+
+		# In the PatientData object that we created from the info retrieved from the database, figure out in which rows each
+		# SpiroDataEntry will go in the datasheet. This must be called after setGlobals as we set the starting rows in that method
+		setMonitoringMonthRows(self.monitoring_months, self.patient_data)
+
+	def __del__(self):
+		"""The class destructor
+		"""
+		# Close the database connection
+		self.cnx.close()
+
+		# If we are supposed to delete the files, delete them now
+		if self.delete_files:
+			for workbook_path in self.workbooks:
+				deleteFile(workbook_path[0])
+
+			for image_path in self.images:
+				deleteFile(image_path)
+
+	# report generated to be sent to CMI
+	def generateCMIDatasheet(self, filename=None):
+		"""Generate the CMI datasheet
+		
+		Keyword Arguments:
+			filename {str} -- The desired filename without the file extension.
+			Leave blank to use the default "CMI_Datasheet-[patient_id]-[Monitoring Month]" (default: {None})
+		"""
+
+		# If no filename is supplied for the workbook, the default should be set
+		if filename == None:
+			filename = "CMI_Datasheet-{0}-{1}".format(
+				self.patient_id, self.viewing_month.get_month_name().replace(" ", "_"))
+		full_filename = filename+'.xlsx'
+		workbook = xlsxwriter.Workbook(filename+'.xlsx')
+		worksheet = workbook.add_worksheet("Datasheet")
+
+		# Set the workbook formats that will be used by the helper functions
+		setFormats(workbook)
+
+		# Write the overview and data table sections of the datasheet. The self.images.extend part means that all
+		# the images that are generated by the functions and stored in the current working directory will be added to
+		# self.images so that we know what to delete later.
+		self.images.extend(writeOverview(worksheet, self.cnx, self.patient_id, self.patient_data,
+										 self.monitoring_months, write_stats_table=True))
+		self.images.extend(writeCMIDataTable(worksheet, self.cnx, self.patient_id,
+											 self.patient_data, self.monitoring_months))
+
+		# write the survey response worksheet
+		survey_response_worksheet = workbook.add_worksheet("Survey Responses")
+		patient_data_for_viewing_month = self.patient_data.get_entries_for_monitoring_month(
+			self.monitoring_months.get_viewing_month())
+		writeAbnormalSurveyTable(
+			survey_response_worksheet, "A1", patient_data_for_viewing_month)
+
+		workbook.close()
+		# Add the generated workbook to the list of workbooks so we know what to delete and what to email later.
+		self.workbooks.append((full_filename, "cmi"))
+
+	def generateSiteReport(self, filename=None):
+		"""Generate the site report
+		
+		Keyword Arguments:
+			filename {str} -- The desired filename without the file extension. 
+			Leave blank to use the default "Site_Report-[patient_id]-[Monitoring Month]" (default: {None})
+		"""
+		# If no filename is supplied for the workbook, the default should be set
+		if filename == None:
+			filename = "Site_Report-{0}-{1}".format(
+				self.patient_id, self.viewing_month.get_month_name().replace(" ", "_"))
+		full_filename = filename+'.xlsx'
+
+		workbook = xlsxwriter.Workbook(full_filename)
+		worksheet = workbook.add_worksheet("Site Report")
+
+		# Set the workbook formats that will be used by the helper functions
+		setFormats(workbook)
+
+		# Write the overview section of the datasheet. The self.images.extend part means that all
+		# the images that are generated by the function and stored in the current working directory will be added to
+		# self.images so that we know what to delete later.
+		self.images.extend(writeOverview(worksheet, self.cnx, self.patient_id, self.patient_data, self.monitoring_months,
+										 write_variance_table=True))
+		
+		# Write the survey response worksheet
+		survey_response_worksheet = workbook.add_worksheet("Survey Responses")
+		patient_data_for_viewing_month = self.patient_data.get_entries_for_monitoring_month(
+			self.monitoring_months.get_viewing_month())
+		writeAbnormalSurveyTable(
+			survey_response_worksheet, "A1", patient_data_for_viewing_month)
+
+		workbook.close()
+		# Add the generated workbook to the list of workbooks so we know what to delete and what to email later.
+		self.workbooks.append((full_filename, 'site'))
+
+	def sendReports(self):
+		"""Send the reports to the site and/or CMI, depending on which reports were generated.
+		"""
+
+		site_id = self.patient_id[0:3]
+		site_email_addr = email_list[site_id]
+
+		for workbook in self.workbooks:
+			# organize command line for sending emails
+			email_title = '"'+workbook[0]+'"'
+			if workbook[1] == 'site':
+				send_mail([site_email_addr], email_title,
+						  "See attachment", [workbook[0]], email_config_path=self.email_config_path)
+			elif workbook[1] == 'cmi':
+				send_mail([cmi_email_address], email_title,
+						  "See attachment", [workbook[0]], email_config_path=self.email_config_path)
+
+
+def getPatientData(cnx, patient_id, get_spiro_data=False, get_survey_data=False, get_pulse_data=False):
+	"""Get the data for the provided patient_id from the PostgreSQL database.
+	
+	Arguments:
+		cnx {psycopg2.connector} -- The PostgreSQL database connection
+		patient_id {str} -- The patient id for which to grab the data
+	
+	Keyword Arguments:
+		get_spiro_data {bool} -- Whether to grab the spirometry data (default: {False})
+		get_survey_data {bool} -- Whether to grab the survey data (default: {False})
+		get_pulse_data {bool} -- Whether to grab the pulse-oximetry data (default: {False})
+	
+	Returns:
+		patientdata.PatientData -- A unified object containing all the gathered data for the provided patient_id, organized by entry_id.
+	"""
+
+	patient_data = patientdata.PatientData()
+
+	if get_spiro_data:
 		cursor = cnx.cursor()
-		query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date FROM small_test WHERE patient_id = %s"
+		query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter, \
+					id FROM spiro_data WHERE patient_id = %s order by test_date asc"
 		cursor.execute(query, (patient_id,))
 
+		for (fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter, test_id) in cursor:
+			date = convert_to_date(test_date)
+			if date != None:
+				new_entry = patient_data.new_spiro_data_entry(
+					date,
+					test_id,
+					float(fev11),
+					float(fev12),
+					float(fev13),
+					float(fev14),
+					float(fev15),
+					float(fev16),
+					is_variance,
+					variance_test_counter)
+			else:
+				continue
+	if get_pulse_data:
+		cursor = cnx.cursor()
+		query = "SELECT minrate, maxrate, lowestsat, timeabnormal, \
+					timeminrate, test_date, pulse_boolean, o2sat_boolean, \
+					id FROM pulse_data WHERE patient_id = %s"
+		cursor.execute(query, (patient_id,))
 
-	row = 30
-	col = 1
-	max_fev_list = []
-	dates = []
-	for (fev11, fev12, fev13, fev14, fev15, fev16, test_date) in cursor:
-		fev_list = [float(fev11)*1000, float(fev12)*1000, float(fev13)*1000, float(fev14)*1000, float(fev15)*1000, float(fev16)*1000]
-		max_fev = max(fev_list)
-		max_fev_list.append(max_fev)
-		d = datetime.datetime.strptime(test_date,"%Y-%m-%d")
-		dates.append(d)
+		for (minrate, maxrate, lowestsat, timeabnormal, timeminrate, test_date, is_pulse_abnormal, is_o2sat_abnormal, entry_id) in cursor:
+			date = convert_to_date(test_date)
+			if date != None:
+				new_entry = patient_data.new_pulse_data_entry(
+					date,
+					entry_id,
+					minrate,
+					maxrate,
+					lowestsat,
+					timeabnormal,
+					timeminrate,
+					is_pulse_abnormal,
+					is_o2sat_abnormal)
+			else:
+				continue
+	if get_survey_data:
+		cursor = cnx.cursor()
 
-	row += 1
-
-	date_list = [(date-dates[0]).days for date in dates]
-
-	# create linear regression object
-	regr = linear_model.LinearRegression()
-	regr.fit(np.array(date_list).reshape(-1,1), np.array(max_fev_list).reshape(-1,1))
-	predicted = regr.predict(np.array(date_list).reshape(-1,1))
-
-	#plt.legend(loc='best')
-	#plt.xticks(np.arange(25),devices)
-	fig, ax = plt.subplots(figsize=((10,6)))
-	plt.plot([date_list[0],date_list[-1]],[predicted[0],predicted[-1]],"k--")
-	plt.scatter(date_list, max_fev_list, marker='s')
-	plt.xlabel('Days',fontsize = 22)
-	plt.ylabel('FEV1(ml)', fontsize = 22)
-
-	plt.title('Monitoring Month', loc="center", fontsize=22)
-
-	# plt.show()
-
-	fig.savefig(filename+'.png')
-
-	worksheet.insert_image('B9', filename+'.png', {'x_scale':0.5, 'y_scale':0.5})
-
-	workbook.close()
-
-    # send report to sites
-    send_report_site(patient_id, filename)
+		query = "SELECT q1, q11, q12, q13, q14, q15, q16, q17, q2, q21, q22, q23, q24, q3, q31, q32, q33, \
+					q34, q35, q4, q41, q42, q43, entry_timestamp::timestamp::date, id FROM survey_data WHERE patient_id = %s"
+		cursor.execute(query, (patient_id,))
+		for (q1, q11, q12, q13, q14, q15, q16, q17, q2, q21, q22, q23, q24, q3, q31, q32, q33,
+			 q34, q35, q4, q41, q42, q43, entry_timestamp, entry_id) in cursor:
+			date = convert_to_date(entry_timestamp)
+			if date != None:
+				new_entry = patient_data.new_survey_data_entry(date, entry_id)
+				q1_options = [q11, q12, q13, q14, q15, q16, q17]
+				new_entry.add_question("q1", q1, q1_options)
+				q2_options = [q21, q22, q23, q24]
+				new_entry.add_question("q2", q2, q2_options)
+				q3_options = [q31, q32, q33, q34, q35]
+				new_entry.add_question("q3", q3, q3_options)
+				q4_options = [q41, q42, q43]
+				new_entry.add_question("q4", q4, q4_options)
+			else:
+				continue
+	return patient_data
 
 
-def calc_nl(patient_id):
-    cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
-    cursor = cnx.cursor()
+def convert_to_date(input_date):
+	"""Attempt to convert from a str to a Date type
+	
+	Arguments:
+		input_date {str} -- The input date
+	
+	Returns:
+		datetime.date -- The converted input
+	"""
 
-    query = "SELECT fev11, fev12, fev13, fev14, fev15, fev16 FROM small_test WHERE patient_id = %s"
-    cursor.execute(query, (patient_id,))
+	if isinstance(input_date, datetime.date):
+		return input_date
+	else:
+		d = None
+		try:
+			d = datetime.datetime.strptime(input_date, "%Y-%m-%d")
+		except ValueError:
+			d = datetime.datetime.strptime(
+				input_date, "%Y-%m-%d %H:%M:%S")
 
-    fev_all = []
+		date = datetime.date(d.year, d.month, d.day) if d != None else None
+		return date
 
-    for (fev11, fev12, fev13, fev14, fev15, fev16) in cursor:
-        fev_list = [float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)]
-		max_fev = max(fev_list)
-        fev_all.append(max_fev)
 
-    low_limit = min(fev_all)
-    up_limit = max(fev_all)
+def deleteFile(path):
+	"""Delete a file
+	
+	Arguments:
+		path {string} -- The path to the file that is to be deleted.
+	"""
 
-    nl_range = str(low_limit) + '-' + str(up_limit)
+	if os.path.exists(path):
+		os.remove(path)
+	else:
+		print "The file \"{0}\" does not exist".format(path)
 
-    insert_range_statement = "UPDATE meta_data SET normal_range = %s WHERE patient_id = %s VALUES (%s,%s)"
-    cursor.execute(insert_range_statement,(nl_range, patient_id))
 
-# send reports to different sites
-def send_report_site(patient_id, filename):
-    site_id = patient_id[0:3]
-    email_addr = email_list[site_id]
-    # organize command line for sending emails
-    email_title = '"'+filename+'"'
-    commandline = '/usr/local/bin/sendEmail -f qolecp@gmail.com -t ' + email_addr + ' -u ' + email_title + '-m "See attachment"' + ' -a ' + filename + ' -s smtp.gmail.com:587 -o tls=yes -xu qolecp@gmail.com -xp Qol13579#'
-    os.system(commandline)
+def setFormats(workbook):
+	"""Generate cell formats to use with all formula cells
+	
+	Arguments:
+		workbook {xlswriter.Workbook} -- The current workbook in which the formats will be used.
+	"""
 
-# send reports to cmi
-def send_report_cmi(patient_id):
+	# Generate cell formats to use with all formula cells
+	global formats
+	formats = {}
+	formats["three_dec"] = workbook.add_format({'num_format': '0.000'})
+	formats["two_dec"] = workbook.add_format({'num_format': '0.00'})
+	formats["percent"] = workbook.add_format({'num_format': '0%'})
+	formats["no_dec"] = workbook.add_format({'num_format': '0'})
+	formats["date"] = workbook.add_format({'shrink': True})
 
-def nl_sendback(patient_id):
-	cnx = mysql.connector.connect(user='root',password='mysql_db',host='localhost',database='spirometry_db')
+	formats["two_dec_color"] = workbook.add_format(
+		{'num_format': '0.00', 'bg_color': 'yellow'})
+	formats["three_dec_color"] = workbook.add_format(
+		{'num_format': '0.000', 'bg_color': 'yellow'})
+	formats["percent_color"] = workbook.add_format(
+		{'num_format': '0%', 'bg_color': 'yellow'})
+	formats["no_dec_color"] = workbook.add_format(
+		{'num_format': '0', 'bg_color': 'yellow'})
+	formats["date_color"] = workbook.add_format(
+		{'shrink': True, 'bg_color': 'yellow'})
+	formats["color"] = workbook.add_format({'bg_color': 'yellow'})
+
+
+def setGlobals():
+	""" Set globals which will be used by the helper functions
+	"""
+
+	# Set the globals which will be used by the helper functions
+	global start_col
+	start_col = 0
+	global fevmax_col
+	fevmax_col = start_col + 7
+	global fev1xk_col
+	fev1xk_col = start_col + 12
+	global days_col
+	days_col = start_col + 15
+	global max_col
+	max_col = start_col + 8
+	global percent_max_col
+	percent_max_col = start_col + 9
+	global percent_mean_col
+	percent_mean_col = start_col + 11
+	global start_row
+	start_row = 30
+
+	global survey_contents
+	survey_contents_path = os.path.join(
+		os.getcwd(), "survey_contents.json")
+	with open(survey_contents_path) as file:
+		survey_contents = json.load(file)
+
+
+def getMonitoringMonths(cnx, patient_id, viewing_month):
+	"""Generate a list of the monitoring months for the current patient's study data
+	
+	Arguments:
+		cnx {psycopg2.connector} -- The connection to the PostgreSQL database
+		patient_id {str} -- The patient id for which the reports are being generated
+		viewing_month {str} -- The month for which we want to generate the report, can be <= to the current month
+	
+	Returns:
+		monitoringmonths.MonitoringMonthList -- a list of all the monitoring months from the start of the study to now
+	"""
+
 	cursor = cnx.cursor()
-
-	query = "SELECT normal_range FROM meta_data WHERE patient_id = %s"
+	query = "SELECT nl_end_date, start_study_date FROM patient_data WHERE patient_id = %s"
 	cursor.execute(query, (patient_id,))
 
-	#nl_range = cursor[0].split('-')
-	nl_range = cursor[0]
+	nl_end_date = None
+	start_study_date = None
+	for (new_nl_end_date, new_start_study_date) in cursor:
+		nl_end_date = new_nl_end_date
+		start_study_date = new_start_study_date
+		break
+
+	# Generate set of starting date for each monitoring month up to the current date
+	# Also write the label for the monitoring month
+	monitoring_months = MonitoringMonthList(
+		start_study_date, nl_end_date, viewing_month)
+
+	return monitoring_months
+
+
+def setMonitoringMonthRows(monitoring_months, patient_data):
+	"""Figure out in which rows in the datasheet each PatientDataEntry will will correspond to.
+	This must be called after setGlobals as we set the starting rows in that method.
+	
+	Arguments:
+		monitoring_months {monitoringmonths.MonitoringMonthList} -- A list of the monitoring months for the given patient's data entries
+		patient_data {patientdata.PatientData} -- All the data on the patient from the database
+	"""
+
+	# print monitoring_months
+	row = start_row
+	for entry in patient_data.get_spiro_data():
+		current_monitoring_month = monitoring_months.get_month_by_date(
+			entry.date)
+
+		if current_monitoring_month != None:
+			if row < current_monitoring_month.start_row:
+				current_monitoring_month.start_row = row
+			if row > current_monitoring_month.end_row:
+				current_monitoring_month.end_row = row
+			current_monitoring_month = monitoring_months.get_month_by_date(
+				entry.date)
+
+		else:
+			print "error, unable to determine monitoring month"
+		row += 1
+	# print monitoring_months
+
+
+def writeCMIDataTable(worksheet, cnx, patient_id, patient_data, monitoring_months):
+	image_list = []
+
+	cursor = cnx.cursor()
+	query = "SELECT normal_range, date_of_transplant, start_study_date FROM patient_data WHERE patient_id = %s"
+	cursor.execute(query, (patient_id,))
+
+	normal_range = None
+	date_of_transplant = None
+	start_study_date = None
+	for new_normal_range, new_date_of_transplant, new_start_study_date in cursor:
+		if new_normal_range != None:
+			normal_range = new_normal_range.split(',')
+			normal_range = [float(range_value) for range_value in normal_range]
+		else:
+			normal_range = None
+		date_of_transplant = new_date_of_transplant
+		start_study_date = new_start_study_date
+		break
+
+	worksheet.write('A30', 'PTN')
+	worksheet.write('B30', 'FEV11')
+	worksheet.write('C30', 'FEV12')
+	worksheet.write('D30', 'FEV13')
+	worksheet.write('E30', 'FEV14')
+	worksheet.write('F30', 'FEV15')
+	worksheet.write('G30', 'FEV16')
+	worksheet.write('H30', 'FEV1MAX')
+	worksheet.write('I30', 'MAX')
+	worksheet.write('J30', '%MAX')
+	worksheet.write('K30', 'Mean')
+	worksheet.write('L30', '%Mean')
+	worksheet.write('M30', 'FEV1*K')
+	worksheet.write('N30', 'Date')
+	worksheet.write('O30', 'SHS Date')
+	worksheet.write('P30', 'Days')
+	worksheet.write('Q30', 'DTx')
+	worksheet.write('R30', 'MonthsPTx')
+	worksheet.write('S30', 'Status')
+
+	row = start_row
+	col = start_col
+
+	for entry in patient_data.get_spiro_data():
+		fev1_values = entry.get_spiro_data_entry().fev1_data
+
+		# If the entry has a variance, we want to color the row yellow
+		two_dec_format = formats["two_dec"]
+		percent_format = formats["percent"]
+		no_dec_format = formats["no_dec"]
+		date_format = formats["date"]
+		none_format = None
+		if entry.get_spiro_data_entry().is_variance:
+			two_dec_format = formats["two_dec_color"]
+			percent_format = formats["percent_color"]
+			no_dec_format = formats["no_dec_color"]
+			date_format = formats["date_color"]
+			none_format = formats["color"]
+
+		# Write the patient id (PTN)
+		worksheet.write(row, col, patient_id, none_format)
+
+		# Write the FEV1 values
+		worksheet.write(row, col+1, fev1_values[0],
+						two_dec_format)
+		worksheet.write(row, col+2, fev1_values[1],
+						two_dec_format)
+		worksheet.write(row, col+3, fev1_values[2],
+						two_dec_format)
+		worksheet.write(row, col+4, fev1_values[3],
+						two_dec_format)
+		worksheet.write(row, col+5, fev1_values[4],
+						two_dec_format)
+		worksheet.write(row, col+6, fev1_values[5],
+						two_dec_format)
+
+		# Write the FEV1MAX formula
+		worksheet.write_formula(row, col+7, '=MAX({0}:{1})'.format(
+			xl_rowcol_to_cell(row, col + 1),
+			xl_rowcol_to_cell(row, col + 6)),
+			two_dec_format)
+		# write MAX
+		worksheet.write_formula(row, max_col, '=W31', two_dec_format)
+		# Write %MAX
+		worksheet.write_formula(
+			row, percent_max_col, '=({0}-{1})/({1})'.format(
+				xl_rowcol_to_cell(row, fevmax_col),
+				xl_rowcol_to_cell(row, col + 8)),
+			percent_format)
+		# Write Mean
+		worksheet.write_formula(
+			row,
+			col + 10,
+			'=AVERAGE({0}:{1})'.format(
+				xl_rowcol_to_cell(
+					monitoring_months.get_month_by_date(entry.date).start_row,
+					fevmax_col),
+				xl_rowcol_to_cell(
+					monitoring_months.get_month_by_date(entry.date).end_row,
+					fevmax_col)),
+			two_dec_format)
+		# Write %Mean
+		worksheet.write_formula(row, col+11, '=({0}-{1})/({1})'.format(
+			xl_rowcol_to_cell(row, fevmax_col), xl_rowcol_to_cell(row, col + 10)), percent_format)
+		# Write FEV1xK
+		worksheet.write_formula(
+			row, fev1xk_col, '={0}*1000'.format(xl_rowcol_to_cell(row, fevmax_col)), no_dec_format)
+		# Write date of the entry (Date)
+		worksheet.write(
+			row, col + 13, entry.date.strftime("%Y-%m-%d"), date_format)
+		# Write the date the patient started the study (SHS Date)
+		if start_study_date != None:
+			worksheet.write(
+				row, col + 14, start_study_date.strftime("%Y-%m-%d"), date_format)
+			worksheet.write(
+				row, days_col, (entry.date - start_study_date).days, none_format)
+		# Write the date of the patient's transplant and the number of months since the transplant (DTx and MonthsPTx)
+		if date_of_transplant != None:
+			worksheet.write(
+				row, col + 16, date_of_transplant.strftime("%Y-%m-%d"), date_format)
+			months_ptx = diff_month(entry.date, date_of_transplant)
+			worksheet.write(row, col + 17, round(months_ptx, 1), none_format)
+		# Write the label for what monitoring month the entry falls under (Status)
+		worksheet.write(
+			row, col + 18, monitoring_months.get_month_by_date(entry.date).get_month_name(), none_format)
+		row += 1
+
+	worksheet.write('U30', 'Mean')
+	worksheet.write('V30', 'Min')
+	worksheet.write('W30', 'Max')
+	worksheet.write('X30', 'SD 2')
+	worksheet.write('Y30', 'CV (2SD)')
+
+	# Write the formulas for the "Baseline" data cells
+	writeOverviewStatsRow(worksheet, 'U31', monitoring_months, 0, 0, False)
+
+	# Write Baseline plot data
+	worksheet.write('U48', 'Slope')
+	worksheet.write('V48', 'R')
+	worksheet.write('W48', 'R-square')
+	worksheet.write('X48', 'Count')
+	worksheet.write('Y48', 'P-value')
+	writePlotDataRow(worksheet, 'U49', fev1xk_col, monitoring_months, 0, 0)
+
+	baseline_plot_filename = 'baseline'
+	baseline_plot_filename_full = baseline_plot_filename + '.png'
+
+	# get the lists for the plots
+	max_fev_list = patient_data.get_spiro_data().get_fev1_max_list()
+	dates = patient_data.get_spiro_data().get_entry_dates()
+
+	errorMsg = generatePlot(
+		max_fev_list,
+		[
+			monitoring_months[0],
+			monitoring_months[0]
+		],
+		dates,
+		start_study_date,
+		normal_range,
+		baseline_plot_filename,
+		"Baseline")
+	if errorMsg == "":
+		# Only attach the plot if the generatePlot was a success
+		worksheet.insert_image('U33', baseline_plot_filename_full, {
+							   'x_scale': 0.5, 'y_scale': 0.5})
+	else:
+		worksheet.write('U33', errorMsg)
+	image_list.append(baseline_plot_filename_full)
+
+	# # Write %mean plot data
+	# worksheet.write('U66', 'Slope')
+	# worksheet.write('V66', 'R')
+	# worksheet.write('W66', 'R-square')
+	# worksheet.write('X66', 'Count')
+	# worksheet.write('Y66', 'P-value')
+	# writePlotDataRow(worksheet, 'U67', percent_mean_col, monitoring_months, 0, -1)
+	return image_list
+
+
+def writeOverview(worksheet, cnx, patient_id, patient_data, monitoring_months, write_stats_table=False, write_variance_table=False):
+	image_list = []
+
+	worksheet.write('B2', 'Patient Study Number')
+	worksheet.write('B3', 'Date')
+	worksheet.write('B4', 'Monitoring Month')
+	worksheet.write('B5', 'NL Range')
+	worksheet.write('B6', 'Variance')
+	worksheet.write('B7', 'Lowest FEV1')
+
+	cursor = cnx.cursor()
+	query = "SELECT normal_range, start_study_date, study_number FROM patient_data WHERE patient_id = %s"
+	cursor.execute(query, (patient_id,))
+
+	normal_range = None
+	start_study_date = None
+	patient_study_number = ""
+	for new_normal_range, new_start_study_date, new_patient_study_number in cursor:
+		# Extract the two normal range values from the comma-separated string
+		if new_normal_range != None:
+			normal_range = new_normal_range.split(',')
+			normal_range = [float(range_value) for range_value in normal_range]
+		else:
+			normal_range = None
+		start_study_date = new_start_study_date
+		patient_study_number = new_patient_study_number
+		break
+
+	# Write the patient study number and current date
+	worksheet.write('E2', patient_study_number)
+	now = datetime.datetime.now()
+	now_date = datetime.date(now.year, now.month, now.day)
+	worksheet.write('E3', now_date.strftime("%Y-%m-%d"))
+
+	# Generate set of starting date for each monitoring month up to the current date
+	# Also write the label for the monitoring month
+	if monitoring_months.get_month(-1) != monitoring_months.get_viewing_month():
+		worksheet.write('E4', '{0}, viewing {1}'.format(
+			monitoring_months.get_month(-1).get_month_name(True), monitoring_months.get_viewing_month().get_month_name(True)))
+	else:
+		worksheet.write(
+			'E4', monitoring_months.get_month(-1).get_month_name(True))
+
+	# If a normal range exists for this patient, display it
+	if normal_range != None:
+		worksheet.write(
+			'E5', "{0} - {1}".format(normal_range[0], normal_range[1]))
+
+	# Write "Yes" if there is a variance in the data, "No" otherwise
+	worksheet.write('E6', "Yes" if (
+		len(patient_data.get_spiro_data().get_variances()) > 0) else "No")
+
+	# Write the lowest FEV1_Max score for the current viewing month
+	# Get the patient data for the current viewing month
+	viewing_month = monitoring_months.get_viewing_month()
+	print str(viewing_month)
+	patient_data_for_viewing_month = patient_data.get_entries_for_monitoring_month(
+		viewing_month)
+	fev1_max_for_viewing_month = patient_data_for_viewing_month.get_spiro_data().get_fev1_max_list()
+	if len(fev1_max_for_viewing_month) > 0:
+		min_fev1_max_for_viewing_month = min(fev1_max_for_viewing_month)
+		worksheet.write('E7', min_fev1_max_for_viewing_month,
+						formats["two_dec"])
+
+	# generate supplemental data
+
+	# For all reports, we want to show what the normal data should look like in the NL column
+	worksheet.write('G2', 'Supplemental Data')
+	worksheet.write('I2', 'NL')
+	worksheet.write('G3', 'Questionnaire')
+	worksheet.write('G4', 'Oximetry')
+	worksheet.write('H5', 'O2 Sat')
+	worksheet.write('H6', 'Duration Abnormal')
+	worksheet.write('H7', 'Duration Lowest')
+	worksheet.write('H8', 'Heart Rate')
+
+	worksheet.write('I5', '>97%')
+	worksheet.write('I6', 'NA')
+	worksheet.write('I7', 'NA')
+	worksheet.write('I8', 'NL')
+
+	# Get a summary of the survey responses for the current viewing month
+	viewing_month_survey_summary = patient_data_for_viewing_month.get_survey_data().get_summary()
+	condition_set = set()
+	# Given the responses to the survey, get the conditions to display
+	for question in viewing_month_survey_summary:
+		if question.answer:
+			condition_set.add(survey_contents[question.id]["condition"])
+
+	# In the case that any of the supplemental data is abnormal, we want to display the ABNL column
+	abnormal_pulse_data = patient_data_for_viewing_month.get_pulse_data().get_abnormal()
+	has_abnormal_data = len(abnormal_pulse_data) > 0 or len(condition_set) > 0
+	if has_abnormal_data:
+		worksheet.write('J2', 'ABNL')
+		if len(abnormal_pulse_data) > 0:
+			most_recent_abnormal_pulse_data_entry = abnormal_pulse_data[-1].get_pulse_data_entry(
+			)
+			if most_recent_abnormal_pulse_data_entry.is_o2sat_abnormal > 0:
+				lowestsat_cell_format = formats["color"] if most_recent_abnormal_pulse_data_entry.is_o2sat_abnormal == 2 else None
+				time_cell_format = formats["color"] if most_recent_abnormal_pulse_data_entry.is_o2sat_abnormal == 2 else None
+				worksheet.write('J5', "{0}% (lowest value)".format(
+					most_recent_abnormal_pulse_data_entry.lowestsat), lowestsat_cell_format)
+				worksheet.write(
+					'J6', most_recent_abnormal_pulse_data_entry.timeabnormal, time_cell_format)
+				worksheet.write(
+					'J7', most_recent_abnormal_pulse_data_entry.timeminrate, time_cell_format)
+			if most_recent_abnormal_pulse_data_entry.is_pulse_abnormal > 0:
+				worksheet.write('J8', "{0} vs {1}".format(
+					most_recent_abnormal_pulse_data_entry.minrate, most_recent_abnormal_pulse_data_entry.maxrate))
+
+		if len(condition_set) > 0:
+			condition_string = ", ".join(list(condition_set))
+			print condition_string
+			worksheet.write('J3', condition_string)
+		else:
+			worksheet.write('J3', 'Negative')
+	# get the lists for the plots
+	max_fev_list = patient_data.get_spiro_data().get_fev1_max_list()
+	dates = patient_data.get_spiro_data().get_entry_dates()
+
+	one_month_plot_filename = 'monitoring_month_latest'
+	one_month_plot_filename_full = one_month_plot_filename + '.png'
+
+	errorMsg = generatePlot(max_fev_list, [
+		monitoring_months.get_viewing_month()], dates, start_study_date, normal_range, one_month_plot_filename)
+	if errorMsg == "":
+		# Only attach the plot if the generatePlot was a success
+		worksheet.insert_image(
+			'B9', one_month_plot_filename_full, {'x_scale': 0.5, 'y_scale': 0.5})
+	else:
+		worksheet.write('B9', errorMsg)
+	image_list.append(one_month_plot_filename_full)
+
+	three_month_plot_filename = 'monitoring_month_3_month'
+	three_month_plot_filename_full = three_month_plot_filename + '.png'
+
+	errorMsg = generatePlot(
+		max_fev_list,
+		[
+			monitoring_months[(monitoring_months.viewing_month_index - 2)
+							  if (monitoring_months.viewing_month_index - 2) > 0 else 0],
+			monitoring_months.get_viewing_month()
+		],
+		dates,
+		start_study_date,
+		normal_range,
+		three_month_plot_filename)
+	if errorMsg == "":
+		# Only attach the plot if the generatePlot was a success
+		worksheet.insert_image(
+			'J9', three_month_plot_filename_full, {'x_scale': 0.5, 'y_scale': 0.5})
+	else:
+		worksheet.write('J9', errorMsg)
+	image_list.append(three_month_plot_filename_full)
+
+	if write_stats_table:
+		# Build table of overview statistical data
+		# write the labels for the columns
+		worksheet.write('C24', 'Mean')
+		worksheet.write('D24', 'Min')
+		worksheet.write('E24', 'Max')
+		worksheet.write('F24', 'SD 2')
+		worksheet.write('G24', 'CV (2SD)')
+		worksheet.write('I24', 'Slope')
+		worksheet.write('J24', 'R')
+		worksheet.write('K24', 'R-square')
+		worksheet.write('L24', 'Count')
+		worksheet.write('M24', 'P-value')
+
+		# write the labels for the rows
+		worksheet.write('B25', '1 month')
+		worksheet.write('B26', '3 month')
+		worksheet.write('B27', 'Baseline')
+		worksheet.write('B28', 'All')
+
+		# Write the formulas for the "1 month" data cells
+		writeOverviewStatsRow(worksheet, 'C25', monitoring_months,
+							  monitoring_months.viewing_month_index, monitoring_months.viewing_month_index)
+
+		# Write the formulas for the "3 month" data cells
+		three_month_start_index = (
+			monitoring_months.viewing_month_index - 2) if (monitoring_months.viewing_month_index - 2) > 1 else 1
+		writeOverviewStatsRow(worksheet, 'C26', monitoring_months,
+							  three_month_start_index, monitoring_months.viewing_month_index)
+
+		# Write the formulas for the "Baseline" data cells
+		writeOverviewStatsRow(worksheet, 'C27', monitoring_months, 0, 0)
+
+		# Write the formulas for the "All" data cells
+		writeOverviewStatsRow(
+			worksheet, 'C28', monitoring_months, 0, monitoring_months.viewing_month_index)
+
+	if write_variance_table:
+		writeFEV1MaxOverviewTable(
+			worksheet, 'B24', patient_data_for_viewing_month)
+	return image_list
+
+
+def writeFEV1MaxOverviewTable(worksheet, top_left_cell_coordinate, patient_data):
+	if not isinstance(top_left_cell_coordinate, tuple):
+		top_left_cell_coordinate = xl_cell_to_rowcol(top_left_cell_coordinate)
+	(row_number, start_column_number) = top_left_cell_coordinate
+
+	worksheet.write(row_number, start_column_number, 'Date')
+	worksheet.write(row_number+1, start_column_number, 'Surveilance')
+
+	column_add = 1
+	for entry in patient_data.get_spiro_data():
+		print str(entry)
+		worksheet.write(row_number, start_column_number+column_add,
+						entry.date.strftime("%Y-%m-%d"), formats["date"])
+		if entry.get_spiro_data_entry().is_variance:
+			worksheet.write(row_number+1, start_column_number+column_add,
+							entry.get_spiro_data_entry().fev1_max, formats["two_dec_color"])
+		else:
+			worksheet.write(row_number+1, start_column_number+column_add,
+							entry.get_spiro_data_entry().fev1_max, formats["two_dec"])
+		column_add += 1
+
+	row_add = 2
+
+	for variance in patient_data.get_spiro_data().get_variances():
+		column_add = 1
+		worksheet.write(row_number+row_add+1, start_column_number, 'Variance')
+		# Write variance
+		worksheet.write(row_number+row_add, start_column_number+column_add,
+						variance.variance.date.strftime("%Y-%m-%d"), formats["date"])
+		worksheet.write(row_number+row_add+1, start_column_number+column_add,
+						variance.variance.get_spiro_data_entry().fev1_max, formats["two_dec_color"])
+		column_add += 1
+		for variance_test in variance.variance_tests:
+			worksheet.write(row_number+row_add, start_column_number+column_add,
+							variance_test.date.strftime("%Y-%m-%d"), formats["date"])
+			worksheet.write(row_number+row_add+1, start_column_number+column_add,
+							variance_test.get_spiro_data_entry().fev1_max, formats["two_dec"])
+			column_add += 1
+		row_add += 2
+
+
+def writeAbnormalSurveyTable(worksheet, top_left_cell_coordinate, patient_data):
+	if not isinstance(top_left_cell_coordinate, tuple):
+		top_left_cell_coordinate = xl_cell_to_rowcol(top_left_cell_coordinate)
+	(row_number, start_column_number) = top_left_cell_coordinate
+
+	worksheet.write(row_number, start_column_number, "Date")
+
+	survey_data = patient_data.get_survey_data()
+	i = 1
+	for entry in survey_data:
+		survey_data_entry = entry.get_survey_data_entry()
+		date_format = formats["date_color"] if entry.get_spiro_data_entry(
+		).is_variance else formats["date"]
+		worksheet.write(row_number+i, start_column_number,
+						str(entry.date), date_format)
+		for question in survey_contents:
+			worksheet.write(row_number+i, start_column_number+1,
+							"Q: {0}".format(survey_contents[question]["question"]))
+			worksheet.write(row_number+i+1, start_column_number+2, "A: {0}".format(
+				survey_data_entry[question].get_response_str()
+			))
+			i += 2
+
+
+def writePlotDataRow(worksheet, top_left_cell_coordinate, data_col, monitoring_months, start_month_index, end_month_index):
+	if not isinstance(top_left_cell_coordinate, tuple):
+		top_left_cell_coordinate = xl_cell_to_rowcol(top_left_cell_coordinate)
+	(row_number, start_column_number) = top_left_cell_coordinate
+
+	# Write the formulas for the 3 month data cells
+	working_data_cells = (
+		xl_rowcol_to_cell(
+			monitoring_months[start_month_index].start_row,
+			data_col
+		),
+		xl_rowcol_to_cell(
+			monitoring_months[end_month_index].end_row,
+			data_col
+		))
+	working_days_cells = (
+		xl_rowcol_to_cell(
+			monitoring_months[start_month_index].start_row,
+			days_col
+		),
+		xl_rowcol_to_cell(
+			monitoring_months[end_month_index].end_row,
+			days_col
+		))
+	working_max_cells = (
+		xl_rowcol_to_cell(
+			monitoring_months[start_month_index].start_row,
+			max_col
+		),
+		xl_rowcol_to_cell(
+			monitoring_months[end_month_index].end_row,
+			max_col
+		))
+	worksheet.write_formula(row_number, start_column_number, '=IF({0}>0, SLOPE({1}:{2},{3}:{4}), "")'.format(
+		working_data_cells[1], working_data_cells[0], working_data_cells[1], working_days_cells[0], working_days_cells[1]), formats["three_dec"])
+	worksheet.write_formula(row_number, start_column_number+1, '=IF({0}>0, CORREL({1}:{2},{3}:{4}),"")'.format(
+		working_data_cells[1], working_data_cells[0], working_data_cells[1], working_days_cells[0], working_days_cells[1]), formats["two_dec"])
+	worksheet.write_formula(row_number, start_column_number+2, '=IF({0}>0, {1}^2, "")'.format(
+		working_data_cells[1], xl_rowcol_to_cell(row_number, start_column_number+1)), formats["three_dec"])
+	worksheet.write_formula(row_number, start_column_number+3, '=COUNT({0}:{1})'.format(
+		working_data_cells[0], working_data_cells[1]), formats["no_dec"])
+
+	# If the R-value is negative, we need to reverse the sign of the R-value in the following formula to get the P-value
+	worksheet.write_formula(
+		row_number, start_column_number+4, '=IF({0}>0, TDIST(ABS({1})*SQRT(({3}-2)/(1-{2})),({3}-2),1),"")'.format(
+			working_max_cells[1],
+			xl_rowcol_to_cell(row_number, start_column_number+1),
+			xl_rowcol_to_cell(row_number, start_column_number+2),
+			xl_rowcol_to_cell(row_number, start_column_number+3)
+		), formats["two_dec"])
+
+
+def writeOverviewStatsRow(worksheet, top_left_cell_coordinate, monitoring_months, start_month_index, end_month_index, write_plot_data=True):
+	"""Helper function to generate a row for the table of overview statistics.
+
+	Warning: expects to be called from within generate after the necessary global variables have been defined.
+	Will almost certainly fail elsewhere.
+
+	Arguments:
+		worksheet {worksheet} -- The object for the open worksheet
+		top_left_cell_coordinate {str or tuple of ints} -- string index or row-col tuple index of the top-left cell of the row
+		monitoring_months {list of list} -- list of monitoring months
+		start_month_index {int} -- index of the starting month in monitoring_months
+		end_month_index {int} -- index of the ending month in monitoring_months
+	"""
+
+	if not isinstance(top_left_cell_coordinate, tuple):
+		top_left_cell_coordinate = xl_cell_to_rowcol(top_left_cell_coordinate)
+	(row_number, start_column_number) = top_left_cell_coordinate
+	# Write the formulas for the 3 month data cells
+	working_fevmax_cells = (
+		xl_rowcol_to_cell(
+			monitoring_months[start_month_index].start_row,
+			fevmax_col
+		),
+		xl_rowcol_to_cell(
+			monitoring_months[end_month_index].end_row,
+			fevmax_col
+		))
+
+	worksheet.write_formula(row_number, start_column_number, '=AVERAGE({0}:{1})'.format(
+		working_fevmax_cells[0], working_fevmax_cells[1]), formats["two_dec"])
+	worksheet.write_formula(row_number, start_column_number+1,  '=MIN({0}:{1})'.format(
+		working_fevmax_cells[0], working_fevmax_cells[1]), formats["two_dec"])
+	worksheet.write_formula(row_number, start_column_number+2, '=MAX({0}:{1})'.format(
+		working_fevmax_cells[0], working_fevmax_cells[1]), formats["two_dec"])
+	worksheet.write_formula(row_number, start_column_number+3, '=STDEV({0}:{1})*2'.format(
+		working_fevmax_cells[0], working_fevmax_cells[1]), formats["two_dec"])
+	worksheet.write_formula(row_number, start_column_number+4,
+							'=({1})/{0}'.format(
+								xl_rowcol_to_cell(
+									row_number, start_column_number),
+								xl_rowcol_to_cell(row_number, start_column_number + 3)),
+							formats["percent"])
+	if write_plot_data:
+		writePlotDataRow(worksheet, (row_number, start_column_number+6), fev1xk_col,
+						 monitoring_months, start_month_index, end_month_index)
+
+
+def diff_month(d1, d2):
+	return (d1 - d2).days / 30.0
+
+
+def generatePlot(max_fev_list, monitoring_months, dates, start_date, normal_range, filename, plot_title=None):
+	""" Generates a plot of max_fev1 to dates with linear regression. \
+	If more than one monitoring month is provided, the first item will be considered the starting month, \
+	the last will be considered the end month.
+
+	Arguments:
+		max_fev_list {list of integers} -- A list of max_fev1 values, ordered by date, in Liters.
+		monitoring_months {list of tuples} -- The monitoring months to plot.
+		dates {list of datetime.date} -- Date at each index maps to value in max_fev_list.
+		normal_range {list of floats} -- Should contain the low range first, followed by high range.
+		filename {str} -- The name for the image file to be generated.
+		plot_title {str} -- The title of the plot; defaults to the range of monitoring months. Supply \
+							empty string to leave off plot title.
+	"""
+	date_list = [(date - (start_date if start_date !=
+						  None else dates[0])).days for date in dates]
+
+	start_date = monitoring_months[0].start_date
+	end_date = monitoring_months[-1].end_date
+	start = bisect.bisect_left(dates, start_date)
+	end = bisect.bisect_right(dates, end_date)
+
+	start_index = start
+	end_index = end if len(date_list) > end else len(date_list)
+	print "start: {0}, end: {1}, start_date: {2}, end_date: {3}".format(
+		start_index, end_index, start_date, end_date)
+
+	# By default, we want the title to be the range of monitoring months being displayed. If another
+	# title is supplied, we want to use that instead. Later, we'll check if the plot_title is an empty
+	# string. If it is, we won't display a title in the plot.
+	if plot_title == None:
+		plot_title = ""
+
+		if len(monitoring_months) > 1:
+			plot_title = "Monitoring Months {0}-{1}".format(
+				monitoring_months[0].get_month_name(True), monitoring_months[-1].get_month_name(True))
+		elif len(monitoring_months) > 0:
+			plot_title = monitoring_months[0].get_month_name()
+
+	# create linear regression object.
+	if len(date_list) > start:
+		plot_date_list = date_list[start_index: end_index]
+		plot_max_fev_list = max_fev_list[start_index:end_index]
+		plot_max_fev_list = [fev1 * 1000 for fev1 in plot_max_fev_list]
+		regr = linear_model.LinearRegression()
+		regr.fit(np.array(plot_date_list).reshape(-1, 1),
+				 np.array(plot_max_fev_list).reshape(-1, 1))
+		predicted = regr.predict(np.array(plot_date_list).reshape(-1, 1))
+
+		fig, ax = plt.subplots(figsize=((10, 6)))
+
+		# Get the normal range lines
+		low_normal_range = [normal_range[0] * 1000, normal_range[0] * 1000]
+		high_normal_range = [normal_range[1] * 1000, normal_range[1] * 1000]
+
+		# Plot everything
+		plt.plot([plot_date_list[0], plot_date_list[-1]], [predicted[0], predicted[-1]], "k--",
+				 [plot_date_list[0], plot_date_list[-1]], low_normal_range, 'r',
+				 [plot_date_list[0], plot_date_list[-1]], high_normal_range, 'r')
+		plt.scatter(plot_date_list, plot_max_fev_list, marker='s')
+
+		plt.xlabel('Days', fontsize=22)
+		plt.ylabel('FEV1(mL)', fontsize=22)
+
+		# Write the secondary axis showing %MAX
+		ax2 = ax.twinx()
+		mn, mx = ax.get_ylim()
+		max_fev1_max = max(plot_max_fev_list)
+		print "mn = {0}, mx = {1}".format(mn, max_fev1_max)
+		ax2.set_ylim(((mn-max_fev1_max)/max_fev1_max),
+					 ((mx-max_fev1_max)/max_fev1_max))
+		ax2.yaxis.set_major_formatter(ticker.MultipleLocator(1))
+		vals = ax2.get_yticks()
+		ax2.set_yticklabels(['{0:.0%}'.format(x) for x in vals])
+
+		ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
+		ax.yaxis.set_minor_locator(ticker.MultipleLocator(20))
+		ax.yaxis.set_minor_formatter(ticker.NullFormatter())
+		ax.grid(True, 'major', 'y')
+
+		if plot_title != "":
+			plt.title(plot_title, loc="center", fontsize=22)
+
+		fig.savefig(filename + '.png')
+		return ""
+	else:
+		error_message = "No data for {0}".format(plot_title)
+		return error_message
+
+
+def send_mail(send_to, subject, text, files=None, email_config_path=None):
+	"""Send an email using Gmail.
+	
+	Arguments:
+		send_to {str} -- The email address to which to send the email
+		subject {str} -- The subject for the email.
+		text {str} -- The body text for the email.
+	
+	Keyword Arguments:
+		files {list(file)} -- The files to attach to the email. (default: {None})
+		email_config_path {str} -- The credentials for the Gmail account. (default: {None})
+	"""
+
+	assert isinstance(send_to, list)
+
+	send_from = None
+	send_from_password = None
+	if email_config_path == None:
+		email_config_path = os.path.join(
+			os.getcwd(), "email_config.json")
+	with open(email_config_path, "r") as email_config_file:
+		email_config = json.load(email_config_file)
+		send_from = email_config["email_address"]
+		send_from_password = email_config["password"]
+
+	msg = MIMEMultipart()
+	msg['From'] = send_from
+	msg['To'] = COMMASPACE.join(send_to)
+	msg['Date'] = formatdate(localtime=True)
+	msg['Subject'] = subject
+
+	msg.attach(MIMEText(text))
+
+	for f in files or []:
+		with open(f, "rb") as fil:
+			part = MIMEApplication(
+				fil.read(),
+				Name=basename(f)
+			)
+		# After the file is closed
+		part['Content-Disposition'] = 'attachment; filename="%s"' % basename(f)
+		msg.attach(part)
+
+	try:
+		server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+		server.ehlo()
+		server.login(send_from, send_from_password)
+		server.sendmail(send_from, send_to, msg.as_string())
+		server.close()
+
+		print 'Email with subject \'{0}\' sent!'.format(subject)
+	except:
+		print 'Something went wrong sending email with subject \'{0}\'...'.format(
+			subject)
+
+
+def main(patient_id, report_type, output_filename, month, dbconfig, emailconfig):
+	generator = ReportGenerator(patient_id, month, db_config_path=dbconfig, email_config_path=emailconfig)
+	if report_type == 'cmi':
+		generator.generateCMIDatasheet(output_filename)
+	elif report_type == 'site':	
+		generator.generateSiteReport(output_filename)
+	elif report_type == 'all':
+		generator.generateCMIDatasheet(output_filename)
+		generator.generateSiteReport(output_filename)
+	else:
+		print "Error: invalid report_type \"{0}\"".format(report_type)
+		return
+	generator.sendReports()
+
+
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='Generate and send reports for the Home Spirometry study.')
+	parser.add_argument('patient_id', metavar='ID', type=str,
+						help='the patient id for which to generate the report')
+	parser.add_argument(dest='report_type', choices=['cmi', 'site', 'all'], help="the type of report to generate and send")
+	parser.add_argument('-m', '--month', dest='month', default=None, metavar='INT',
+						help='the number of the monitoring month to show data for')
+	parser.add_argument('-o', '--output', dest='output_filename', default=None, metavar='STRING',
+						help='the name of the output file, without the file extension')
+	parser.add_argument('--dbconfig', default=None, metavar='PATH', dest='dbconfig',
+						help='the path to the database connection .ini file')
+	parser.add_argument('--emailconfig', default=None, metavar='PATH', dest='emailconfig',
+						help='the path to the email account .json file')
+	args = parser.parse_args()
+	main(args.patient_id, args.report_type, args.output_filename, args.month, args.dbconfig, args.emailconfig)
