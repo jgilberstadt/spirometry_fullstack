@@ -1,12 +1,12 @@
 [Unit]
-Description=Test Python Service
+Description=Run Daily Service
 After=network.target
 
 [Install]
 WantedBy=multi-user.target
 
 [Service]
-User=dingwen
-ExecStart=sh execution.sh
+User=dingwenli
+ExecStart=sh daily_check.sh
 Restart=always
 RestartSec=1
