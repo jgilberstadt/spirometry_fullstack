@@ -15,14 +15,16 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
     cnx = psycopg2.connect(**dbc)
     cursor = cnx.cursor()
 
-    query = "SELECT nl_end_date, start_study_date, patient_id, p_value FROM patient_data"
+    query = "SELECT nl_end_date, start_study_date, patient_id, p_value, monitoring_start_date FROM patient_data"
     cursor.execute(query, ())
 
-    for (nl_end_date, start_study_date, patient_id, p_value) in cursor:
+    for (nl_end_date, start_study_date, patient_id, p_value, monitoring_start_date) in cursor:
         start_study_date = reportgenerator.convert_to_date(start_study_date)
+        monitoring_start_date = reportgenerator.convert_to_date(monitoring_start_date)
         nl_end_date = reportgenerator.convert_to_date(nl_end_date)
         current_date = datetime.datetime.now()
         timedelta = current_date - start_study_date
+        timedelat_monitoring = current_date - monitoring_start_date
 
         # Every two weeks during the training period, only need to send the datasheet to 
         # the CMI for this one
@@ -69,13 +71,13 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
 
         # check for monitoring period
         elif(nl_end_date is not None and timedelta.day >= 30):
-            if(timedelta.day % 30 == 0):
-                current_month = timedelta.day / 30
+            if(timedelat_monitoring.day % 30 == 0):
+                current_month = timedelat_monitoring.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
-            elif(timedelta.day % 30 == 1):
-                current_month = timedelta.day / 30
+            elif(timedelat_monitoring.day % 30 == 1):
+                current_month = timedelat_monitoring.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateSiteReport()
                 rgObj.sendReports()
