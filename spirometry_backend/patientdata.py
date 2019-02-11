@@ -474,7 +474,7 @@ class PatientDataEntry:
         self.__spiro_data_entry = SpiroDataEntry(
             fev11, fev12, fev13, fev14, fev15, fev16, is_variance, variance_counter)
 
-    def get_spiro_data_entry(self):'
+    def get_spiro_data_entry(self):
         """Get the spirometry data corresponding to this entry
         
         Returns:

@@ -2,7 +2,7 @@ import argparse
 import time
 
 import psycopg2
-import schedule
+#import schedule
 from dbconfig import config
 from reportgenerator import ReportGenerator
 import reportgenerator
@@ -57,12 +57,12 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
             insert_cursor = cnx.cursor()
             insert_cursor.execute("UPDATE patient_data SET p_value=%s WHERE patient_id=%s", (new_p_value, patient_id))
         elif(nl_end_date is None and p_value is not None and timedelta.day > 30):
-            if(timedelta.day % 14 == 0 and float(p_value) >= 0.1):
+            if(timedelta.day % 14 == 0 and float(p_value) >= 0.01):
                 current_month = timedelta.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
-            if(timedelta.day % 7 == 0 and float(p_value) < 0.1):
+            if(timedelta.day % 7 == 0 and float(p_value) < 0.01):
                 current_month = timedelta.day / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateCMIDatasheet()
