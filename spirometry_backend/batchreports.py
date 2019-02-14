@@ -20,17 +20,17 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
 
     for (nl_end_date, start_study_date, patient_id, p_value, monitoring_start_date) in cursor:
         start_study_date = reportgenerator.convert_to_date(start_study_date)
-        monitoring_start_date = reportgenerator.convert_to_date(monitoring_start_date)
-        nl_end_date = reportgenerator.convert_to_date(nl_end_date)
-        current_date = datetime.datetime.now()
+        current_date = datetime.date.today()
         timedelta = current_date - start_study_date
-        timedelat_monitoring = current_date - monitoring_start_date
 
         # Every two weeks during the training period, only need to send the datasheet to 
         # the CMI for this one
 
-        if(nl_end_date is None and timedelta.day < 30):
-            if(timedelta.day % 14 == 0):
+        print "timedelta.days", timedelta.days
+        print "nl_end_date", nl_end_date
+
+        if(nl_end_date is None and timedelta.days < 30):
+            if(timedelta.days % 14 == 0):
                 rgObj = ReportGenerator(patient_id, viewing_month="1")
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
@@ -46,7 +46,7 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
         # until they are moved to the monitoring period.
 
         # To Do: add an additional column in the patient_data table indicating the end of training phase
-        elif(nl_end_date is None and timedelta.day == 30):
+        elif(nl_end_date is None and timedelta.days == 30):
             rbObj = ReportGenerator(patient_id, viewing_month="1")
             rbObj.generateCMIDatasheet()
             # read p-value from datasheet and then store it in the DB
@@ -54,31 +54,35 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
             full_filename = filename+".xlsx"
             df = pd.read_excel(full_filename, sheetname=None, header=None)
             new_p_value = float(df["Datasheet"].loc[26,"M"])
+            enter_monitroing_start_date = current_date.strftime('%Y-%m-%d')
             insert_cursor = cnx.cursor()
-            insert_cursor.execute("UPDATE patient_data SET p_value=%s WHERE patient_id=%s", (new_p_value, patient_id))
-        elif(nl_end_date is None and p_value is not None and timedelta.day > 30):
-            if(timedelta.day % 14 == 0 and float(p_value) >= 0.01):
-                current_month = timedelta.day / 30
+            insert_cursor.execute("UPDATE patient_data SET p_value=%s, monitoring_start_date=%s WHERE patient_id=%s", (new_p_value, patient_id, enter_monitroing_start_date))
+        elif(nl_end_date is None and p_value is not None and timedelta.days > 30):
+            if(timedelta.days % 14 == 0 and float(p_value) >= 0.01):
+                current_month = timedelta.days / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
-            if(timedelta.day % 7 == 0 and float(p_value) < 0.01):
-                current_month = timedelta.day / 30
+            if(timedelta.days % 7 == 0 and float(p_value) < 0.01):
+                current_month = timedelta.days / 30
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
 
 
         # check for monitoring period
-        elif(nl_end_date is not None and timedelta.day >= 30):
-            if(timedelat_monitoring.day % 30 == 0):
-                current_month = timedelat_monitoring.day / 30
-                rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
+        elif(nl_end_date is not None and timedelta.days >= 30):
+            nl_end_date = reportgenerator.convert_to_date(nl_end_date)
+            monitoring_start_date = reportgenerator.convert_to_date(monitoring_start_date)
+            timedelta_monitoring = current_date - monitoring_start_date
+            if(timedelta_monitoring.days % 2 == 0):
+                current_month = timedelta_monitoring.days / 30
+                rgObj = ReportGenerator(patient_id, viewing_month=str(current_month), delete_files=False)
                 rgObj.generateCMIDatasheet()
                 rgObj.sendReports()
-            elif(timedelat_monitoring.day % 30 == 1):
-                current_month = timedelat_monitoring.day / 30
-                rgObj = ReportGenerator(patient_id, viewing_month=str(current_month))
+            elif(timedelta_monitoring.days % 2 == 1):
+                current_month = timedelta_monitoring.days / 30
+                rgObj = ReportGenerator(patient_id, viewing_month=str(current_month), delete_files=False)
                 rgObj.generateSiteReport()
                 rgObj.sendReports()
 
