@@ -85,6 +85,23 @@ def main(run_all_reports, db_config_path=None, email_config_path=None):
                 rgObj = ReportGenerator(patient_id, viewing_month=str(current_month), delete_files=False)
                 rgObj.generateSiteReport()
                 rgObj.sendReports()
+            
+            
+            # case 4: 4. During the monitoring period, if a variance is detected,
+            # a datasheet should be sent to the CMI immediately and then again after the 4-day testing period is over. (edited) 
+        
+            # get latest variance from spiro_data
+            variance_cursor = cnx.cursor()
+            variance_cursor.execute("SELECT is_variance, variance_test_counter FROM spiro_data WHERE patient_id = %s ORDER BY test_date DESC LIMIT 1", (patient_id))
+            
+            for (is_variance, variance_test_counter) in cursor:
+                if is_variance or variance_test_counter == 4 :
+                    rgObj = ReportGenerator(patient_id, viewing_month=str(current_month), delete_files=False)
+                    rgObj.generateCMIDatasheet()
+                    rgObj.sendReports()
+                   
+
+
 
     
 if __name__ == "__main__":

@@ -15,3 +15,4 @@ spirometry_backend/~$test_pg_cmi_datasheet.xlsx
 spirometry_backend/test_pg_site_report.xlsx
 spirometry_backend/~$test_pg_site_report.xlsx
 spirometry_backend/email_config.json
+spirometry_backend/.vscode/settings.json
