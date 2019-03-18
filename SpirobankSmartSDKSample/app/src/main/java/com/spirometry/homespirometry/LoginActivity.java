@@ -134,11 +134,14 @@ public class LoginActivity extends AppCompatActivity {
                     }else {
                         try {
                             String normal_range = jObj.getJSONObject("user").getString("normal_range");
-                            Log.d("sendPatientId", "is patient invalid: " + error);
-                            String[] minMaxRanges = normal_range.split(",");
-                            mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
-                            mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
-                            Toast.makeText(getApplicationContext(), minMaxRanges[0]+" "+minMaxRanges[1], Toast.LENGTH_LONG).show();
+                            if (normal_range != "null") {
+                                Log.d("normalRange", normal_range);
+                                Log.d("sendPatientId", "is patient invalid: " + error);
+                                String[] minMaxRanges = normal_range.split(",");
+                                mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
+                                mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
+                                Toast.makeText(getApplicationContext(), minMaxRanges[0] + " " + minMaxRanges[1], Toast.LENGTH_LONG).show();
+                            }
                             // do stuff
                             // set patient id
                             mBundleData.setPatient_id(truePassword);
