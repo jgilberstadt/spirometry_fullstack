@@ -144,7 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             // do stuff
                             // set patient id
-                            mBundleData.setPatient_id(truePassword);
+                            mBundleData.setPatient_id(patientIdView.getText().toString());
+                            Log.d("patient_id", patientIdView.getText().toString());
                             Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
                             //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
                             Log.d(TAG, "bundle-data" +mBundleData);

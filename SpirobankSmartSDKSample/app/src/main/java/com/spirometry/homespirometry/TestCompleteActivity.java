@@ -92,8 +92,11 @@ public class TestCompleteActivity extends AppCompatActivity {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
 //        Log.d("hyunrae", Arrays.toString(mBundleData.getSurveyAnswerArr()));
+        // for testing purpose. When deployed, comment the following hardcode flags.
+        /*
         mBundleData.setVarianceExists(1);
         mBundleData.setSymptomsExist(0);
+        */
         // should handle the case of normal test vs. repeated test
         if (mBundleData.getVarianceExists()==1) {
             if (mBundleData.getSymptomsExist()==1) {
@@ -200,7 +203,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                     Calendar minDate = Calendar.getInstance();
                     Calendar maxDate = Calendar.getInstance();
                     if (dayFinishedTime == Calendar.SUNDAY) {
-                        Log.d(TAG, "Day of Weekk" + getTestFinsihedTime.DAY_OF_WEEK);
+                        Log.d(TAG, "Day of Week" + getTestFinsihedTime.DAY_OF_WEEK);
                         minDate.add(Calendar.DAY_OF_YEAR, +7);
                         long sevenDaysAhead = minDate.getTimeInMillis();
                         maxDate.add(Calendar.DAY_OF_YEAR, +13);
@@ -480,8 +483,12 @@ public class TestCompleteActivity extends AppCompatActivity {
     }
 
     public void createFile(String param, boolean addSurvey) {
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         final File file_path = getFilesDir();
-        final String file_name = param + "_" + getManufacturerSerialNumber();
+        final String file_name = param + "_" + getManufacturerSerialNumber() + "_" + sdf.format(currentTime);
+
+        Log.d("upload_filename pos 1", file_name);
 
         file = new File(file_path, file_name);
 
@@ -516,8 +523,6 @@ public class TestCompleteActivity extends AppCompatActivity {
 
             line += mBundleData.getPatient_id();
             line += "!";
-            Date currentTime = Calendar.getInstance().getTime();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             line += sdf.format(currentTime);
             line += "!";
             if(mBundleData.getVarianceExists()==1) {
@@ -593,12 +598,13 @@ public class TestCompleteActivity extends AppCompatActivity {
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
-        // String php_address = "http://172.16.10.165/spirometry/store_data.php";
 
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
         File selectedFile = new File(selectedFilePath, file_name);
+
+        Log.d("final path:", selectedFile.getPath());
 
         if (!selectedFile.isFile()) {
             return 0;
@@ -614,14 +620,14 @@ public class TestCompleteActivity extends AppCompatActivity {
                 connection.setRequestProperty("Connection", "Keep-Alive");
                 connection.setRequestProperty("ENCTYPE", "multipart/form-data");
                 connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                connection.setRequestProperty("uploaded_file", selectedFilePath);
+                connection.setRequestProperty("uploaded_file", file_name);
 
                 //creating new dataoutputstream
                 dataOutputStream = new DataOutputStream(connection.getOutputStream());
 
                 //writing bytes to data outputstream
                 dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-                dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + selectedFilePath + "\"" + lineEnd);
+                dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + file_name + "\"" + lineEnd);
 
                 dataOutputStream.writeBytes(lineEnd);
 
