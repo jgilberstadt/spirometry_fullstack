@@ -5,9 +5,13 @@ package com.spirometry.homespirometry;
     Once connected, the user will be taken to PulseActivity for measurement.
  */
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +56,8 @@ public class PulseConnectingActivity extends AppCompatActivity{
     Button retryButton;
     ProgressBar progressBar;
 
+    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 456;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +82,10 @@ public class PulseConnectingActivity extends AppCompatActivity{
         // Register callback. See below
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+        }
+
         try {
             // Get the key in the assets folder that allows us to use the iHealth SDK. When given a new key, you must upload it to the assets folder and update below accordingly.
             InputStream is = getAssets().open("com_spirometry_homespirometry_android.pem");
@@ -86,13 +96,30 @@ public class PulseConnectingActivity extends AppCompatActivity{
             // authenticate with the key
             boolean isPass = iHealthDevicesManager.getInstance().sdkAuthWithLicense(buffer);
             Log.i(TAG, "isPass:    " + isPass);
-            // Start discovery for device. PO3 is the device type of a pulse oximeter.
+
             iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
         } catch (IOException e) {
             Log.d(TAG, e.toString());
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_COARSE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    // Start discovery for device. PO3 is the device type of a pulse oximeter.
+                    iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+                    Log.i(TAG, "Request Permission Pass");
+                } else {
+                    // Alert the user that this application requires the location permission to perform the scan.
+                    Log.i(TAG, "Request Permission Fail");
+                }
+            }
+        }
     }
 
     private iHealthDevicesCallback miHealthDevicesCallback = new iHealthDevicesCallback() {

@@ -114,7 +114,7 @@ public class Q4Activity extends AppCompatActivity {
                             mBundleData.setSurveyAnswers(16 + i, 0);
                         }
                         mBundleData.setQuestionStates(3, -1);
-                        Intent intent = new Intent(Q4Activity.this, Q3Activity.class);
+                        Intent intent = new Intent(Q4Activity.this, TestCompleteActivity.class);
                         intent.putExtra("bundle-data", mBundleData);
                         startActivity(intent);
                     }
