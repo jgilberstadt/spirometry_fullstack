@@ -82,9 +82,6 @@ public class PulseConnectingActivity extends AppCompatActivity{
         // Register callback. See below
         iHealthDevicesManager.getInstance().registerClientCallback(miHealthDevicesCallback);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
-        }
 
         try {
             // Get the key in the assets folder that allows us to use the iHealth SDK. When given a new key, you must upload it to the assets folder and update below accordingly.
@@ -97,7 +94,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
             boolean isPass = iHealthDevicesManager.getInstance().sdkAuthWithLicense(buffer);
             Log.i(TAG, "isPass:    " + isPass);
 
-            iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+            }
         } catch (IOException e) {
             Log.d(TAG, e.toString());
             e.printStackTrace();
