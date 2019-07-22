@@ -45,10 +45,13 @@
         <activity android:name=".BlowActivity2" />
 
         <activity android:name=".Q1Activity" />
+        <activity android:name=".Q1SubActivity" />
         <activity android:name=".Q2Activity" />
+        <activity android:name=".Q2SubActivity" />
         <activity android:name=".Q4Activity" />
-
+        <activity android:name=".Q3SubActivity" />
         <activity android:name=".Q3Activity" />
+        <activity android:name=".Q4SubActivity" />
         <activity android:name=".TestCompleteActivity">
 
             </activity>

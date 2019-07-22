@@ -36,21 +36,19 @@
             android:padding="20dp"
             android:text="@string/q4"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="28sp" />
+            android:textSize="42sp" />
 
         <LinearLayout
             android:id="@+id/initialRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/window_navigation"
-            android:layout_below="@+id/Q3text"
             android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/initialRadioGroup"
                 android:layout_width="match_parent"
-                android:layout_height="480dp"
-                android:layout_marginTop="30dp"
+                android:layout_height="275dp"
                 android:orientation="vertical">
 
                 <com.spirometry.homespirometry.classes.ToggleableRadioButton

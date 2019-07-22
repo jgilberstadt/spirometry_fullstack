@@ -10,7 +10,7 @@
 
     <string name="login_message">Welcome to the Home Spirometry study. Please enter the password to proceed. </string>
 
-    <string name="incorrect_password">If you do not remember the password, please contact (911) 911-9111 for the correct password</string>
+    <string name="incorrect_password">If you do not remember the password, please contact your Enrolling Center.</string>
 
     <string name="spirometer_not_connected">The spirometer is not connected.\n\nPlease make sure that the spirometer has sufficient battery and is turned on. </string>
 
@@ -20,18 +20,18 @@
 
     <string name="pulse_instruction">You will be placing a pulse oximeter over either your index or middle finger for 60 seconds. The 60 seconds will begin once the device begins to record your heart rate. Please push and release the button on the pulse oximeter and press next. </string>
 
-    <string name="q1">Do you have any of the following?\nA NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea? Yes or No</string>
+    <string name="q1">Do you have any of the following?\nA NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea? Please choose one below.</string>
 
-    <string name="q2">Do you have any of the following?\nA NEW cough, or cough now producing sputum/mucus, new wheezing or new shortness of breath? Yes or No</string>
+    <string name="q2">Do you have any of the following?\nA NEW cough, or cough now producing sputum/mucus, new wheezing or new shortness of breath? Please choose one below.</string>
 
-    <string name="q3">Do you have any of the following?\nA NEW generalized weakness, lightheadedness or dizziness? Yes or No</string>
+    <string name="q3">Do you have any of the following?\nA NEW generalized weakness, lightheadedness or dizziness? Please choose one below.</string>
 
-    <string name="q4">Do you have any of the following?\nA NEW shortness of breath at rest, on exertion or when lying flat, new shortness of breath that awakens you from sleep or new swelling in your feet or legs? Yes or No</string>
+    <string name="q4">Do you have any of the following?\nA NEW shortness of breath at rest, on exertion or when lying flat, new shortness of breath that awakens you from sleep or new swelling in your feet or legs? Please choose one below.</string>
 
     <string name="ifYes"> Check each symptom that is NEW: </string>
 
     <string name="test_complete">Thank you. \n\nYour next appointment is scheduled for:</string>
-    <string name="you_will_be_contacted">Testing and Questionnaire Complete. \n \n Your Enrolling Center will contact you for follow up instructions.</string>
+    <string name="you_will_be_contacted">Testing and Questionnaire Complete. \n \n Your Enrolling Center will contact you for follow up instructions. Please contact your Enrolling Center if you do not hear back within 4 hours.</string>
     <string name="repeat_for_4_days">Please repeat all tests and questionnaire between 6am and noon for the next 4 days.</string>
 
     <string name="title_activity_po3">PO3</string>
@@ -57,5 +57,8 @@
     <string name="Q4Activity"> Q4Activity help page. Come back and fill this out </string>
     <string name="testingPeriodDay">1</string>
 
+    <string name="questionSkip">Please complete all questions before continuing.</string>
+    <string name="continueButton">Continue</string>
 
+    <string name="q1Back">You are at the beginning of the questionnaire.</string>
 </resources>

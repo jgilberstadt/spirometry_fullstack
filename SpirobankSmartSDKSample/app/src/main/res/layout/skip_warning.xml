@@ -17,49 +17,22 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="44sp"
         />
+
     <TextView
-        android:id="@+id/txt_dia"
+        android:id="@+id/q1Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="30dp"
-        android:text="Are you sure you want to skip the question?"
+        android:text="@string/questionSkip"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="30sp"
-        />
+        android:textSize="30sp" />
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/contBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
+        android:text="@string/continueButton" />
 
-        >
-
-        <Button
-            android:id="@+id/btn_no"
-            android:layout_width="140dp"
-            android:layout_height="70dp"
-            android:layout_marginRight="50dp"
-            android:clickable="true"
-            android:text="NO"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btn_yes"
-            android:layout_width="140dp"
-            android:layout_height="70dp"
-            android:clickable="true"
-            android:text="YES"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#000000"
-            android:textSize="30dp" />
-
-    </LinearLayout>
 
 </LinearLayout>
