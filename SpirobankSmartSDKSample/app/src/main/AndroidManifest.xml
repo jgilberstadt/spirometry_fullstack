@@ -41,7 +41,9 @@
 
         </activity>
 
-        <activity android:name=".BlowActivity" />
+        <activity android:name=".BlowActivity">
+
+        </activity>
         <activity android:name=".BlowActivity2" />
 
         <activity android:name=".Q1Activity" />
@@ -64,7 +66,9 @@
 
         </activity>
 
-        <activity android:name=".SpirometerInstructionActivity"></activity>
+        <activity android:name=".SpirometerInstructionActivity">
+
+        </activity>
         <activity android:name=".ApplicationChooseActivity"></activity>
     </application>
 
