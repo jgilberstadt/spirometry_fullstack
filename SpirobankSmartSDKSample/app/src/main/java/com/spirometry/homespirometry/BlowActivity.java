@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.PulseInstructionActivity;
 import com.spirometry.spirobanksmartsdk.Device;
@@ -22,7 +21,6 @@ import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
-import com.spirometry.spirobanksmartsdk.Patient;
 import com.spirometry.spirobanksmartsdk.ResultsFvc;
 import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 
@@ -46,18 +44,9 @@ public class BlowActivity extends AppCompatActivity {
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private NewParcelable mBundleData;
 
-    Patient patient;
-
     Context myContext;
     final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
-    String deviceInfoStringAddress;
-    String deviceInfoStringName;
-    String deviceInfoStringProtocol;
-    String deviceInfoStringSerialNumber;
-    String deviceInfoStringAdvertisementDataName;
-    ArrayList<String> deviceInfoArray = new ArrayList<>();
-    ArrayList<String> arr;
     String blowDeviceResultArray = "";
     String blowDeviceResultArrayPefFev1 = "";
 
@@ -70,9 +59,6 @@ public class BlowActivity extends AppCompatActivity {
     int numBlows = 0;
     int value = numBlows + 1;
     private int messageNumber = 7;
-    private int messageNumberFvc = 6;
-
-    private String patient_id = "000000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,21 +123,6 @@ public class BlowActivity extends AppCompatActivity {
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            //Log.d(TAG, "deviceDiscovered: " + deviceInfo.getAddress());
-            //peter: this is a hardCode. I was first told to focus on connecting only one device using whatever I want to implement incluing Hardcoding.
-            //the if statement looks for the device's address number so 00:26:33:CD:28:F6 is a Z008182 address.
-
-            /*
-            if (deviceInfo.getAddress().matches("00:26:33:CD:28:EB")) {
-                //if you find the device, then send the bluetooth information over.
-                Log.d(TAG, "When HardCode Device Matches: " + deviceInfo);
-
-                handleUpdateListScan.post(runUpdateListScan); // I need this in next activity to connect
-            } else {
-                Log.d(TAG, "Device Not Found: " + deviceInfo.getAdvertisementDataName());
-            }
-            */
-
             handleUpdateListScan.post(runUpdateListScan);
         }
 
@@ -162,8 +133,6 @@ public class BlowActivity extends AppCompatActivity {
             infoList.add("devConnected");
             deviceManager.stopDiscovery();
             currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
-            // handleUpdateInfo.post(runUpdateInfo);
-            //  if (dialogConnection != null) dialogConnection.dismiss();
         }
 
         @Override
@@ -171,30 +140,22 @@ public class BlowActivity extends AppCompatActivity {
             infoDisconnect = "Disconnected \n" + device.getDeviceInfo().getAdvertisementDataName();
             deviceManager.startDiscovery(BlowActivity.this);
             currDevice = null;
-
-            //  handleUpdateInfo.post(runUpdateInfo);
         }
 
         @Override
         public void deviceConnectionFailed(DeviceInfo deviceInfo) {
             currDevice = null;
             infoDisconnect = deviceInfo.getAdvertisementDataName() + " Connection Fail";
-            //  handleUpdateInfo.post(runUpdateInfo);
-            //  if (dialogConnection != null) dialogConnection.dismiss();
         }
 
         @Override
         public void bluetoothLowEnergieIsNotSupported() {
             infoDisconnect = "Bluetooth Low Energie Is Not Supported";
-            //  handleUpdateInfo.post(runUpdateInfo);
-            //   if (dialogConnection != null) dialogConnection.dismiss();
         }
 
         @Override
         public void bluetoothIsPoweredOFF() {
             infoDisconnect = "Bluetooth Is Powered OFF";
-            // handleUpdateInfo.post(runUpdateInfo);
-            //  if (dialogConnection != null) dialogConnection.dismiss();
             deviceManager.turnOnBluetooth(myContext);
         }
 
@@ -202,7 +163,6 @@ public class BlowActivity extends AppCompatActivity {
         public void accessCoarseLocationPermissionRequired() {
             //Android M runtime authorization
             infoDisconnect = "Access Coarse Location Permission Required";
-            //handleUpdateInfo.post(runUpdateInfo);
 
             //For this request you need to implement callback
             deviceManager.requestCoarseLocationPermission(BlowActivity.this, PERMISSION_REQUEST_COARSE_LOCATION);
@@ -220,7 +180,6 @@ public class BlowActivity extends AppCompatActivity {
     DeviceCallback deviceCallback = new DeviceCallback() {
         @Override
         public void flowUpdated(Device device, float flow, int stepVolume, boolean isFirstPackage) {
-            //Log.d("hyunrae", "a");
             value = numBlows;
             handlerVisibilityChange.post(runVisibilityChange);
         }
@@ -246,7 +205,7 @@ public class BlowActivity extends AppCompatActivity {
 
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
-            Log.d(TAG, "wow: " + String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100));
+            Log.d(TAG, "wow: " + resultsPefFev1.getPef_cLs() * 60 / (float) 100);
             currDevice.stopTest(getApplicationContext());
         }
 
@@ -259,8 +218,6 @@ public class BlowActivity extends AppCompatActivity {
             messageNumber--;
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
-            int overallNumBlows = numBlows -1;
-
             String pef = String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100);
             String fev1 = String.valueOf(resultsFvc.getFev1_cL() / (float) 100);
             String fvc = String.valueOf(resultsFvc.getFvc_cL() / (float) 100);
@@ -272,21 +229,7 @@ public class BlowActivity extends AppCompatActivity {
             String resultArray = pef + " " + fev1 + " " + fvc + " " + fev1_fvc + " " + fev6 + " " + fef2575 + "\n";
             blowDeviceResultArray += resultArray;
 
-            /*
-            Log.d("overallNumBlows",  "" + overallNumBlows);
-            Log.d("1pef",  "" + resultArray[0]);
-            Log.d("fev1",  "" + resultArray[1]);
-            Log.d("fvc",  "" + resultArray[2]);
-            Log.d("fev1_fvc",  "" + resultArray[3]);
-            Log.d("fev6",  "" + resultArray[4]);
-            Log.d("fef2575",  "" + resultArray[5]);
-            */
-          //  Log.d("resultArray",  "" + resultArray[3]);
-
-
-            //mBundleData.setBlowDataArray(resultArray);
-
-            Log.d(TAG, "wow2: " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100));
+            Log.d(TAG, "wow2: " + resultsFvc.getPef_cLs() * 60 / (float) 100);
 
             if(numBlows <6) {
                 handlerWaitandStartFvc.post(runWaitandStartFvc); // the thing here is that what happen if the data upload doesn't upload?
@@ -299,8 +242,6 @@ public class BlowActivity extends AppCompatActivity {
 
         @Override
         public void testRestarted(Device device) {
-            //Log.d("hyunrae", "dddd");
-            //Log.d("peter", " " + numBlows);
             if(numBlows >=6) {
                 currDevice.stopTest(getApplicationContext());
                 Log.d("done with all 7 tests", "done with all 7 tests");
@@ -337,8 +278,10 @@ public class BlowActivity extends AppCompatActivity {
     Runnable runTextViewNumberChange = new Runnable() {
         @Override
         public void run() {
-            blowMessage.setText("You Have " + messageNumber + " Blows Left");
-            numberCount.setText("" + numBlows);
+            String blowMessageString = "You have " + messageNumber + " Blows Left";
+            String numberCountString = "" + numBlows;
+            blowMessage.setText(blowMessageString);
+            numberCount.setText(numberCountString);
         } //+++
     };
 

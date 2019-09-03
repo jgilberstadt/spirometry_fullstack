@@ -19,18 +19,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ihealth.communication.control.Po3Control;
-import com.ihealth.communication.control.PoProfile;
 import com.ihealth.communication.manager.DiscoveryTypeEnum;
 import com.ihealth.communication.manager.iHealthDevicesCallback;
 import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.ihealth.communication.manager.iHealthDevicesUpgradeManager;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
+
 import com.spirometry.homespirometry.BuildConfig;
-import com.spirometry.homespirometry.R;
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 

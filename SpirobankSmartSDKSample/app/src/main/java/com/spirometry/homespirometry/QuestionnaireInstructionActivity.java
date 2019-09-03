@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.homespirometry.R;
 import com.spirometry.homespirometry.classes.NewParcelable;
 
 /**

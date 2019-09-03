@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.spirometry.homespirometry.R;
-
 import static com.spirometry.homespirometry.AppController.TAG;
 
 public class AlarmNotificationReciever extends BroadcastReceiver {
@@ -38,9 +36,8 @@ public class AlarmNotificationReciever extends BroadcastReceiver {
                 .setContentInfo("Info")
                 .setContentIntent(pendingIntent);
 
-        notificationManager.notify(1, builder.build());
+        if (notificationManager != null){
+            notificationManager.notify(1, builder.build());
         }
-
-
-
     }
+}

@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
 
 import java.io.BufferedReader;
@@ -59,13 +58,8 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         timeKeepingText = (TextView) findViewById(R.id.timeKeepingText);
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);
 
-     ///   AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this, 0,myIntent, PendingIntent.FLAG_NO_CREATE);
-
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
-        //        0);
-//        alarmManager.cancel(pendingIntent);
 
         //If there is not alarm set, then this will be happening
         if(pendingIntent == null) {
@@ -73,7 +67,8 @@ public class ApplicationChooseActivity extends AppCompatActivity {
             dateTimeRepresent.setTextSize(50);
             dateTimeRepresent.setText(R.string.no_alarm_set);
 
-        }else{
+        }
+        else{
             Log.d(TAG, "Pending Intent");
             FileInputStream fis = null;
             dateTimeRepresent.setTextSize(70);
@@ -337,7 +332,10 @@ public class ApplicationChooseActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
                        0);
-                alarmManager.cancel(pendingIntent);//important
+                if (alarmManager != null){
+                    alarmManager.cancel(pendingIntent);//important
+                }
+
                 pendingIntent.cancel();//important
 
                 //This is for Display of the Finalized Alarm Time
@@ -355,7 +353,8 @@ public class ApplicationChooseActivity extends AppCompatActivity {
                 } else { minuteString = Integer.toString(minute); }
                 timeRepresent = (hours[timePicker.getCurrentHour()] + ":" + minuteString + " " + AM_PM);
                 dateTimeRepresent.setTextSize(70);
-                dateTimeRepresent.setText(dateRepresent + " " + timeRepresent);
+                String dateTimeString = dateRepresent + " " + timeRepresent;
+                dateTimeRepresent.setText(dateTimeString);
 
                 finalDate.clear();
                 finalDate.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
@@ -386,7 +385,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
                 }
 
                 //This will set a new pendingIntent Time
-                startAlarm(true);
+                startAlarm();
 
                 dialog.dismiss();
             }
@@ -395,7 +394,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void startAlarm(boolean isNotification) {
+    private void startAlarm() {
         // finalDate.clear();
         Log.d(TAG, "Start Alarm!: ");
         AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -403,10 +402,10 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(ApplicationChooseActivity.this, 0, myIntent, 0);
 
-        if(isNotification) {
-            Log.d(TAG, "Start!!! ");
-            Log.d(TAG,"start1"+  String.valueOf(finalDate));
-            Log.d(TAG, "start2" +  String.valueOf(finalDate.getTimeInMillis()));
+        Log.d(TAG, "Start!!! ");
+        Log.d(TAG,"start1"+ finalDate);
+        Log.d(TAG, "start2" + finalDate.getTimeInMillis());
+        if (manager != null){
             manager.set(AlarmManager.RTC_WAKEUP, finalDate.getTimeInMillis(), pendingIntent);
         }
     }
