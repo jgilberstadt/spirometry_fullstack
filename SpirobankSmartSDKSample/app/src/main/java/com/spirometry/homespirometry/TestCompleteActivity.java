@@ -113,7 +113,7 @@ public class TestCompleteActivity extends AppCompatActivity {
                 SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
                 int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                if(testingPeriodDay<4) {
+                if(testingPeriodDay<3) {
                     editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
                     editor.apply();
                     startSurveyAlarm();

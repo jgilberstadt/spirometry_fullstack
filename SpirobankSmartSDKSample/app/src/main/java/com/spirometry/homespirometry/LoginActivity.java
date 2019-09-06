@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendPatientId(final EditText patientIdView) {
         final String patientId = patientIdView.getText().toString();
+        Log.d("input patient id:", patientId);
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -205,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        checkSurvey(file.getPath(), file.getName(), "http://10.28.16.164/spirometry/store_data_plain.php");
+                        checkSurvey(file.getPath(), file.getName(), "http://ecp-app-hsdev1.nrg.wustl.edu/spirometry/store_data_plain.php");
                     }
                 }).start();
             }
