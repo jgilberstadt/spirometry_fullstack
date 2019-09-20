@@ -84,6 +84,10 @@ public class TestCompleteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Boolean mode = false;
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_complete);
 
@@ -98,210 +102,211 @@ public class TestCompleteActivity extends AppCompatActivity {
         mBundleData.setSymptomsExist(0);
         */
         // should handle the case of normal test vs. repeated test
-        if (mBundleData.getVarianceExists()==1) {
-            if (mBundleData.getSymptomsExist()==1) {
-                varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
-                varianceAndSymptoms.setVisibility(View.VISIBLE);
+        if(mode){
+            if (mBundleData.getVarianceExists()==1) {
+                if (mBundleData.getSymptomsExist()==1) {
+                    varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
+                    varianceAndSymptoms.setVisibility(View.VISIBLE);
 
-                createFile("yesVarianceYesSymptoms", true);
-            } else {
-                varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
-                varianceAndNoSymptoms.setVisibility(View.VISIBLE);
-                //TODO: set notifications for the next 4 days here
-                // get value from shared preference
+                    createFile("yesVarianceYesSymptoms", true);
+                } else {
+                    varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
+                    varianceAndNoSymptoms.setVisibility(View.VISIBLE);
+                    //TODO: set notifications for the next 4 days here
+                    // get value from shared preference
 
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                if(testingPeriodDay<3) {
-                    editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
-                    editor.apply();
-                    startSurveyAlarm();
-                }else{
-                    editor.putInt(getString(R.string.testingPeriodDay), 0);
-                    editor.apply();
+                    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                    int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    if(testingPeriodDay<3) {
+                        editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
+                        editor.apply();
+                        startSurveyAlarm();
+                    }else{
+                        editor.putInt(getString(R.string.testingPeriodDay), 0);
+                        editor.apply();
+                    }
+                    createFile("yesVarianceNoSymptoms", true);
                 }
-                createFile("yesVarianceNoSymptoms", true);
-            }
-        } else {
-            nextAppointment = (TextView) findViewById(R.id.nextAppointment);
-            nextAppointment.setVisibility(View.VISIBLE);
-            dateRepresent = (TextView) findViewById(R.id.dateRepresent);
-            timeRepresent = (TextView) findViewById(R.id.timeRepresent);
-            dateButton = (Button) findViewById(R.id.dateButton);
-            changeAppointment = (Button) findViewById(R.id.changeAppointment);
+            } else {
+                nextAppointment = (TextView) findViewById(R.id.nextAppointment);
+                nextAppointment.setVisibility(View.VISIBLE);
+                dateRepresent = (TextView) findViewById(R.id.dateRepresent);
+                timeRepresent = (TextView) findViewById(R.id.timeRepresent);
+                dateButton = (Button) findViewById(R.id.dateButton);
+                changeAppointment = (Button) findViewById(R.id.changeAppointment);
 
-            //Get Test Finished Time
-            final Calendar getTestFinsihedTime = Calendar.getInstance();
-            final int dayFinishedTime = getTestFinsihedTime.get(Calendar.DAY_OF_WEEK);
-            Log.d(TAG, "Day of Week" + dayFinishedTime);
-            Log.d(TAG, "Calendar Day of the Week" + Calendar.SATURDAY);
+                //Get Test Finished Time
+                final Calendar getTestFinsihedTime = Calendar.getInstance();
+                final int dayFinishedTime = getTestFinsihedTime.get(Calendar.DAY_OF_WEEK);
+                Log.d(TAG, "Day of Week" + dayFinishedTime);
+                Log.d(TAG, "Calendar Day of the Week" + Calendar.SATURDAY);
 
-            if (dayFinishedTime != Calendar.SATURDAY) {
-                Log.d(TAG, "Day of Week" + getTestFinsihedTime.DAY_OF_WEEK);
+                if (dayFinishedTime != Calendar.SATURDAY) {
+                    Log.d(TAG, "Day of Week" + getTestFinsihedTime.DAY_OF_WEEK);
 
 //            getTestFinsihedTime.add( Calendar.DATE, 1 );
-            }
+                }
 
-            java.util.Date currentTime = getTestFinsihedTime.getTime();
-            Log.d(TAG, "currentTime" + currentTime);
+                java.util.Date currentTime = getTestFinsihedTime.getTime();
+                Log.d(TAG, "currentTime" + currentTime);
 
 
-            //Log.d("What time is it?"  + getTestFinsihedTime);
+                //Log.d("What time is it?"  + getTestFinsihedTime);
 
-            //Get current date time with Calendar()
-            Calendar weekAddedCal = Calendar.getInstance();
-            weekAddedCal.add(Calendar.DATE, 7); // Adding a week to current time to set a appointment date
+                //Get current date time with Calendar()
+                Calendar weekAddedCal = Calendar.getInstance();
+                weekAddedCal.add(Calendar.DATE, 7); // Adding a week to current time to set a appointment date
 
-            int minutes = weekAddedCal.get(Calendar.MINUTE);
-            int mod = minutes % 15;
-            weekAddedCal.add(Calendar.MINUTE, mod < 8 ? -mod : (15 - mod)); //mod < 8 ? -mod : (15-mod)
-            //If the equality is true, then do the first one (number before colon)
-            //if the equality is not right, then do the second one (number after the colon)
+                int minutes = weekAddedCal.get(Calendar.MINUTE);
+                int mod = minutes % 15;
+                weekAddedCal.add(Calendar.MINUTE, mod < 8 ? -mod : (15 - mod)); //mod < 8 ? -mod : (15-mod)
+                //If the equality is true, then do the first one (number before colon)
+                //if the equality is not right, then do the second one (number after the colon)
 
-            Log.d("minutes", Integer.toString(minutes));
+                Log.d("minutes", Integer.toString(minutes));
 
-            SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
-            String formattedDate = df.format(weekAddedCal.getTime());
-            Log.d(TAG, " dddd" + formattedDate);
-            dateRepresent.setText(formattedDate);
+                SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+                String formattedDate = df.format(weekAddedCal.getTime());
+                Log.d(TAG, " dddd" + formattedDate);
+                dateRepresent.setText(formattedDate);
 
-            SimpleDateFormat formatHour = new SimpleDateFormat("hh:mm");
-            String formattedTime = formatHour.format(weekAddedCal.getTime());
+                SimpleDateFormat formatHour = new SimpleDateFormat("hh:mm");
+                String formattedTime = formatHour.format(weekAddedCal.getTime());
 
-            if (formattedTime.charAt(0) == '0') {
-                formattedTime = formattedTime.substring(1);
-            }
+                if (formattedTime.charAt(0) == '0') {
+                    formattedTime = formattedTime.substring(1);
+                }
 
-            if (weekAddedCal.get(Calendar.HOUR_OF_DAY) < 13) {
-                timeRepresent.setText(formattedTime + " " + "AM");
-            } else {
-                timeRepresent.setText(formattedTime + " " + "PM");
-            }
+                if (weekAddedCal.get(Calendar.HOUR_OF_DAY) < 13) {
+                    timeRepresent.setText(formattedTime + " " + "AM");
+                } else {
+                    timeRepresent.setText(formattedTime + " " + "PM");
+                }
 
-            finalDate = weekAddedCal;
+                finalDate = weekAddedCal;
 
-            Log.d(TAG, "finalDate Initial " + finalDate);
+                Log.d(TAG, "finalDate Initial " + finalDate);
 
-            changeAppointment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                changeAppointment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    final Dialog dialog = new Dialog(TestCompleteActivity.this, R.style.Theme_Dialog);
-                    //dialog.getDatePicker().setMaxDate(new Date().getTime());
-                    dialog.setContentView(R.layout.date_time_picker);
+                        final Dialog dialog = new Dialog(TestCompleteActivity.this, R.style.Theme_Dialog);
+                        //dialog.getDatePicker().setMaxDate(new Date().getTime());
+                        dialog.setContentView(R.layout.date_time_picker);
 
-                    dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
+                        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
+                        datePicker = (DatePicker) dialog.findViewById(R.id.datePicker);
+                        Calendar minDate = Calendar.getInstance();
+                        Calendar maxDate = Calendar.getInstance();
+                        if (dayFinishedTime == Calendar.SUNDAY) {
+                            Log.d(TAG, "Day of Week" + getTestFinsihedTime.DAY_OF_WEEK);
+                            minDate.add(Calendar.DAY_OF_YEAR, +7);
+                            long sevenDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +13);
+                            long thirteenDayAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(sevenDaysAhead);
+                            datePicker.setMaxDate(thirteenDayAhead);
+                            //datePicker.setMinDate(System.currentTimeMillis()-1000);
+                        } else if (dayFinishedTime == Calendar.MONDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +6);
+                            long sixDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +12);
+                            long twelveDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(sixDaysAhead);
+                            datePicker.setMaxDate(twelveDaysAhead);
+                        } else if (dayFinishedTime == Calendar.TUESDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +5);
+                            long fiveDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +11);
+                            long elevenDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(fiveDaysAhead);
+                            datePicker.setMaxDate(elevenDaysAhead);
+                        } else if (dayFinishedTime == Calendar.WEDNESDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +4);
+                            long fourDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +10);
+                            long tenDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(fourDaysAhead);
+                            datePicker.setMaxDate(tenDaysAhead);
+                        } else if (dayFinishedTime == Calendar.THURSDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +3);
+                            long threeDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +9);
+                            long nineDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(threeDaysAhead);
+                            datePicker.setMaxDate(nineDaysAhead);
+                        } else if (dayFinishedTime == Calendar.FRIDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +2);
+                            long twoDaysAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +8);
+                            long eightDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(twoDaysAhead);
+                            datePicker.setMaxDate(eightDaysAhead);
+                        } else if (dayFinishedTime == Calendar.SATURDAY) {
+                            minDate.add(Calendar.DAY_OF_YEAR, +1);
+                            long oneDayAhead = minDate.getTimeInMillis();
+                            maxDate.add(Calendar.DAY_OF_YEAR, +7);
+                            long sevenDaysAhead = maxDate.getTimeInMillis();
+                            datePicker.setMinDate(oneDayAhead);
+                            datePicker.setMaxDate(sevenDaysAhead);
                         }
-                    });
-
-                    timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
-                    datePicker = (DatePicker) dialog.findViewById(R.id.datePicker);
-                    Calendar minDate = Calendar.getInstance();
-                    Calendar maxDate = Calendar.getInstance();
-                    if (dayFinishedTime == Calendar.SUNDAY) {
-                        Log.d(TAG, "Day of Week" + getTestFinsihedTime.DAY_OF_WEEK);
-                        minDate.add(Calendar.DAY_OF_YEAR, +7);
-                        long sevenDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +13);
-                        long thirteenDayAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(sevenDaysAhead);
-                        datePicker.setMaxDate(thirteenDayAhead);
-                        //datePicker.setMinDate(System.currentTimeMillis()-1000);
-                    } else if (dayFinishedTime == Calendar.MONDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +6);
-                        long sixDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +12);
-                        long twelveDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(sixDaysAhead);
-                        datePicker.setMaxDate(twelveDaysAhead);
-                    } else if (dayFinishedTime == Calendar.TUESDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +5);
-                        long fiveDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +11);
-                        long elevenDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(fiveDaysAhead);
-                        datePicker.setMaxDate(elevenDaysAhead);
-                    } else if (dayFinishedTime == Calendar.WEDNESDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +4);
-                        long fourDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +10);
-                        long tenDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(fourDaysAhead);
-                        datePicker.setMaxDate(tenDaysAhead);
-                    } else if (dayFinishedTime == Calendar.THURSDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +3);
-                        long threeDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +9);
-                        long nineDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(threeDaysAhead);
-                        datePicker.setMaxDate(nineDaysAhead);
-                    } else if (dayFinishedTime == Calendar.FRIDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +2);
-                        long twoDaysAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +8);
-                        long eightDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(twoDaysAhead);
-                        datePicker.setMaxDate(eightDaysAhead);
-                    } else if (dayFinishedTime == Calendar.SATURDAY) {
-                        minDate.add(Calendar.DAY_OF_YEAR, +1);
-                        long oneDayAhead = minDate.getTimeInMillis();
-                        maxDate.add(Calendar.DAY_OF_YEAR, +7);
-                        long sevenDaysAhead = maxDate.getTimeInMillis();
-                        datePicker.setMinDate(oneDayAhead);
-                        datePicker.setMaxDate(sevenDaysAhead);
-                    }
-                    //  timePicker.
+                        //  timePicker.
 
               /*  maxDate.add(Calendar.DAY_OF_YEAR, +5);
                 long fiveDaysAhead = maxDate.getTimeInMillis();
                 datePicker.setMaxDate(fiveDaysAhead); */
 
-                    dialog.findViewById(R.id.confirmBtn).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                        dialog.findViewById(R.id.confirmBtn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                            Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
-                                    0);
-                            alarmManager.cancel(pendingIntent);//important
-                            pendingIntent.cancel();//important
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                Intent myIntent = new Intent(TestCompleteActivity.this, AlarmNotificationReciever.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
+                                        0);
+                                alarmManager.cancel(pendingIntent);//important
+                                pendingIntent.cancel();//important
 
-                            dateRepresent.setText(months[datePicker.getMonth()] + " " + datePicker.getDayOfMonth() + ", " + datePicker.getYear());
-                            String AM_PM;
-                            if (timePicker.getCurrentHour() < 12) {
-                                AM_PM = "AM";
-                            } else {
-                                AM_PM = "PM";
-                            }
-                            int minute = timePicker.getCurrentMinute();
-                            String minuteString;
-                            if (minute < 10) {
-                                minuteString = "0" + minute;
-                            } else {
-                                minuteString = Integer.toString(minute);
-                            }
-                            timeRepresent.setText(hours[timePicker.getCurrentHour()] + ":" + minuteString + " " + AM_PM);
-                            finalDate.clear();
-                            finalDate.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+                                dateRepresent.setText(months[datePicker.getMonth()] + " " + datePicker.getDayOfMonth() + ", " + datePicker.getYear());
+                                String AM_PM;
+                                if (timePicker.getCurrentHour() < 12) {
+                                    AM_PM = "AM";
+                                } else {
+                                    AM_PM = "PM";
+                                }
+                                int minute = timePicker.getCurrentMinute();
+                                String minuteString;
+                                if (minute < 10) {
+                                    minuteString = "0" + minute;
+                                } else {
+                                    minuteString = Integer.toString(minute);
+                                }
+                                timeRepresent.setText(hours[timePicker.getCurrentHour()] + ":" + minuteString + " " + AM_PM);
+                                finalDate.clear();
+                                finalDate.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
 
-                            //file name called savedName , and MODE_PRIVATE meaning only this application can access
-                            // SharedPreferences sharedP = getSharedPreferences("savedName", Context.MODE_PRIVATE);
+                                //file name called savedName , and MODE_PRIVATE meaning only this application can access
+                                // SharedPreferences sharedP = getSharedPreferences("savedName", Context.MODE_PRIVATE);
 
-                            setDefaults("finalDateStore", finalDate.getTimeInMillis(), getApplicationContext());
-                            getDefaults("finalDateStore", getApplicationContext());
-                            Log.d(TAG, "getDefaults" + getDefaults("finalDateStore", getApplicationContext()));
-                            Long temp = getDefaults("finalDateStore", getApplicationContext());
-                            Date myDate = new Date(temp);
-                            Log.d(TAG, "getDefaults " + "Date" + myDate);
-                            Toast.makeText(getApplicationContext(), "saved" + myDate, Toast.LENGTH_SHORT).show();
+                                setDefaults("finalDateStore", finalDate.getTimeInMillis(), getApplicationContext());
+                                getDefaults("finalDateStore", getApplicationContext());
+                                Log.d(TAG, "getDefaults" + getDefaults("finalDateStore", getApplicationContext()));
+                                Long temp = getDefaults("finalDateStore", getApplicationContext());
+                                Date myDate = new Date(temp);
+                                Log.d(TAG, "getDefaults " + "Date" + myDate);
+                                Toast.makeText(getApplicationContext(), "saved" + myDate, Toast.LENGTH_SHORT).show();
 
 
-                            //gives object that can edit to this file
+                                //gives object that can edit to this file
             /*            SharedPreferences.Editor editor = sharedP.edit();
                         editor.putLong("saved" , finalDate.getTimeInMillis());
                         editor.apply();
@@ -316,57 +321,68 @@ public class TestCompleteActivity extends AppCompatActivity {
 
 
 //                        Toast.makeText(getApplicationContext(), "saved" + myDate, Toast.LENGTH_SHORT).show();
-                            //   Log.d(TAG, "savedDate" + )
+                                //   Log.d(TAG, "savedDate" + )
 
-                            dialog.dismiss();
-                        }
-                    });
+                                dialog.dismiss();
+                            }
+                        });
 
-                    dialog.show();
-                }
-            });
-
-
-            dateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String text = dateRepresent.getText().toString() + " " + timeRepresent.getText().toString();
-                    FileOutputStream fos = null;
-                    Log.d(TAG, "try" + text);
-                    Log.d(TAG, "try" + finalDate);
+                        dialog.show();
+                    }
+                });
 
 
-                    try { //try always gets executed, and then if some kind of error occurs, then go to catch method. (Ah i see this now heh)
-                        fos = openFileOutput(FILE_NAME, MODE_PRIVATE); //Mode_private means that only this spirometer app can access the file, not the other apps
-                        fos.write(text.getBytes()); // now we need to actaully save this outputstream file, officially saves the data
-                        Toast.makeText(getApplicationContext(), "Saved: " + FILE_NAME, // Saved to " + getFilesDir() + "/" +
-                                Toast.LENGTH_LONG).show();
+                dateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) { // this is an exception from for.write(text.getBytes())
-                        e.printStackTrace();
-                    } finally { // this will be executed even if the exception is thrown
-                        if (fos != null) {
-                            try {
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                        String text = dateRepresent.getText().toString() + " " + timeRepresent.getText().toString();
+                        FileOutputStream fos = null;
+                        Log.d(TAG, "try" + text);
+                        Log.d(TAG, "try" + finalDate);
+
+
+                        try { //try always gets executed, and then if some kind of error occurs, then go to catch method. (Ah i see this now heh)
+                            fos = openFileOutput(FILE_NAME, MODE_PRIVATE); //Mode_private means that only this spirometer app can access the file, not the other apps
+                            fos.write(text.getBytes()); // now we need to actaully save this outputstream file, officially saves the data
+                            Toast.makeText(getApplicationContext(), "Saved: " + FILE_NAME, // Saved to " + getFilesDir() + "/" +
+                                    Toast.LENGTH_LONG).show();
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) { // this is an exception from for.write(text.getBytes())
+                            e.printStackTrace();
+                        } finally { // this will be executed even if the exception is thrown
+                            if (fos != null) {
+                                try {
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
+
+
+                        startAlarm(true);
+                        Intent intent = new Intent(TestCompleteActivity.this, FinalPageActivity.class);
+                        intent.putExtra("bundle-data", mBundleData);
+                        TestCompleteActivity.this.startActivity(intent);
+                        finish();
                     }
-
-
-                    startAlarm(true);
-                    Intent intent = new Intent(TestCompleteActivity.this, FinalPageActivity.class);
-                    intent.putExtra("bundle-data", mBundleData);
-                    TestCompleteActivity.this.startActivity(intent);
-                    finish();
-                }
-            });
+                });
+                createFile("noVariance", false);
+            }
+        }
+        else{
+            nextAppointment = (TextView) findViewById(R.id.nextAppointment);
+            nextAppointment.setVisibility(View.VISIBLE);
+            dateButton = (Button) findViewById(R.id.dateButton);
+            dateButton.setVisibility(View.INVISIBLE);
+            changeAppointment = (Button) findViewById(R.id.changeAppointment);
+            changeAppointment.setVisibility(View.INVISIBLE);
             createFile("noVariance", false);
         }
+
 
     }
 
