@@ -122,36 +122,35 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendPatientId(final EditText patientIdView) {
         final String patientId = patientIdView.getText().toString();
-        Log.d("input patient id:", patientId);
+        Log.d("customDebug", patientId);
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response);
+                Log.d("customDebug", "Login Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if(error) {
                         showWrongPasswordToast(patientIdView);
-                    }else {
+                    } else {
                         try {
                             String normal_range = jObj.getJSONObject("user").getString("normal_range");
                             if (normal_range != "null") {
-                                Log.d("normalRange", normal_range);
-                                Log.d("sendPatientId", "is patient invalid: " + error);
+                                Log.d("customDebug", normal_range);
+                                Log.d("customDebug", "is patient invalid: " + error);
                                 String[] minMaxRanges = normal_range.split(",");
                                 mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                                 mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
-                                Toast.makeText(getApplicationContext(), minMaxRanges[0] + " " + minMaxRanges[1], Toast.LENGTH_LONG).show();
+                                Log.d("customDebug", "range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
                             }
-                            // do stuff
                             // set patient id
                             mBundleData.setPatient_id(patientIdView.getText().toString());
-                            Log.d("patient_id", patientIdView.getText().toString());
+                            Log.d("customDebug", patientIdView.getText().toString());
                             String mode = jObj.getJSONObject("user").getString("mode");
                             mBundleData.setMode(Integer.valueOf(mode));
                             Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
                             //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
-                            Log.d(TAG, "bundle-data" +mBundleData);
+                            Log.d("customDebug", "bundle-data" +mBundleData);
                             intent.putExtra("bundle-data", mBundleData);
                             startActivity(intent);
                         } catch (Exception e) {
@@ -162,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                     // JSON error
                     showWrongPasswordToast(patientIdView);
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("customDebug", e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -170,9 +169,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 showWrongPasswordToast(patientIdView);
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("customDebug", "Login Error: " + error.getMessage());
+//                Toast.makeText(getApplicationContext(),
+//                        error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -191,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showWrongPasswordToast(EditText patientIdView) {
         Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
+        Log.d("a", "wrong");
         correctPasswordCheck++;
         if(correctPasswordCheck >=4){
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
