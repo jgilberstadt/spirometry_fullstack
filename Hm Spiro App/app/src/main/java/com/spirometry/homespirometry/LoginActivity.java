@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendPatientId(final EditText patientIdView) {
         final String patientId = patientIdView.getText().toString();
-        Log.d("input patient id:", patientId);
+        Log.d("input IMEI:", patientId);
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             String normal_range = jObj.getJSONObject("user").getString("normal_range");
                             if (normal_range != "null") {
                                 Log.d("normalRange", normal_range);
-                                Log.d("sendPatientId", "is patient invalid: " + error);
+                                Log.d("sendIMEI", "is IMEI invalid: " + error);
                                 String[] minMaxRanges = normal_range.split(",");
                                 mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                                 mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                             // do stuff
                             // set patient id
                             mBundleData.setPatient_id(patientIdView.getText().toString());
-                            Log.d("patient_id", patientIdView.getText().toString());
+                            Log.d("imei", patientIdView.getText().toString());
                             String mode = jObj.getJSONObject("user").getString("mode");
                             mBundleData.setMode(Integer.valueOf(mode));
                             Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
@@ -179,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("patient_id", patientId);
+                params.put("imei_num", patientId);
                 return params;
             }
 
