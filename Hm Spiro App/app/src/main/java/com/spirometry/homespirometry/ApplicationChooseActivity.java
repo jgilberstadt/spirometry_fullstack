@@ -129,7 +129,6 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         Log.d(TAG, "bundle-data" +mBundleData);
         intent.putExtra("bundle-data", mBundleData);
         startActivity(intent);
-
     }
 
     public void changeAppointment(View v) {
@@ -144,6 +143,13 @@ public class ApplicationChooseActivity extends AppCompatActivity {
                 });
         alertDialog.show();
     }
+
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(ApplicationChooseActivity.this, HelpActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
 //
 //        final Dialog dialog = new Dialog(ApplicationChooseActivity.this, R.style.Theme_Dialog);
 //        dialog.setContentView(R.layout.date_time_picker);

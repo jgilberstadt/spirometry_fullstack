@@ -2,6 +2,7 @@ package com.spirometry.homespirometry;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,7 +20,6 @@ public class HelpActivity extends AppCompatActivity {
 
     */
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -30,13 +30,16 @@ public class HelpActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Get name of the previous activity
-        String activityName = getCallingActivity().getShortClassName().toString();
+        String activityName = getCallingActivity().getShortClassName();
         activityName = activityName.substring(1);
         TextView helpTV = (TextView) this.findViewById(R.id.helpTV);
-
         // Need to get the ID of the String in the resources folder
         int stringId = this.getResources().getIdentifier(activityName, "string", this.getPackageName());
-        helpTV.setText(stringId);
+        if(stringId == 0){
+            helpTV.setText(R.string.NoActivityForHelp);
+        } else {
+            helpTV.setText(stringId);
+        }
 
         // Hide HELP button
         Button helpButton = (Button) this.findViewById(R.id.helpButton);
@@ -46,6 +49,4 @@ public class HelpActivity extends AppCompatActivity {
     public void onClickBack(View view) {
         finish();
     }
-
-
 }

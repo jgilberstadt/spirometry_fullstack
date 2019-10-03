@@ -37,17 +37,19 @@
     <string name="title_activity_po3">PO3</string>
     <string name="no_alarm_set">You Currently Do Not Have Any Appointment</string>
 
-
+    <!--    Help Page Strings-->
     <string name="LoginActivity"> LoginActivity help page. Come back and fill this out </string>
     <string name="SpirometerConnectingActivity"> SpirometerConnectingActivity help page. Come back and fill this out </string>
     <string name="BlowActivity"> BlowActivity help page. Come back and fill this out </string>
-
+    <string name="PulseActivity"> PulseActivity help page. Come back and fill this out </string>
+    <string name="ApplicationChooseActivity"> ApplicationChooseActivity help page. Come back and fill this out </string>
+    <string name="NoActivityForHelp">No string found for the activity lead to this help page. Please add a string literal to the strings.xml
+        file with name same as the activity name</string>
     <string name="search_for_pulse">Searching for Pulse Oximeter</string>
     <string name="pulse_not_found">The Pulse Oximeter was not found. Please ensure that the device has enough battery. Please press the button on the device and then the RETRY button below</string>
     <string name="PulseConnectingActivity"> PulseConnectingActivity help page. Come back and fill this out </string>
 
     <string name="pulse_direction">Please insert any finger except the thumb completely into the pulse oximeter</string>
-    <string name="PulseActivity"> PulseActivity help page. Come back and fill this out </string>
 
     <string name="QuestionnaireInstructionActivity"> QuestionnaireInstructionActivity help page. Come back and fill this out </string>
     <string name="TestCompleteActivity"> TestCompleteActivity help page. Come back and fill this out </string>
@@ -61,4 +63,8 @@
     <string name="continueButton">Continue</string>
 
     <string name="q1Back">You are at the beginning of the questionnaire.</string>
+    <string name="modeNumberOne">Pre Surveillance Mode</string>
+    <string name="modeNumberTwo">Transfer to Surveillance in Progress</string>
+    <string name="modeNumberThree">Surveillance Mode</string>
+    <string name="modeNumberFour">Out of Study</string>
 </resources>

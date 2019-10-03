@@ -473,7 +473,6 @@ public class BlowActivity extends AppCompatActivity {
 
     public void onClickHelp(View view) {
         Intent intent = new Intent(BlowActivity.this, HelpActivity.class);
-        //startActivity(intent);
         startActivityForResult(intent, 1);
     }
 
