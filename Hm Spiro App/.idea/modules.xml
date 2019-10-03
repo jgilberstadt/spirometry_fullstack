@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Hm Spiro App.iml" filepath="$PROJECT_DIR$/Hm Spiro App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Hm Spiro App-app.iml" filepath="$PROJECT_DIR$/app/Hm Spiro App-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spirobanksmartsdk/Hm Spiro App-spirobanksmartsdk.iml" filepath="$PROJECT_DIR$/spirobanksmartsdk/Hm Spiro App-spirobanksmartsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/spirobanksmartsdk/spirobanksmartsdk.iml" filepath="$PROJECT_DIR$/spirobanksmartsdk/spirobanksmartsdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spirometry_android-Hm Spiro App.iml" filepath="$PROJECT_DIR$/spirometry_android-Hm Spiro App.iml" />
     </modules>
   </component>
 </project>
