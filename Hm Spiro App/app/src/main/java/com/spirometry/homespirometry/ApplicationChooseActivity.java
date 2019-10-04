@@ -137,7 +137,7 @@ public class ApplicationChooseActivity extends SuperActivity {
     }
 
     // this is a onClickListener
-    private void startTest(View v) {
+    public void startTest(View v) {
         //Intent intent = new Intent(ApplicationChooseActivity.this, SpirometerConnectingActivity.class);
         Intent intent = new Intent(ApplicationChooseActivity.this, PulseInstructionActivity.class);
         Log.d(TAG, "bundle-data" +mBundleData);
@@ -172,7 +172,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         alertDialog.show();
     }
 
-    private void onClickHelp(View view) {
+    public void onClickHelp(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, 1);
