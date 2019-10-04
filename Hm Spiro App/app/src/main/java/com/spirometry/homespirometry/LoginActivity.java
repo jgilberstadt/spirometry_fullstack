@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -29,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -51,26 +54,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends SuperActivity {
 
     Button submitButton;
     EditText patientIdView;
     ImageView spirometerImage;
     TextView spiroCheck;
     TextView contactHospital;
+    TextView titleTextView;
     ProgressBar spiroProgressBar;
-    String truePassword = "123456";
-
-    Boolean patientIdResult = false;
-
-
     DeviceManager deviceManager;
     DeviceInfo discoveredDeviceInfo;
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private NewParcelable mBundleData;
-
     private long mLastClickTime = 0;
     private Dialog warningDialog;
     private Dialog datePicker;
@@ -78,17 +76,15 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         mBundleData = new NewParcelable();
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        super.onCreate(savedInstanceState);
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+        resources = this.getResources();
         submitButton = (Button) findViewById(R.id.submitButton);
         patientIdView = (EditText) findViewById(R.id.etPassword);
+        titleTextView = (TextView) findViewById(R.id.titleTextView);
         spirometerImage = (ImageView) findViewById(R.id.spirometerImage);
         int imageResource = getResources().getIdentifier("@drawable/spiro", null, this.getPackageName());
         spirometerImage.setImageResource(imageResource);
@@ -102,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
             File dir = getFilesDir();
             uploadPastFiles(dir);
         }
-
 
         //we want to create a login request, when the user actually clicks the login button, so onClickListener
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendPatientId(final EditText patientIdView) {
         final String patientId = patientIdView.getText().toString();
-        Log.d("customDebug", patientId);
+        Log.d(TAG, patientId);
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_CHECK_PATIENT_EXIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -136,23 +131,24 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             String normal_range = jObj.getJSONObject("user").getString("normal_range");
                             if (normal_range != "null") {
-                                Log.d("customDebug", normal_range);
-                                Log.d("customDebug", "is patient invalid: " + error);
+                                Log.d(TAG, "normal range: "+normal_range);
+                                Log.d(TAG, "is patient invalid: " + error);
                                 String[] minMaxRanges = normal_range.split(",");
                                 mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                                 mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
-                                Log.d("customDebug", "range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
+                                Log.d(TAG, "range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
                             }
-                            // set patient id
-                            mBundleData.setPatient_id(patientIdView.getText().toString());
 
-                            Log.d("customDebug", patientIdView.getText().toString());
+                            // set patient id and mode
+                            mBundleData.setPatient_id(patientIdView.getText().toString());
                             String mode = jObj.getJSONObject("user").getString("mode");
                             mBundleData.setMode(Integer.valueOf(mode));
+
+                            //newBundleData is a static mBundle inherited from super class. This is in progress to
+                            //gradally replace mBundleData. This must be set to ensure the title bar display the correct mode
+                            newBundleData.setMode(Integer.valueOf(mode));
                             Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
-                            //Intent intent = new Intent(LoginActivity.this, PulseConnectingActivity.class);
-                            Log.d("customDebug", "bundle-data" +mBundleData);
-                            intent.putExtra("bundle-data", mBundleData);
+                            intent.putExtra(TAG, mBundleData);
                             startActivity(intent);
                         } catch (Exception e) {
                             showWrongPasswordToast(patientIdView);
@@ -162,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                     // JSON error
                     showWrongPasswordToast(patientIdView);
                     e.printStackTrace();
-                    Log.d("customDebug", e.getMessage());
+                    Log.d(TAG, "JSON Exception:" + e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -170,14 +166,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 showWrongPasswordToast(patientIdView);
-                Log.e("customDebug", "Login Error: " + error.getMessage());
-//                Toast.makeText(getApplicationContext(),
-//                        error.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Login Error: " + error.getMessage());
             }
         }){
+            // Posting parameters to login url
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("imei_num", patientId);
                 return params;
@@ -256,7 +250,6 @@ public class LoginActivity extends AppCompatActivity {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("file_name", file_name);
-
                 return params;
             }
 
@@ -274,8 +267,6 @@ public class LoginActivity extends AppCompatActivity {
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
-        // String php_address = "http://172.16.10.165/spirometry/store_data.php";
-
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
@@ -379,7 +370,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("hyunrae", Integer.toString(serverResponseCode));
+            Log.d(TAG, "server response code: "+serverResponseCode);
             return serverResponseCode;
         }
     }

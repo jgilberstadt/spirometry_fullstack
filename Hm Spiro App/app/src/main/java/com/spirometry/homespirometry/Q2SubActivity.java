@@ -16,8 +16,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
-public class Q2SubActivity extends AppCompatActivity {
+public class Q2SubActivity extends SuperActivity {
 
     NewParcelable mBundleData;
 
@@ -28,9 +29,9 @@ public class Q2SubActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_q2);
+        super.onCreate(savedInstanceState);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
@@ -43,7 +44,6 @@ public class Q2SubActivity extends AppCompatActivity {
         radioGroup2 = (RadioGroup) findViewById(R.id.q2_rg);
         radioGroup3 = (RadioGroup) findViewById(R.id.q3_rg);
         radioGroup4 = (RadioGroup) findViewById(R.id.q4_rg);
-
 
         final ScrollView answersSV = (ScrollView) findViewById(R.id.answersSV);
         final LinearLayout questionLayout = (LinearLayout) findViewById(R.id.q1_layout);

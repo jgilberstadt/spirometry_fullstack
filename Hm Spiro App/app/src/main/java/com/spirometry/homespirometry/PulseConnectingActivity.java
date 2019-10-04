@@ -32,6 +32,7 @@ import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.BuildConfig;
 import com.spirometry.homespirometry.R;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 
 import org.json.JSONArray;
@@ -44,7 +45,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 
-public class PulseConnectingActivity extends AppCompatActivity{
+public class PulseConnectingActivity extends SuperActivity {
     private NewParcelable mBundleData;
     private static final String TAG = PulseConnectingActivity.class.getSimpleName();
 
@@ -60,8 +61,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_pulse_connecting);
+        super.onCreate(savedInstanceState);
 
         //deviceManager.disconnect();
         directionTV = (TextView) findViewById(R.id.directionTextView);
@@ -208,5 +210,9 @@ public class PulseConnectingActivity extends AppCompatActivity{
         progressBar.setVisibility(View.VISIBLE);
         directionTV.setText(R.string.search_for_pulse);
         retryButton.setVisibility(View.GONE);
+    }
+    public void onClickHelp(View view) {
+        Intent intent = new Intent(PulseConnectingActivity.this, HelpActivity.class);
+        startActivityForResult(intent, 1);
     }
 }

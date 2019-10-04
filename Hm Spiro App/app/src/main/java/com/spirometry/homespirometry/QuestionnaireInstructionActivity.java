@@ -9,21 +9,20 @@ import android.view.WindowManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 /**
  * Created by ASUS on 6/28/2018.
  */
 
-public class QuestionnaireInstructionActivity  extends AppCompatActivity {
+public class QuestionnaireInstructionActivity  extends SuperActivity {
 
     NewParcelable mBundleData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire_instruction);
-
+        super.onCreate(savedInstanceState);
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

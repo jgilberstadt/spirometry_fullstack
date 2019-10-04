@@ -9,13 +9,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 
 /**
  * Created by ASUS on 6/21/2018.
  */
 
-public class Q3Activity extends AppCompatActivity {
+public class Q3Activity extends SuperActivity {
 
     NewParcelable mBundleData;
 
@@ -23,9 +24,9 @@ public class Q3Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_q3);
+        super.onCreate(savedInstanceState);
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 

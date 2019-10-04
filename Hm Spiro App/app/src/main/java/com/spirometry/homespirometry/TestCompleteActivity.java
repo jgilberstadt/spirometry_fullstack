@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -55,7 +56,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 
-public class TestCompleteActivity extends AppCompatActivity {
+public class TestCompleteActivity extends SuperActivity {
 
     public static final String FILE_NAME = "timeKeeping.txt";
 
@@ -85,11 +86,9 @@ public class TestCompleteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Boolean mode = false;
-
-
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_test_complete);
+        super.onCreate(savedInstanceState);
 
         mHandler = new Handler();
 

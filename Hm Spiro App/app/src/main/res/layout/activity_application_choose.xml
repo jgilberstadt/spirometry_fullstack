@@ -44,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="158dp"
-        android:onClick="changeAppointment"
+        android:onClick="changeAppointmentAlert"
         android:text="Change Appointment"
         android:textAllCaps="false"
         android:textSize="25sp" />

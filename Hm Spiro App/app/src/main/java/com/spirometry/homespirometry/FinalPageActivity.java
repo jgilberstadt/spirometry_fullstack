@@ -6,13 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.spirometry.homespirometry.classes.SuperActivity;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class FinalPageActivity extends AppCompatActivity {
+public class FinalPageActivity extends SuperActivity {
 
     public static final String FILE_NAME_ONE = "timeKeeping.txt";
 
@@ -21,8 +23,9 @@ public class FinalPageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_final_page);
+        super.onCreate(savedInstanceState);
         imageView2 = (ImageView) findViewById(R.id.imageView2);
         finalText = (TextView) findViewById(R.id.finalText);
 // *from here erase

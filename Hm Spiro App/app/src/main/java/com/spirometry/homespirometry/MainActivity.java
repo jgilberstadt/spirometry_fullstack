@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
@@ -46,7 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends SuperActivity {
 
     DeviceManager deviceManager;
     Device currDevice;
@@ -81,16 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
+        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         myContext = this;
-
-        setContentView(R.layout.activity_main);
-
 
         // Get patient id
         EditText pidText= (EditText) findViewById(R.id.patientid_text);

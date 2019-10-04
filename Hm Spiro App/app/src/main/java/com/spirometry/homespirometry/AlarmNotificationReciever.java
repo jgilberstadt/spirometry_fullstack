@@ -40,7 +40,4 @@ public class AlarmNotificationReciever extends BroadcastReceiver {
 
         notificationManager.notify(1, builder.build());
         }
-
-
-
     }

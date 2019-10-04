@@ -2,13 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spirometry.homespirometry">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <application
         android:name=".AppController"
         android:allowBackup="true"
@@ -16,17 +9,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".classes.SuperActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".QuestionnaireInstructionActivity">
-
-        </activity>
+        <activity android:name=".QuestionnaireInstructionActivity"></activity>
         <activity android:name=".SpirometerConnectingActivity" />
         <activity android:name=".SpirometerConnectingActivity2" />
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,16 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".classes.PulseInstructionActivity" />
-
-        <activity android:name=".PulseConnectingActivity">
-
-        </activity>
-
+        <activity android:name=".PulseInstructionActivity" />
+        <activity android:name=".PulseConnectingActivity"></activity>
         <activity android:name=".BlowActivity" />
         <activity android:name=".BlowActivity2" />
-
         <activity android:name=".Q1Activity" />
         <activity android:name=".Q1SubActivity" />
         <activity android:name=".Q2Activity" />
@@ -52,20 +37,22 @@
         <activity android:name=".Q3SubActivity" />
         <activity android:name=".Q3Activity" />
         <activity android:name=".Q4SubActivity" />
-        <activity android:name=".TestCompleteActivity">
-
-            </activity>
+        <activity android:name=".TestCompleteActivity"></activity>
         <activity android:name=".PulseActivity" />
         <activity android:name=".HelpActivity" />
 
+        <activity android:name=".FinalPageActivity"></activity>
+
+        <activity android:name=".SpirometerInstructionActivity" />
+        <activity android:name=".ApplicationChooseActivity" />
         <receiver android:name=".AlarmNotificationReciever" />
-
-        <activity android:name=".FinalPageActivity">
-
-        </activity>
-
-        <activity android:name=".SpirometerInstructionActivity"></activity>
-        <activity android:name=".ApplicationChooseActivity"></activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

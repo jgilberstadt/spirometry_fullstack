@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -17,7 +18,7 @@ import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 
 import java.util.ArrayList;
 
-public class SpirometerInstructionActivity extends AppCompatActivity {
+public class SpirometerInstructionActivity extends SuperActivity {
 
     private static final String TAG = SpirometerInstructionActivity.class.getSimpleName();
 
@@ -32,8 +33,9 @@ public class SpirometerInstructionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_spirometer_instruction);
+        super.onCreate(savedInstanceState);
 
         startTest2 = (Button) findViewById(R.id.startTest2);
 

@@ -7,7 +7,8 @@ import android.os.Parcelable;
 
 public class NewParcelable implements Parcelable {
     private String patient_id;
-    private int mode;
+    private int mode = 0;
+    private String modeString;
     private String firebase_token;
     private String blowDeviceResultArray;
     private String blowDeviceResultArrayPefFev1;
@@ -30,6 +31,8 @@ public class NewParcelable implements Parcelable {
     public String getPatient_id() { return patient_id; }
     public void setToken(String tk) {firebase_token = tk; }
     public String getToken() { return firebase_token; }
+    public String getModeString() { return modeString; }
+    public void setModeString(String modeString) { this.modeString = modeString; }
     public void setBlowDataArrayPefFev1(String arr){
         blowDeviceResultArrayPefFev1 = arr;
     }

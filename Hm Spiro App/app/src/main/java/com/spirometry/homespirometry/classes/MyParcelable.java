@@ -27,8 +27,6 @@ public class MyParcelable implements Parcelable {
     private boolean varianceExists;
     // patient id
     private String patient_id;
-    private String mode;
-
 
     public int describeContents() {
         return 0;

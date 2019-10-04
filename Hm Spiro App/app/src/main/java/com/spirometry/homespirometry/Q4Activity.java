@@ -9,13 +9,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 
 /**
  * Created by ASUS on 6/21/2018.
  */
 
-public class Q4Activity extends AppCompatActivity {
+public class Q4Activity extends SuperActivity {
 
     NewParcelable mBundleData;
 
@@ -23,10 +24,9 @@ public class Q4Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_q4);
-
+        super.onCreate(savedInstanceState);
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
         //for keeping the device awake on this activity

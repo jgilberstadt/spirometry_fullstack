@@ -15,8 +15,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
-public class Q4SubActivity extends AppCompatActivity {
+public class Q4SubActivity extends SuperActivity {
 
     NewParcelable mBundleData;
 
@@ -26,9 +27,9 @@ public class Q4SubActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_q4);
+        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
 
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
@@ -124,7 +125,6 @@ public class Q4SubActivity extends AppCompatActivity {
 
     public void onClickHelp(View view) {
         Intent intent = new Intent(Q4SubActivity.this, HelpActivity.class);
-        //startActivity(intent);
         startActivityForResult(intent, 1);
     }
 }

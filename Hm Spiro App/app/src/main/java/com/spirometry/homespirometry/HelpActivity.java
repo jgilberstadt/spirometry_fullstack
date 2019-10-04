@@ -9,8 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
-public class HelpActivity extends AppCompatActivity {
+public class HelpActivity extends SuperActivity {
 
     /*
 
@@ -22,9 +23,9 @@ public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_help);
+        super.onCreate(savedInstanceState);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

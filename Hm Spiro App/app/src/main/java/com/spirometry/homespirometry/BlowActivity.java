@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
-import com.spirometry.homespirometry.classes.PulseInstructionActivity;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
@@ -29,7 +27,7 @@ import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlowActivity extends AppCompatActivity {
+public class BlowActivity extends SuperActivity {
 
     private static final String TAG = BlowActivity.class.getSimpleName();
 
@@ -80,10 +78,9 @@ public class BlowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         //arr = mBundleData.getDeviceInfo();
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_blow);
-
+        super.onCreate(savedInstanceState);
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

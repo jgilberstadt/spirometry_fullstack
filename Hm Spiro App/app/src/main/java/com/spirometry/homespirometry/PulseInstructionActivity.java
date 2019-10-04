@@ -1,4 +1,4 @@
-package com.spirometry.homespirometry.classes;
+package com.spirometry.homespirometry;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,20 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.spirometry.homespirometry.HelpActivity;
-import com.spirometry.homespirometry.PulseConnectingActivity;
-import com.spirometry.homespirometry.Q1Activity;
-import com.spirometry.homespirometry.QuestionnaireInstructionActivity;
-import com.spirometry.homespirometry.R;
+import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
-public class PulseInstructionActivity extends AppCompatActivity {
+public class PulseInstructionActivity extends SuperActivity {
     private NewParcelable mBundleData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_pulse_instruction);
+        super.onCreate(savedInstanceState);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.Sites;
+import com.spirometry.homespirometry.classes.SuperActivity;
 import com.spirometry.spirobanksmartsdk.Device;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
@@ -24,7 +26,7 @@ import com.spirometry.homespirometry.R;
 
 import java.util.ArrayList;
 
-public class SpirometerConnectingActivity extends AppCompatActivity{
+public class SpirometerConnectingActivity extends SuperActivity {
 
     private NewParcelable mBundleData;
     String success = "Success!";
@@ -48,9 +50,9 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_spirometer_connecting);
+        super.onCreate(savedInstanceState);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -269,7 +271,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
             Log.d(TAG, "no connection");
             deviceManager.stopDiscovery();
            if(localInfo == true){
-                Log.d(TAG, "the device is connectted, nothing to show");
+                Log.d(TAG, "the device is connected, nothing to show");
                handleUpdateInfo.post(runUpdateInfo);
            }else {
                 localInfo = false;
@@ -283,7 +285,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
                 directionTextView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 if(numberOfDisconnect >=3){
-                    directionTextView.setText("Contact Pulmonary Function Lab. Phone: 999-999-9999");
+                    directionTextView.setText("Contact Pulmonary Function Lab. Phone: " + Sites.contactMap.get(Sites.Site.WashU));
                     directionTextView.setTextColor(Color.parseColor("#0000FF"));
                     directionTextView.setVisibility(View.VISIBLE);
                 }
@@ -297,8 +299,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity{
 
     public void onClickHelp(View view) {
         Intent intent = new Intent(SpirometerConnectingActivity.this, HelpActivity.class);
-        startActivity(intent);
-        //startActivityForResult(intent, 1);
+        startActivityForResult(intent, 1);
     }
 
 }

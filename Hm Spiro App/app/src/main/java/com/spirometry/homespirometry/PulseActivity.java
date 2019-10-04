@@ -37,6 +37,7 @@ import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.R;
 import com.spirometry.homespirometry.classes.NewParcelable;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +63,7 @@ import java.util.TimerTask;
 import java.util.zip.DeflaterOutputStream;
 
 
-public class PulseActivity extends AppCompatActivity {
+public class PulseActivity extends SuperActivity {
 
     private static final String TAG = PulseActivity.class.getSimpleName();
 
@@ -89,10 +90,9 @@ public class PulseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_pulse);
-
+        super.onCreate(savedInstanceState);
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

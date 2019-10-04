@@ -1,8 +1,6 @@
 package com.spirometry.homespirometry;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,31 +8,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
-import com.spirometry.homespirometry.classes.PulseInstructionActivity;
+import com.spirometry.homespirometry.classes.SuperActivity;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ApplicationChooseActivity extends AppCompatActivity {
+public class ApplicationChooseActivity extends SuperActivity {
     public static final String FILE_NAME = "timeKeeping.txt";
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = ApplicationChooseActivity.class.getSimpleName();
     //This is a MyParcelable object that contains data / objects to be passed between activities
     private NewParcelable mBundleData;
 
@@ -54,14 +48,18 @@ public class ApplicationChooseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_application_choose);
-
+        super.onCreate(savedInstanceState);
         mBundleData = getIntent().getParcelableExtra("bundle-data");
-
+        Log.d(TAG,"mode:"+newBundleData.getMode());
         timeKeepingText = (TextView) findViewById(R.id.timeKeepingText);
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);
-
+        //alert patient about their mode
+        modeAlert();
+        if(newBundleData.getMode() == 2){
+            //Todo: write database query to change patient mode to 3 once this appointment completes
+        }
      ///   AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this, 0,myIntent, PendingIntent.FLAG_NO_CREATE);
@@ -131,10 +129,24 @@ public class ApplicationChooseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void changeAppointment(View v) {
+    public void modeAlert() {
         AlertDialog alertDialog = new AlertDialog.Builder(ApplicationChooseActivity.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("Function not available in pre-surveillance");
+        int mode = newBundleData.getMode();
+        if(mode == 2){
+            alertDialog.setTitle(getString(R.string.transfer_mode_title));
+            alertDialog.setMessage(getString(R.string.transfer_mode_message));
+        } else {
+            alertDialog.setTitle("You are in " + newBundleData.getModeString());
+            if(mode == 1){
+                alertDialog.setMessage(getString(R.string.presurveillnce_mode_instruction));
+            } else if(mode == 2){
+                alertDialog.setTitle(getString(R.string.transfer_mode_title));
+            }
+            else if(mode == 3){
+                alertDialog.setMessage(getString(R.string.surveillnce_mode_instruction));
+            }
+        }
+
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -145,7 +157,7 @@ public class ApplicationChooseActivity extends AppCompatActivity {
     }
 
     public void onClickHelp(View view) {
-        Intent intent = new Intent(ApplicationChooseActivity.this, HelpActivity.class);
+        Intent intent = new Intent(this, HelpActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, 1);
     }
@@ -416,21 +428,21 @@ public class ApplicationChooseActivity extends AppCompatActivity {
 //        dialog.show();
 //    }
 
-    private void startAlarm(boolean isNotification) {
-        // finalDate.clear();
-        Log.d(TAG, "Start Alarm!: ");
-        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(ApplicationChooseActivity.this, 0, myIntent, 0);
-
-        if(isNotification) {
-            Log.d(TAG, "Start!!! ");
-            Log.d(TAG,"start1"+  String.valueOf(finalDate));
-            Log.d(TAG, "start2" +  String.valueOf(finalDate.getTimeInMillis()));
-            manager.set(AlarmManager.RTC_WAKEUP, finalDate.getTimeInMillis(), pendingIntent);
-        }
-    }
+//    private void startAlarm(boolean isNotification) {
+//        // finalDate.clear();
+//        Log.d(TAG, "Start Alarm!: ");
+//        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(ApplicationChooseActivity.this, 0, myIntent, 0);
+//
+//        if(isNotification) {
+//            Log.d(TAG, "Start!!! ");
+//            Log.d(TAG,"start1"+  String.valueOf(finalDate));
+//            Log.d(TAG, "start2" +  String.valueOf(finalDate.getTimeInMillis()));
+//            manager.set(AlarmManager.RTC_WAKEUP, finalDate.getTimeInMillis(), pendingIntent);
+//        }
+//    }
 
 }
 
