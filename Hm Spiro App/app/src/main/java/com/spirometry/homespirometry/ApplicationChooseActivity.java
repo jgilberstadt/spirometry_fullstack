@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -60,6 +61,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         if(newBundleData.getMode() == 2){
             //Todo: write database query to change patient mode to 3 once this appointment completes
         }
+        updateNextAppointmentText();
      ///   AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(ApplicationChooseActivity.this, AlarmNotificationReciever.class);
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this, 0,myIntent, PendingIntent.FLAG_NO_CREATE);
@@ -69,11 +71,11 @@ public class ApplicationChooseActivity extends SuperActivity {
 //        alarmManager.cancel(pendingIntent);
 
         //If there is not alarm set, then this will be happening
+        /*
         if(pendingIntent == null) {
             Log.d(TAG, "No Pending Intent");
             dateTimeRepresent.setTextSize(50);
             dateTimeRepresent.setText(R.string.no_alarm_set);
-
         } else {
             Log.d(TAG, "Pending Intent");
             FileInputStream fis = null;
@@ -105,14 +107,28 @@ public class ApplicationChooseActivity extends SuperActivity {
                     }
                 }
             }
-        }
-
+        }*/
     }
 
-    public static Calendar toCalendar(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal;
+    private void updateNextAppointmentText(){
+        dateTimeRepresent.setTextSize(50);
+        Calendar nextDate = getNextAppointmentDate();
+        int mode = newBundleData.getMode();
+        if(mode == 1){
+            //pre-surveillance mode
+            nextDate.add(Calendar.DATE,1);
+        } else if (mode == 2 || mode == 3){
+            //surveillance mode, display next Monday
+            nextDate.add(Calendar.WEEK_OF_YEAR, 1);
+            nextDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        } else {
+            dateTimeRepresent.setText("No Appointment Scheduled");
+        }
+        SimpleDateFormat sformat = new SimpleDateFormat("EEEE, dd/mm/yyyy"); // the day of the week spelled out completely
+        dateTimeRepresent.setText(sformat.format(nextDate.getTime()));
+    }
+    private Calendar getNextAppointmentDate(){
+        return Calendar.getInstance();
     }
 
     public static Long getDefaults(String key, Context context) {
@@ -120,8 +136,8 @@ public class ApplicationChooseActivity extends SuperActivity {
         return sharedP.getLong(key, 1);
     }
 
-    public void startTest(View v) { // this is a same method as setOnclickListener button_save
-
+    // this is a onClickListener
+    private void startTest(View v) {
         //Intent intent = new Intent(ApplicationChooseActivity.this, SpirometerConnectingActivity.class);
         Intent intent = new Intent(ApplicationChooseActivity.this, PulseInstructionActivity.class);
         Log.d(TAG, "bundle-data" +mBundleData);
@@ -129,7 +145,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         startActivity(intent);
     }
 
-    public void modeAlert() {
+    private void modeAlert() {
         AlertDialog alertDialog = new AlertDialog.Builder(ApplicationChooseActivity.this).create();
         int mode = newBundleData.getMode();
         if(mode == 2){
@@ -156,7 +172,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         alertDialog.show();
     }
 
-    public void onClickHelp(View view) {
+    private void onClickHelp(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
         //startActivity(intent);
         startActivityForResult(intent, 1);

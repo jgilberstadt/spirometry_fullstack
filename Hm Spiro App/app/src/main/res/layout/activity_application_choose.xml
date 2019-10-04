@@ -36,7 +36,7 @@
         android:onClick="startTest"
         android:text="Start Test"
         android:textSize="25sp" />
-    
+
     <TextView
         android:id="@+id/dateTimeRepresent"
         android:layout_width="465dp"
