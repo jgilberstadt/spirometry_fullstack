@@ -74,7 +74,7 @@ public class ApplicationChooseActivity extends SuperActivity {
             dateTimeRepresent.setTextSize(50);
             dateTimeRepresent.setText(R.string.no_alarm_set);
 
-        }else{
+        } else {
             Log.d(TAG, "Pending Intent");
             FileInputStream fis = null;
             dateTimeRepresent.setTextSize(70);

@@ -36,19 +36,7 @@
         android:onClick="startTest"
         android:text="Start Test"
         android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/button_load"
-        android:layout_width="427dp"
-        android:layout_height="138dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="158dp"
-        android:onClick="changeAppointmentAlert"
-        android:text="Change Appointment"
-        android:textAllCaps="false"
-        android:textSize="25sp" />
-
+    
     <TextView
         android:id="@+id/dateTimeRepresent"
         android:layout_width="465dp"

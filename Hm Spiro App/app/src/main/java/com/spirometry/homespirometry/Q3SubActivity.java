@@ -31,9 +31,8 @@ public class Q3SubActivity extends SuperActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q3);
-
+        super.onCreate(savedInstanceState);
         mBundleData = getIntent().getParcelableExtra("bundle-data");
 
         //for keeping the device awake on this activity

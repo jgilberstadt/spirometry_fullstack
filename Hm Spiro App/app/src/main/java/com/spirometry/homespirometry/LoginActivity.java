@@ -77,6 +77,7 @@ public class LoginActivity extends SuperActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mBundleData = new NewParcelable();
+        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
         //set screen always ON
