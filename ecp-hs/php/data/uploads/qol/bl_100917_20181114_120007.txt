@@ -1,0 +1,71 @@
+Troubled by shortness of breath when hurrying on the level or walking up a slight hill
+Fair
+Several days a week
+Only with respiratory infections
+Most days a week
+Not at all
+3 or more attacks
+every day is good
+Yes
+Cause me a lot of problems or are the most important physical problem I have
+False
+False
+True
+False
+False
+True
+True
+True
+False
+False
+True
+False
+False
+True
+True
+False
+True
+False
+False
+False
+True
+True
+False
+False
+True
+True
+True
+True
+False
+False
+True
+They stop me from doing one or two things I would like to do
+Mild
+Severe
+None
+Moderate
+Moderate
+Mild
+Severe
+None
+None
+Severe
+Moderate
+Mild
+I am unable to walk
+I have severe problems washing or dressing myself
+I have slight problems doing my usual activities
+I have no pain or discomfort
+I am moderately anxious or depressed
+100917
+0
+20181114_120007
+1
+0
+0
+0
+03:07
+commeanp@wustl.edu
+0
+0
+100

@@ -1,0 +1,45 @@
+{
+    "q1": {
+        "question": "A NEW cough, runny nose, sore throat, fever, shaking chills, muscle aches or recent diarrhea?",
+        "condition": "Infectious symptoms",
+        "options": [
+            "Cough",
+            "Runny Nose",
+            "Sore Throat",
+            "Fever",
+            "Shaking Chills",
+            "Muscle Aches",
+            "Recent Diarrhea"
+        ]
+    },
+    "q2": {
+        "question": "A NEW cough, or cough now producing sputum/mucus, new wheezing or new shortness of breath?",
+        "condition": "Infectious symptoms",
+        "options": [
+            "Cough",
+            "Cough now producing sputum/mucus",
+            "New wheezing",
+            "New shortness of breath"            
+        ]
+    },
+    "q3": {
+        "question": "NEW shortness of breath at rest, on exertion or when lying flat, new shortness of breath that awakens you from sleep or new swelling in your feet or legs?",
+        "condition": "Dyspnea",
+        "options": [
+            "Shortness of breath at rest",
+            "Shortness of breath on exertion",
+            "Shortness of breath when lying flat",
+            "New Shortness of breath that awakens you from sleep",
+            "New swelling in your feet or legs"                       
+        ]
+    },
+    "q4": {
+        "question": "NEW generalized weakness, lightheadedness or dizziness?",
+        "condition": "Generalized respiratory symptoms",
+        "options": [
+            "Generalized weakness",
+            "Lightheadedness",
+            "Dizziness"                        
+        ]
+    }
+}

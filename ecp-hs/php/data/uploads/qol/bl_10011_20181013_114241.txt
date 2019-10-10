@@ -1,0 +1,71 @@
+Walks slower than people of the same age on the level because of breathlessness or has to stop for breath when walking at own pace on the level
+Poor
+Several days a week
+
+
+Only with respiratory infections
+1 or 2 attacks
+every day is good
+No
+Cause no problems
+False
+False
+True
+False
+True
+True
+False
+True
+False
+True
+False
+True
+False
+True
+False
+True
+False
+True
+True
+False
+True
+False
+True
+False
+True
+False
+null
+null
+null
+null
+null
+They stop me from doing one or two things I would like to do
+Severe
+Severe
+Moderate
+Moderate
+Moderate
+Mild
+Moderate
+Moderate
+Severe
+Moderate
+Moderate
+Mild
+I have severe problems walking
+I have severe problems washing or dressing myself
+I have moderate problems doing my usual activities
+I have severe pain or discomfort
+I am severely anxious or depressed
+10011
+0
+20181013_114241
+1
+0
+0
+0
+01:25
+dingwenli@wustl.edu
+0
+0
+100
