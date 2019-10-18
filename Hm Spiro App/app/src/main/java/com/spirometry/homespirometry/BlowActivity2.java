@@ -70,7 +70,7 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
 
         _peripheral = TIOManager.sharedInstance().findPeripheralByAddress(peripheralAddress);
         _peripheral.setListener(this);
-        Log.d("hyunrae", peripheralAddress);
+        Log.d(TAG, peripheralAddress);
 
         blowDirection = (TextView) findViewById(R.id.blowDirection);
         blowMessage = (TextView) findViewById(R.id.blowMessage);
@@ -123,14 +123,14 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
 
     @Override
     public void tioPeripheralDidFailToConnect(TIOPeripheral peripheral, String errorMessage) {
-        Log.d("hyunrae", "FAIL TO CONNECT");
+        Log.d(TAG, "FAIL TO CONNECT");
         STTrace.method("tioPeripheralDidFailToConnect", errorMessage);
     }
 
     @Override
     public void tioPeripheralDidDisconnect(TIOPeripheral peripheral, String errorMessage) {
         STTrace.method("tioPeripheralDidDisconnect", errorMessage);
-        Log.d("hyunrae", "disconnected");
+        Log.d(TAG, "disconnected");
         //numBlows--;
     }
 
@@ -139,14 +139,14 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
         try {
             handlerVisibilityChange.post(runVisibilityChange);
             numBlows++;
-            Log.d("hyunrae", "peter " );
+            Log.d(TAG, "peter " );
             messageNumber--;
             handlerTextViewNumberChange.post(runTextViewNumberChange);
             handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
             String text = new String(data, "CP-1252");
-            Log.d("hyunrae", "text "  + text);
+            Log.d(TAG, "text "  + text);
         } catch (Exception e) {
-            Log.d("hyunrae","nah" + e.toString());
+            Log.d(TAG,"nah" + e.toString());
         }
 
     }

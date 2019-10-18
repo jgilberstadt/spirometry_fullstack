@@ -4,16 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,10 +26,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.SuperActivity;
-import com.spirometry.spirobanksmartsdk.Device;
+import com.spirometry.homespirometry.classes.UrlConfig;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
 
@@ -46,11 +42,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,12 +130,15 @@ public class LoginActivity extends SuperActivity {
                                 Log.d(TAG, "is patient invalid: " + error);
                                 String[] minMaxRanges = normal_range.split(",");
                                 mBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
+                                newBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                                 mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
+                                newBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
                                 Log.d(TAG, "range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
                             }
 
                             // set patient id and mode
-                            mBundleData.setPatient_id(patientIdView.getText().toString());
+                            mBundleData.setPatientId(patientIdView.getText().toString());
+                            newBundleData.setPatientId(patientIdView.getText().toString());
                             String mode = jObj.getJSONObject("user").getString("mode");
                             mBundleData.setMode(Integer.valueOf(mode));
 

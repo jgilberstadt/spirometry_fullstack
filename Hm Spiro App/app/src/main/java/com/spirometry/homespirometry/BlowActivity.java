@@ -385,7 +385,7 @@ public class BlowActivity extends SuperActivity {
             intent.putExtra("bundle-data", mBundleData);
             startActivity(intent);
             */
-            if(mBundleData.getMode()==1) {
+            if(mBundleData.getMode()==2 || mBundleData.getMode() == 3) {
                 Random r = new Random();
                 int subRandom = r.nextInt(5);
                 boolean var1 = (getMaxFev1(mBundleData.getBlowDataArray()) < mBundleData.getMinNRange()) || (getMaxFev1(mBundleData.getBlowDataArray()) > mBundleData.getMaxNRange());

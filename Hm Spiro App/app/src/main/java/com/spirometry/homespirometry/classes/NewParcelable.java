@@ -27,8 +27,8 @@ public class NewParcelable implements Parcelable {
     private int[] surveyAnswers; // will only consist of 0 or 1s because all yes or no questions. 19 Questions
     private int[] questionStates;
 
-    public void setPatient_id(String pid) { patient_id = pid; }
-    public String getPatient_id() { return patient_id; }
+    public void setPatientId(String pid) { patient_id = pid; }
+    public String getPatientId() { return patient_id; }
     public void setToken(String tk) {firebase_token = tk; }
     public String getToken() { return firebase_token; }
     public String getModeString() { return modeString; }

@@ -9,14 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +26,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.spirometry.homespirometry.classes.MyParcelable;
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.SuperActivity;
+import com.spirometry.homespirometry.classes.UrlConfig;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -47,14 +43,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
 
 public class TestCompleteActivity extends SuperActivity {
 
@@ -535,7 +527,7 @@ public class TestCompleteActivity extends SuperActivity {
             // get patient_id, test_date, normal range?, test counter.
             String line = "";
 
-            line += mBundleData.getPatient_id();
+            line += mBundleData.getPatientId();
             line += "!";
             line += sdf.format(currentTime);
             line += "!";
