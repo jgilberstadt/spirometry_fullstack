@@ -1,0 +1,71 @@
+Stops for breath after walking about 100 yards or after a few minutes on the level
+Very poor
+Only with respiratory infections
+Only with respiratory infections
+Several days a week
+A few days a month
+1 or 2 attacks
+every day is good
+Yes
+Cause no problems
+False
+False
+True
+False
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+
+Moderate
+Severe
+Mild
+Severe
+Mild
+Severe
+Moderate
+Mild
+Severe
+Mild
+Moderate
+Mild
+I have severe problems walking
+I have moderate problems washing or dressing myself
+I have moderate problems doing my usual activities
+I have extreme pain or discomfort
+I am severely anxious or depressed
+10015
+0
+20181013_115905
+1
+0
+0
+0
+00:46
+dingwenli@wustl.edu
+0
+0
+100

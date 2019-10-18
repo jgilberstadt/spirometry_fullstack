@@ -1,0 +1,71 @@
+Walks slower than people of the same age on the level because of breathlessness or has to stop for breath when walking at own pace on the level
+Fair
+Most days a week
+Only with respiratory infections
+Most days a week
+A few days a month
+1 or 2 attacks
+a few good days
+Yes
+Cause me a lot of problems or are the most important physical problem I have
+True
+True
+True
+False
+False
+False
+False
+True
+True
+True
+False
+True
+False
+True
+False
+False
+True
+False
+True
+True
+True
+False
+True
+True
+False
+True
+False
+False
+True
+True
+False
+They stop me from doing one or two things I would like to do
+Mild
+Moderate
+Severe
+Severe
+None
+Moderate
+Mild
+Moderate
+None
+Severe
+
+Mild
+I have slight problems walking
+I have moderate problems washing or dressing myself
+I am unable to do my usual activities
+I have no pain or discomfort
+I am moderately anxious or depressed
+401005
+1
+20181204_112338
+1
+1
+0
+4
+118:59:27
+kater@wustl.edu
+1
+1
+101

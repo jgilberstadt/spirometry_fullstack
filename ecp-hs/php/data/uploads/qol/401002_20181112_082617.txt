@@ -1,0 +1,71 @@
+Stops for breath after walking about 100 yards or after a few minutes on the level
+Good
+Not at all
+Most days a week
+Several days a week
+Several days a week
+1 or 2 attacks
+no good days
+No
+Cause me a few problems
+True
+True
+False
+True
+False
+True
+True
+True
+True
+True
+False
+False
+True
+False
+True
+False
+False
+False
+True
+True
+False
+True
+False
+True
+False
+True
+False
+False
+False
+False
+False
+They stop me from doing one or two things I would like to do
+Mild
+Moderate
+None
+Severe
+Mild
+Severe
+Mild
+Severe
+Mild
+Moderate
+Moderate
+Moderate
+I have slight problems walking
+I am unable to wash or dress myself
+I have no problems doing my usual activities
+I have extreme pain or discomfort
+I am slightly anxious or depressed
+401002
+3
+20181112_082617
+1
+1
+0
+2
+15:41
+kater@wustl.edu
+1
+0
+101

@@ -1,0 +1,71 @@
+Too breathless to leave the house or breathless when dressing or undressing
+Very poor
+Not at all
+Most days a week
+Most days a week
+Most days a week
+1 or 2 attacks
+a few good days
+No
+Cause me a lot of problems or are the most important physical problem I have
+True
+True
+False
+False
+False
+False
+False
+null
+False
+False
+False
+True
+True
+null
+False
+True
+True
+False
+True
+True
+True
+True
+True
+True
+True
+True
+True
+True
+True
+True
+False
+They stop me from doing everything I would like to do
+Severe
+Severe
+Severe
+Moderate
+Moderate
+Severe
+Severe
+None
+None
+Severe
+Moderate
+Mild
+I have slight problems walking
+I have slight problems washing or dressing myself
+I have severe problems doing my usual activities
+I have moderate pain or discomfort
+I am moderately anxious or depressed
+401005
+3
+20181215_075004
+1
+0
+0
+2
+40:57
+kater@wustl.edu
+1
+0
+101
