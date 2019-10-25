@@ -392,8 +392,8 @@ public class BlowActivity extends SuperActivity {
 
                 mBundleData.setVarianceExists(var1 ? 1 : 0);
 
-                //if fev is anomalous, or if random questionnaire is assigned
-                if (subRandom == 5 || mBundleData.getVarianceExists() == 1) {
+                //if fev is anomalous
+                if (mBundleData.getVarianceExists() == 1) {
 
                     Intent intent = new Intent(BlowActivity.this, QuestionnaireInstructionActivity.class);
                     intent.putExtra("bundle-data", mBundleData);

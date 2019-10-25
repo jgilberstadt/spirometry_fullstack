@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UploadController {
+    private final static String TAG = UploadController.class.getSimpleName();
 
-    private final static String TAG = "UploadController";
     public static void upload_PefFev1(final String pef, final String fev1, final String peftime, final String evol) {
         // Tag used to cancel the request
         String tag_string_req = "req_response";
@@ -28,7 +28,7 @@ public class UploadController {
                 try {
                     JSONObject jObj = new JSONObject(response);
                 } catch (JSONException e) {
-                    // JSON errore
+                    // JSON error
                     e.printStackTrace();
                 }
             }
@@ -48,11 +48,9 @@ public class UploadController {
                 params.put("fev1", fev1);
                 params.put("peftime", peftime);
                 params.put("evol", evol);
-
                 return params;
             }
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
@@ -65,7 +63,7 @@ public class UploadController {
         StringRequest strReq = new StringRequest(Request.Method.POST, UrlConfig.URL_FVC_UPLOAD, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Instance Response: " + response.toString());
+                Log.d(TAG, "Instance Response: " + response);
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -73,7 +71,6 @@ public class UploadController {
                     // JSON error
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
