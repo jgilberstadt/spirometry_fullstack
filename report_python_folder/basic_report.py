@@ -40,6 +40,7 @@ class BasicReport:
 	def replaceValues(self):
 		print("This is the basic class method, please implement it in the subclass")
 
+	# If everything is taken care by the above two methods, we can just save the xlsx in this method
 	def generateReport(self):
 		print("This is the basic class method, please implement it in the subclass")
 
