@@ -7,11 +7,10 @@ import psycopg2
 from openpyxl import load_workbook
 
 class BasicReport:
-	def __init__(self, db_config_path=None, email_config_path=None, workbook_path=None, report_type=0):
+	def __init__(self, db_config_path=None, workbook_path=None, report_type=0):
 		# initialize the database connection 
 		# connect to PostgreSQL database
 		self.db_config_path = db_config_path
-		self.email_config_path = email_config_path
 		# get the database credentials from the .ini config file
 		dbc = config('database.ini' if self.db_config_path == None else self.db_config_path, 'postgresql')
 		self.cnx = psycopg2.connect(**dbc)
