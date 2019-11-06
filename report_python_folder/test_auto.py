@@ -10,4 +10,5 @@ wb.save(filename = 'Report save.xlsx')
 from monthly_report import MonthlyReport
 
 mr_obj = MonthlyReport(imei_num='176927',current_month=1)
+mr_obj.replaceValues()
 mr_obj.generateReport()
