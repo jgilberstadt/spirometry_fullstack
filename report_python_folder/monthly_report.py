@@ -51,9 +51,31 @@ class MonthlyReport(BasicReport):
 			self.ws['N'+str(raw_data_incremental_index)] = test_date
 			self.ws['O'+str(raw_data_incremental_index)] = start_study_date
 			self.ws['Q'+str(raw_data_incremental_index)] = date_of_transplant
-			raw_data_incremental_index += 1
 			# need to associate each session with mode
-			#self.ws['S'+str(raw_data_incremental_index)] = 
+			if mode == 1:
+			   self.ws['S'+str(raw_data_incremental_index)] = 'Pre-surv'
+			elif mode == 2 or mode == 3:
+			   self.ws['S'+str(raw_data_incremental_index)] = 'Month'
+			#a
+			raw_data_incremental_index += 1
+
+		cursor.execute("SELECT maxrate, minrate, lowestsat FROM pulse_data WHERE imei_num=%s AND test_date BETWEEN current_date - 30 and current_date", ([self.imei_num]))
+		currentminrate = 1000
+		currentlowestsat = 1000
+		currentmaxrate = 0
+		for (maxrate, minrate, lowestsat) in cursor:
+			if minrate < currentminrate and minrate > 30:
+				currentminrate = minrate
+			if lowestsat < currentlowestsat:
+				currentlowestsat = lowestsat
+			if maxrate > currentmaxrate and maxrate > 30:
+				currentmaxrate = maxrate
+
+		print(currentminrate)
+		print(currentmaxrate)
+		print(lowestsat)
+		self.ws['I11'] = str(currentminrate)+'-'+str(currentmaxrate)
+		self.ws['I8'] = lowestsat
 
 	
 			

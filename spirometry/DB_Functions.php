@@ -117,9 +117,18 @@ require_once 'DB_Connect.php';
     public function storeRecordsToPostgres($patient_id, $test_date, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16,$pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $raw_pef, $raw_pulse) {
 
       // prepare a query for execution
-      pg_prepare($this->conn, "insert", "INSERT INTO spiro_data(patient_id, test_date, fev11, fev12, fev13, fev14, fev15, fev16, is_variance, variance_test_counter) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id");
+      $fevArray = array($fev11, $fev12, $fev13, $fev14, $fev15, $fev16);
+      $fevArrayLength = count($fevArray);
+      $currentMax = 0;
+      for($i=0; $i<$fevArrayLength; $i++){
+        if($fevArray[$i] > $currentMax){
+          $currentMax = $fevArray[$i];
+        }
 
-      $result = pg_execute($this->conn, "insert", array($patient_id,$test_date,$fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $spiro_boolean, $repeated_counter));
+      }
+      pg_prepare($this->conn, "insert", "INSERT INTO spiro_data(patient_id, test_date, fev11, fev12, fev13, fev14, fev15, fev16, is_variance, variance_test_counter, fev_max) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id");
+
+      $result = pg_execute($this->conn, "insert", array($patient_id,$test_date,$fev11,$fev12,$fev13,$fev14,$fev15,$fev16, $spiro_boolean, $repeated_counter, $currentMax));
       $row = pg_fetch_array($result, 0);
       $unique_id = $row["id"];
 
