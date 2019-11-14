@@ -37,6 +37,11 @@ class MonthlyReport(BasicReport):
 			self.ws['E2'] = patient_study_number
 			break
 
+		# create a list of fev1max values to be used in replaceValues(self) function
+		self.fev1max_list = []
+		# create a list of date to be used in replaceValues(self) function
+		self.test_date_list = []
+
 		# query all fev1 values from spiro_data table
 		raw_data_incremental_index = 34
 		cursor.execute("SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter FROM spiro_data WHERE imei_num=%s", ([self.imei_num]))
@@ -51,6 +56,9 @@ class MonthlyReport(BasicReport):
 			self.ws['N'+str(raw_data_incremental_index)] = test_date
 			self.ws['O'+str(raw_data_incremental_index)] = start_study_date
 			self.ws['Q'+str(raw_data_incremental_index)] = date_of_transplant
+			self.fev1max_list.append(max(float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)))
+			self.test_date_list.append(test_date)
+
 			# need to associate each session with mode
 			if mode == 1:
 			   self.ws['S'+str(raw_data_incremental_index)] = 'Pre-surv'
