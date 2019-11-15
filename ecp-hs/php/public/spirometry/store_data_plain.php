@@ -60,11 +60,12 @@ else {
   $o2sat_boolean = 2;
 }
 
-$raw_pef = $dataArr[3];
-$raw_pulse = implode("\n",array_slice($dataArr,4,-2));
+$raw_fvc = $dataArr[3];
+$raw_pef = $dataArr[4];
+$raw_pulse = implode("\n",array_slice($dataArr,5,-2));
 
 
-$unique_id = $db->storeRecordsToPostgres($imei_num, $test_date, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minHR, $maxHR, $lowestSat, $timeAbnormal, $timeMinRate, $raw_pef, $raw_pulse);
+$unique_id = $db->storeRecordsToPostgres($imei_num, $test_date, $fev1_array[0], $fev1_array[1], $fev1_array[2], $fev1_array[3], $fev1_array[4], $fev1_array[5], $pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minHR, $maxHR, $lowestSat, $timeAbnormal, $timeMinRate,  $raw_fvc, $raw_pef, $raw_pulse);
 
 if($spiro_boolean==1 and $unique_id!=false) {
   $survey_meta = $dataArr[count($dataArr)-2];

@@ -114,7 +114,7 @@ require_once 'DB_Connect.php';
     }
     */
 
-    public function storeRecordsToPostgres($imei_num, $test_date, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16,$pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $raw_pef, $raw_pulse) {
+    public function storeRecordsToPostgres($imei_num, $test_date, $fev11,$fev12,$fev13,$fev14,$fev15,$fev16,$pulse_boolean, $o2sat_boolean, $spiro_boolean, $repeated_counter, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $raw_fvc, $raw_pef, $raw_pulse) {
 
       // prepare a query for execution
       pg_prepare($this->conn, "insert", "INSERT INTO spiro_data(imei_num, test_date, fev11, fev12, fev13, fev14, fev15, fev16, is_variance, variance_test_counter) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id");
@@ -127,8 +127,8 @@ require_once 'DB_Connect.php';
 
       $result = pg_execute($this->conn, "insert2", array($imei_num, $minRate, $maxRate, $lowestSat, $timeAbnormal, $timeMinRate, $pulse_boolean, $o2sat_boolean, $unique_id, $test_date));
 
-      pg_prepare($this->conn, "insert3", "INSERT INTO raw_data(id, pef, pulse) VALUES($1, $2, $3)");
-      $result = pg_execute($this->conn, "insert3", array($unique_id, $raw_pef, $raw_pulse));
+      pg_prepare($this->conn, "insert3", "INSERT INTO raw_data(id, fvc, pef, pulse) VALUES($1, $2, $3, $4)");
+      $result = pg_execute($this->conn, "insert3", array($unique_id, $raw_fvc, $raw_pef, $raw_pulse));
 
       // check for successful store
       if($result) {

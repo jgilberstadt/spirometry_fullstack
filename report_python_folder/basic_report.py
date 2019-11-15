@@ -18,6 +18,7 @@ class BasicReport:
 		# initialize the workbook template that can be used for populating the values obtained 
 		# from the PostgreSQL table
 		self.workbook_path = 'Report_Templates/Report template - R6.xlsx' if workbook_path == None else workbook_path
+		self.wb = load_workbook(self.workbook_path)
 
 		# initialize the report type which can be used for selecting the corresponding worksheet.
 		# 0: Report Datasheet (Monthly)
