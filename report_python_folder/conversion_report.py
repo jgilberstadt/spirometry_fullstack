@@ -10,18 +10,39 @@ from basic_report import BasicReport
 import matplotlib.pyplot as plt
 import numpy as np
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timedelta, date
 
 class ConversionReport(BasicReport):
-	def __init__(self, imei_num, current_month):
+	def __init__(self, imei_num):
 		BasicReport.__init__(self, db_config_path='credentials/database.ini', 
 			workbook_path='Report_Templates/Report template - R6.xlsx', report_type=0)
 
 		# put report-specific initalization here
 		# e.g. graph objects, replaced values queried from DB
 		self.imei_num = imei_num
-		self.current_month = current_month
+		#self.current_month = current_month
 		self.ws = self.wb['Report Datasheet (Conv 10 wks)']
+
+	def empty_row(self, index):
+		self.ws['A'+str(index)] = ""
+		self.ws['B'+str(index)] = ""
+		self.ws['C'+str(index)] = ""
+		self.ws['D'+str(index)] = ""
+		self.ws['E'+str(index)] = ""
+		self.ws['F'+str(index)] = ""
+		self.ws['G'+str(index)] = ""
+		self.ws['H'+str(index)] = ""
+		self.ws['I'+str(index)] = ""
+		self.ws['J'+str(index)] = ""
+		self.ws['K'+str(index)] = ""
+		self.ws['L'+str(index)] = ""
+		self.ws['M'+str(index)] = ""
+		self.ws['N'+str(index)] = ""
+		self.ws['O'+str(index)] = ""
+		self.ws['P'+str(index)] = ""
+		self.ws['Q'+str(index)] = ""
+		self.ws['R'+str(index)] = ""
+		self.ws['S'+str(index)] = ""
 
 	# Plot the graphs and place them in the spreedsheet
 	def plotGraph(self):
@@ -78,7 +99,8 @@ class ConversionReport(BasicReport):
 	def replaceValues(self):
 		cursor = self.cnx.cursor()
 		# obtain current datetime
-		report_date = datetime.now()
+		#report_date = datetime.now()
+		report_date = date(2019,11,4)
 		self.ws['E3'] = report_date.strftime("%m/%d/%y")
 		# query patient study number and other information that can be used later
 		cursor.execute("SELECT patient_id, start_study_date, date_of_transplant, mode FROM patient_data WHERE imei_num=%s", ([self.imei_num]))
@@ -91,10 +113,40 @@ class ConversionReport(BasicReport):
 		# create a list of date to be used in replaceValues(self) function
 		self.test_date_list = []
 
+		# the raw data extraction for the conversion report is a bit tricky
+		# first, need to empty the raw data in the template
+		# then, align dates with rows
+
+		# the alignment cursor
+		# at the begining, set the alignment cursor to be 72 days before, which is the start date of the study
+		alignment_cursor = report_date - timedelta(days=72)
+
 		# query all fev1 values from spiro_data table
-		raw_data_incremental_index = 34
-		cursor.execute("SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter FROM spiro_data WHERE imei_num=%s", ([self.imei_num]))
+		raw_data_incremental_index = 45
+		cursor.execute("SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter FROM spiro_data WHERE imei_num=%s AND test_date >=%s and test_date <%s", ([self.imei_num, alignment_cursor, report_date]))
 		for (fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter) in cursor:
+			"""
+			self.ws['A'+str(raw_data_incremental_index)] = patient_study_number
+			self.ws['B'+str(raw_data_incremental_index)] = fev11
+			self.ws['C'+str(raw_data_incremental_index)] = fev12
+			self.ws['D'+str(raw_data_incremental_index)] = fev13
+			self.ws['E'+str(raw_data_incremental_index)] = fev14
+			self.ws['F'+str(raw_data_incremental_index)] = fev15
+			self.ws['G'+str(raw_data_incremental_index)] = fev16
+			self.ws['N'+str(raw_data_incremental_index)] = test_date
+			self.ws['O'+str(raw_data_incremental_index)] = start_study_date
+			self.ws['Q'+str(raw_data_incremental_index)] = date_of_transplant
+			self.fev1max_list.append(max(float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)))
+			self.test_date_list.append(test_date)
+			"""
+
+			while(alignment_cursor < test_date):
+				print "alignment_cursor", alignment_cursor.strftime("%m/%d/%y")
+				print "test_date", test_date.strftime("%m/%d/%y")
+				self.empty_row(raw_data_incremental_index)
+				raw_data_incremental_index += 1
+				alignment_cursor += timedelta(days=1)
+
 			self.ws['A'+str(raw_data_incremental_index)] = patient_study_number
 			self.ws['B'+str(raw_data_incremental_index)] = fev11
 			self.ws['C'+str(raw_data_incremental_index)] = fev12
@@ -108,6 +160,7 @@ class ConversionReport(BasicReport):
 			self.fev1max_list.append(max(float(fev11), float(fev12), float(fev13), float(fev14), float(fev15), float(fev16)))
 			self.test_date_list.append(test_date)
 
+
 			# need to associate each session with mode
 			if mode == 1:
 			   self.ws['S'+str(raw_data_incremental_index)] = 'Pre-surv'
@@ -115,6 +168,7 @@ class ConversionReport(BasicReport):
 			   self.ws['S'+str(raw_data_incremental_index)] = 'Month'
 			#a
 			raw_data_incremental_index += 1
+			alignment_cursor += timedelta(days=1)
 
 		cursor.execute("SELECT maxrate, minrate, lowestsat FROM pulse_data WHERE imei_num=%s AND test_date BETWEEN current_date - 30 and current_date", ([self.imei_num]))
 		currentminrate = 1000
@@ -138,4 +192,4 @@ class ConversionReport(BasicReport):
 			
 	# If everything is taken care by the above two methods, we can just save the xlsx in this method
 	def generateReport(self):
-		self.wb.save(filename = self.imei_num+"_Monthly_Report_"+str(self.current_month)+".xlsx")
+		self.wb.save(filename = self.imei_num+"_Conversion_Report_10wks_"+".xlsx")
