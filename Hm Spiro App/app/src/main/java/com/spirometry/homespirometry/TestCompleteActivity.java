@@ -559,6 +559,10 @@ public class TestCompleteActivity extends SuperActivity {
             line += "\n";
             fOut.write(line.getBytes());
 
+            // write FVC test into file
+            line = mBundleData.getBlowDataArray() + "\n";
+            fOut.write(line.getBytes());
+
             line = mBundleData.getBlowDataArrayPefFev1() + "\n";
             fOut.write(line.getBytes());
 
