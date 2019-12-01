@@ -102,22 +102,10 @@ class ConversionReport(BasicReport):
 
 		# query all fev1 values from spiro_data table
 		raw_data_incremental_index = 45
-		"""
-		for raw_data_incremental_index_tempate in range(45,117):
-			self.empty_row(raw_data_incremental_index_tempate)
-		"""
+
 		cursor.execute("SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter FROM spiro_data WHERE imei_num=%s AND test_date >=%s AND test_date <%s", ([self.imei_num, alignment_cursor, report_date]))
 		for (fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter) in cursor:
-			"""
-			while(alignment_cursor < test_date):
-				print "alignment_cursor", alignment_cursor.strftime("%m/%d/%y")
-				print "test_date", test_date.strftime("%m/%d/%y")
-				self.empty_row(raw_data_incremental_index)
-				raw_data_incremental_index += 1
-				alignment_cursor += timedelta(days=1)
-			"""
 			self.empty_row(raw_data_incremental_index)
-
 			self.ws['A'+str(raw_data_incremental_index)] = int(patient_study_number)
 			self.ws['B'+str(raw_data_incremental_index)] = fev11
 			self.ws['C'+str(raw_data_incremental_index)] = fev12
