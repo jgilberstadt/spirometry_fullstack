@@ -26,7 +26,7 @@ import com.spirometry.homespirometry.R;
 
 import java.util.ArrayList;
 
-public class SpirometerConnectingActivity extends SuperActivity {
+public class SpirometerConnectingActivity extends AppCompatActivity {
 
     private NewParcelable mBundleData;
     String success = "Success!";
@@ -51,8 +51,9 @@ public class SpirometerConnectingActivity extends SuperActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-        setContentView(R.layout.activity_spirometer_connecting);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_spirometer_connecting);
+
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

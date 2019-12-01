@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,20 +13,39 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.spirometry.homespirometry.classes.MyParcelable;
-import com.spirometry.homespirometry.classes.SuperActivity;
+import com.spirometry.homespirometry.PulseInstructionActivity;
+import com.spirometry.spirobanksmartsdk.Device;
+import com.spirometry.spirobanksmartsdk.DeviceCallback;
 import com.spirometry.spirobanksmartsdk.DeviceInfo;
 import com.spirometry.spirobanksmartsdk.DeviceManager;
+import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 import com.spirometry.spirobanksmartsdk.Patient;
+import com.spirometry.spirobanksmartsdk.ResultsFvc;
+import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
+import com.spirometry.homespirometry.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import shared.STTrace;
 import terminalIO.TIOManager;
 import terminalIO.TIOPeripheral;
 import terminalIO.TIOPeripheralCallback;
 
-public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallback {
+public class BlowActivity2 extends AppCompatActivity implements TIOPeripheralCallback {
 
     private static final String TAG = BlowActivity.class.getSimpleName();
 
@@ -61,16 +81,15 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
     protected void onCreate(Bundle savedInstanceState) {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         String peripheralAddress = getIntent().getStringExtra("peripheralAddress");
-        //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-        setContentView(R.layout.activity_blow);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_blow);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         _peripheral = TIOManager.sharedInstance().findPeripheralByAddress(peripheralAddress);
         _peripheral.setListener(this);
-        Log.d(TAG, peripheralAddress);
+        Log.d("hyunrae", peripheralAddress);
 
         blowDirection = (TextView) findViewById(R.id.blowDirection);
         blowMessage = (TextView) findViewById(R.id.blowMessage);
@@ -123,14 +142,14 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
 
     @Override
     public void tioPeripheralDidFailToConnect(TIOPeripheral peripheral, String errorMessage) {
-        Log.d(TAG, "FAIL TO CONNECT");
+        Log.d("hyunrae", "FAIL TO CONNECT");
         STTrace.method("tioPeripheralDidFailToConnect", errorMessage);
     }
 
     @Override
     public void tioPeripheralDidDisconnect(TIOPeripheral peripheral, String errorMessage) {
         STTrace.method("tioPeripheralDidDisconnect", errorMessage);
-        Log.d(TAG, "disconnected");
+        Log.d("hyunrae", "disconnected");
         //numBlows--;
     }
 
@@ -139,14 +158,14 @@ public class BlowActivity2 extends SuperActivity implements TIOPeripheralCallbac
         try {
             handlerVisibilityChange.post(runVisibilityChange);
             numBlows++;
-            Log.d(TAG, "peter " );
+            Log.d("hyunrae", "peter " );
             messageNumber--;
             handlerTextViewNumberChange.post(runTextViewNumberChange);
             handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
             String text = new String(data, "CP-1252");
-            Log.d(TAG, "text "  + text);
+            Log.d("hyunrae", "text "  + text);
         } catch (Exception e) {
-            Log.d(TAG,"nah" + e.toString());
+            Log.d("hyunrae","nah" + e.toString());
         }
 
     }

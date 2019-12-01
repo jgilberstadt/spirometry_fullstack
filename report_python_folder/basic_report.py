@@ -33,6 +33,39 @@ class BasicReport:
 		5:'Report Datasheet (Conv 10 wks)', 6:'Report Datasheet (Conv 6 wks)'}
 		self.report_type_name = self.report_type_dict[report_type]
 
+	def empty_row(self, index):
+		self.ws['A'+str(index)] = ""
+		self.ws['B'+str(index)] = ""
+		self.ws['C'+str(index)] = ""
+		self.ws['D'+str(index)] = ""
+		self.ws['E'+str(index)] = ""
+		self.ws['F'+str(index)] = ""
+		self.ws['G'+str(index)] = ""
+		self.ws['N'+str(index)] = ""
+		self.ws['O'+str(index)] = ""
+		self.ws['S'+str(index)] = ""
+
+	def empty_row_all(self, index):
+		self.ws['A'+str(index)] = ""
+		self.ws['B'+str(index)] = ""
+		self.ws['C'+str(index)] = ""
+		self.ws['D'+str(index)] = ""
+		self.ws['E'+str(index)] = ""
+		self.ws['F'+str(index)] = ""
+		self.ws['G'+str(index)] = ""
+		self.ws['H'+str(index)] = ""
+		self.ws['I'+str(index)] = ""
+		self.ws['J'+str(index)] = ""
+		self.ws['K'+str(index)] = ""
+		self.ws['L'+str(index)] = ""
+		self.ws['M'+str(index)] = ""
+		self.ws['N'+str(index)] = ""
+		self.ws['O'+str(index)] = ""
+		self.ws['P'+str(index)] = ""
+		self.ws['Q'+str(index)] = ""
+		self.ws['R'+str(index)] = ""
+		self.ws['S'+str(index)] = ""
+
 	# Plot the graphs and place them in the spreedsheet
 	def plotGraph(self):
 		print("This is the basic class method, please implement it in the subclass")

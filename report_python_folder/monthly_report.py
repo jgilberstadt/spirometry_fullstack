@@ -95,7 +95,8 @@ class MonthlyReport(BasicReport):
 		raw_data_incremental_index = 34
 		cursor.execute("SELECT fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter FROM spiro_data WHERE imei_num=%s", ([self.imei_num]))
 		for (fev11, fev12, fev13, fev14, fev15, fev16, test_date, is_variance, variance_test_counter) in cursor:
-			self.ws['A'+str(raw_data_incremental_index)] = patient_study_number
+			self.empty_row(raw_data_incremental_index)
+			self.ws['A'+str(raw_data_incremental_index)] = int(patient_study_number)
 			self.ws['B'+str(raw_data_incremental_index)] = fev11
 			self.ws['C'+str(raw_data_incremental_index)] = fev12
 			self.ws['D'+str(raw_data_incremental_index)] = fev13
@@ -114,6 +115,10 @@ class MonthlyReport(BasicReport):
 			elif mode == 2 or mode == 3:
 			   self.ws['S'+str(raw_data_incremental_index)] = 'Month'
 			#a
+			raw_data_incremental_index += 1
+
+		while(raw_data_incremental_index<=116):
+			self.empty_row_all(raw_data_incremental_index)
 			raw_data_incremental_index += 1
 
 		cursor.execute("SELECT maxrate, minrate, lowestsat FROM pulse_data WHERE imei_num=%s AND test_date BETWEEN current_date - 30 and current_date", ([self.imei_num]))

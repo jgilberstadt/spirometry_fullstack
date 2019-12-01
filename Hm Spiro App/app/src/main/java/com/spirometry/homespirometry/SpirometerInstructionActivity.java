@@ -18,7 +18,7 @@ import com.spirometry.spirobanksmartsdk.DeviceManagerCallback;
 
 import java.util.ArrayList;
 
-public class SpirometerInstructionActivity extends SuperActivity {
+public class SpirometerInstructionActivity extends AppCompatActivity {
 
     private static final String TAG = SpirometerInstructionActivity.class.getSimpleName();
 
@@ -34,8 +34,9 @@ public class SpirometerInstructionActivity extends SuperActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-        setContentView(R.layout.activity_spirometer_instruction);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_spirometer_instruction);
+
 
         startTest2 = (Button) findViewById(R.id.startTest2);
 

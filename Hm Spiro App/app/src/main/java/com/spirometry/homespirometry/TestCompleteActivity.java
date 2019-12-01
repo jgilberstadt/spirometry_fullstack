@@ -77,7 +77,7 @@ public class TestCompleteActivity extends SuperActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Boolean mode = false;
+        //Boolean mode = false;
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_test_complete);
         super.onCreate(savedInstanceState);
@@ -93,7 +93,7 @@ public class TestCompleteActivity extends SuperActivity {
         mBundleData.setSymptomsExist(0);
         */
         // should handle the case of normal test vs. repeated test
-        if(mode){
+        if(mBundleData.getMode()==2 || mBundleData.getMode() == 3){
             if (mBundleData.getVarianceExists()==1) {
                 if (mBundleData.getSymptomsExist()==1) {
                     varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
@@ -492,7 +492,8 @@ public class TestCompleteActivity extends SuperActivity {
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         final File file_path = getFilesDir();
-        final String file_name = param + "_" + getManufacturerSerialNumber() + "_" + sdf.format(currentTime);
+        //final String file_name = param + "_" + getManufacturerSerialNumber() + "_" + sdf.format(currentTime);
+        final String file_name = param + "_" + mBundleData.getPatientId() + "_" + sdf.format(currentTime);
 
         Log.d("upload_filename pos 1", file_name);
 
