@@ -16,15 +16,10 @@ import android.widget.TimePicker;
 
 import com.spirometry.homespirometry.classes.NewParcelable;
 import com.spirometry.homespirometry.classes.SuperActivity;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ApplicationChooseActivity extends SuperActivity {
     public static final String FILE_NAME = "timeKeeping.txt";
@@ -124,9 +119,12 @@ public class ApplicationChooseActivity extends SuperActivity {
         } else {
             dateTimeRepresent.setText("No Appointment Scheduled");
         }
-        SimpleDateFormat sformat = new SimpleDateFormat("EEEE, dd/mm/yyyy"); // the day of the week spelled out completely
+        SimpleDateFormat sformat = new SimpleDateFormat("EEEE MMMM dd", Locale.US); // the day of the week spelled out completely
+        Log.d(TAG, sformat.format(nextDate.getTime()));
         dateTimeRepresent.setText(sformat.format(nextDate.getTime()));
+        //dateTimeRepresent.setText(nextDate.getTime().toString());
     }
+
     private Calendar getNextAppointmentDate(){
         return Calendar.getInstance();
     }

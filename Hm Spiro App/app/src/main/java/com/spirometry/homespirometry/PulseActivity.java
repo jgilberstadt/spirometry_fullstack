@@ -87,7 +87,7 @@ public class PulseActivity extends SuperActivity {
     private int timeAbnormal = 0;
     private int timeMinRate = 0;
     private int normOxygen = 90;
-
+    private int timeLeft = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
@@ -253,6 +253,7 @@ public class PulseActivity extends SuperActivity {
                             startTest = true;
 
                             myCountDownTimer = new CountDownTimer(10000, 1000) {
+
 
                                 public void onTick(long millisUntilFinished) {
                                     int countDown = (int) (millisUntilFinished / 1000);

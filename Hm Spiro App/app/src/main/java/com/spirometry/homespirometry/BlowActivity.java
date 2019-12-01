@@ -52,11 +52,6 @@ public class BlowActivity extends AppCompatActivity {
     Context myContext;
     final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
-    String deviceInfoStringAddress;
-    String deviceInfoStringName;
-    String deviceInfoStringProtocol;
-    String deviceInfoStringSerialNumber;
-    String deviceInfoStringAdvertisementDataName;
     ArrayList<String> deviceInfoArray = new ArrayList<>();
     ArrayList<String> arr;
     String blowDeviceResultArray = "";
@@ -71,9 +66,6 @@ public class BlowActivity extends AppCompatActivity {
     int numBlows = 0;
     int value = numBlows + 1;
     private int messageNumber = 7;
-    private int messageNumberFvc = 6;
-
-    private String patient_id = "000000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +108,7 @@ public class BlowActivity extends AppCompatActivity {
         findViewById(R.id.buttonReBlow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(numBlows <6) {
+                if(numBlows < 6) {
                     //currDevice.startTest(getApplicationContext(), Device.TestType.Fvc,(byte)50);
                     currDevice.startTest(getApplicationContext(), Device.TestType.Fvc);
 
@@ -133,7 +125,6 @@ public class BlowActivity extends AppCompatActivity {
         if(numBlows > 6) {
             nextButton.setVisibility(View.VISIBLE);
         }
-
 
     }
 

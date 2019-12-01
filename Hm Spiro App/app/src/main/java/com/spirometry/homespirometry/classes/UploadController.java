@@ -97,5 +97,4 @@ public class UploadController {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
 }
