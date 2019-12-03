@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -53,6 +54,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);
         //alert patient about their mode
         modeAlert();
+
         if(newBundleData.getMode() == 2){
             //Todo: write database query to change patient mode to 3 once this appointment completes
         }

@@ -252,7 +252,7 @@ public class PulseActivity extends SuperActivity {
                         if (startTest == false) {
                             startTest = true;
 
-                            myCountDownTimer = new CountDownTimer(10000, 1000) {
+                            myCountDownTimer = new CountDownTimer(60000, 1000) {
 
 
                                 public void onTick(long millisUntilFinished) {

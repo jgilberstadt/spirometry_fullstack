@@ -146,7 +146,7 @@ public class LoginActivity extends SuperActivity {
                             //gradally replace mBundleData. This must be set to ensure the title bar display the correct mode
                             newBundleData.setMode(Integer.valueOf(mode));
                             Intent intent = new Intent(LoginActivity.this, ApplicationChooseActivity.class);
-                            intent.putExtra(TAG, mBundleData);
+                            intent.putExtra("bundle-data", mBundleData);
                             startActivity(intent);
                         } catch (Exception e) {
                             showWrongPasswordToast(patientIdView);

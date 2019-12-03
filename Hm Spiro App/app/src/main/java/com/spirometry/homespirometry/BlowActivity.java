@@ -28,7 +28,7 @@ import com.spirometry.spirobanksmartsdk.ResultsPefFev1;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlowActivity extends AppCompatActivity {
+public class BlowActivity extends SuperActivity {
 
     private static final String TAG = BlowActivity.class.getSimpleName();
 
@@ -72,9 +72,9 @@ public class BlowActivity extends AppCompatActivity {
         mBundleData = getIntent().getParcelableExtra("bundle-data");
         //arr = mBundleData.getDeviceInfo();
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
+        super.onCreate(savedInstanceState);
+
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

@@ -26,7 +26,7 @@ import com.spirometry.homespirometry.R;
 
 import java.util.ArrayList;
 
-public class SpirometerConnectingActivity extends AppCompatActivity {
+public class SpirometerConnectingActivity extends SuperActivity {
 
     private NewParcelable mBundleData;
     String success = "Success!";
@@ -51,8 +51,9 @@ public class SpirometerConnectingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spirometer_connecting);
+        super.onCreate(savedInstanceState);
+
 
 
         //set screen always ON
@@ -294,7 +295,7 @@ public class SpirometerConnectingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Your Bluetooth Device is Not Connected", Toast.LENGTH_SHORT).show();
             }
         }
-    }, 9000);
+    }, 20000);
         }
     };
 
