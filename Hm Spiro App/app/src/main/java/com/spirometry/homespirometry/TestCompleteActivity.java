@@ -57,7 +57,10 @@ public class TestCompleteActivity extends SuperActivity {
     private static final String TAG = BlowActivity.class.getSimpleName();
     TextView nextAppointment;
     TextView varianceAndSymptoms;
-    TextView varianceAndNoSymptoms;
+    TextView varianceAndNoSymptoms_day4;
+    TextView varianceAndNoSymptoms_day3;
+    TextView varianceAndNoSymptoms_day2;
+    TextView varianceAndNoSymptoms_day1;
     EditText symptomIndicatorText;
     Button changeAppointment;
     TextView dateRepresent;
@@ -101,13 +104,47 @@ public class TestCompleteActivity extends SuperActivity {
 
                     createFile("yesVarianceYesSymptoms", true);
                 } else {
-                    varianceAndNoSymptoms = (TextView) findViewById(R.id.varianceAndNoSymptoms);
-                    varianceAndNoSymptoms.setVisibility(View.VISIBLE);
+                    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                    int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+
+                    Log.d("testingPeriodDay", String.valueOf(testingPeriodDay));
+
+                    varianceAndNoSymptoms_day1 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day1);
+                    varianceAndNoSymptoms_day2 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day2);
+                    varianceAndNoSymptoms_day3 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day3);
+                    varianceAndNoSymptoms_day4 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day4);
+
+                    switch(testingPeriodDay) {
+                        case 0:
+                            varianceAndNoSymptoms_day1.setVisibility(View.VISIBLE);
+                            varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            break;
+                        case 1:
+                            varianceAndNoSymptoms_day2.setVisibility(View.VISIBLE);
+                            varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            break;
+                        case 2:
+                            varianceAndNoSymptoms_day3.setVisibility(View.VISIBLE);
+                            varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            break;
+                        case 3:
+                            varianceAndNoSymptoms_day4.setVisibility(View.VISIBLE);
+                            varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
+                            varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
+                            break;
+                    }
+
                     //TODO: set notifications for the next 4 days here
                     // get value from shared preference
 
-                    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                    int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+
                     SharedPreferences.Editor editor = sharedPref.edit();
                     if(testingPeriodDay<3) {
                         editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
