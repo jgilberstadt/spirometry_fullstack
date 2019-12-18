@@ -31,6 +31,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/nextAppointment_after_persistent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="128dp"
+        android:text="@string/test_complete_last_day"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="48sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/varianceAndSymptoms"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +69,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="128dp"
-        android:text="@string/repeat_for_4_days"
+        android:text="@string/repeat_for_3_days"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="48sp"
@@ -69,7 +85,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="128dp"
-        android:text="@string/repeat_for_3_days"
+        android:text="@string/repeat_for_2_days"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="48sp"
@@ -86,22 +102,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="128dp"
         android:text="@string/repeat_for_2_days"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="48sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/varianceAndNoSymptoms_day4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="128dp"
-        android:text="@string/repeat_for_1_day"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="48sp"

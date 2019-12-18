@@ -3,6 +3,7 @@ package com.spirometry.homespirometry;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +67,7 @@ public class BlowActivity extends SuperActivity {
     int numBlows = 0;
     int value = numBlows + 1;
     private int messageNumber = 7;
+    int testingPeriodDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,10 @@ public class BlowActivity extends SuperActivity {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
         setContentView(R.layout.activity_blow);
         super.onCreate(savedInstanceState);
+
+        // check testing period day as well
+        SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
+        testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -152,7 +158,7 @@ public class BlowActivity extends SuperActivity {
         @Override
         public void deviceConnected(Device device) {
             currDevice = device;
-            Log.d(TAG, "Checkcheck");
+            Log.d(TAG, "Device Connected");
             infoList.add("devConnected");
             deviceManager.stopDiscovery();
             currDevice.startTest(getApplicationContext(), Device.TestType.PefFev1);
@@ -225,7 +231,7 @@ public class BlowActivity extends SuperActivity {
             numBlows++;
             messageNumber--;
 
-            Log.d("hyunrae", "one more test added");
+            Log.d(TAG, "PefFev1 test starts");
             String pef = String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100);
             String fev1 = String.valueOf(resultsPefFev1.getFev1_cL() / (float) 100);
             String peftime = String.valueOf(resultsPefFev1.getPefTime_msec());
@@ -240,14 +246,14 @@ public class BlowActivity extends SuperActivity {
 
             handlerTextViewNumberChange.post(runTextViewNumberChange);
 
-            Log.d(TAG, "wow: " + String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100));
+            Log.d(TAG, "pef_cLs(Peakflow cL sec): " + String.valueOf(resultsPefFev1.getPef_cLs() * 60 / (float) 100));
             currDevice.stopTest(getApplicationContext());
         }
 
         @Override
         public void resultsUpdated(ResultsFvc resultsFvc) {
-            Log.d("hyunrae", Integer.toString(resultsFvc.getFvc_cL()));
-            Log.d("hyunrae", Integer.toString(resultsFvc.getFev6_cl()));
+            Log.d(TAG, "fvc_cL(Forced Exp Vol at 1th sec in cL): " + Integer.toString(resultsFvc.getFvc_cL()));
+            Log.d(TAG, "fev6_cL(Forced Exp Volume at 6th sec in cL) :" + Integer.toString(resultsFvc.getFev6_cl()));
 
             numBlows++;
             messageNumber--;
@@ -280,7 +286,7 @@ public class BlowActivity extends SuperActivity {
 
             //mBundleData.setBlowDataArray(resultArray);
 
-            Log.d(TAG, "wow2: " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100));
+            Log.d(TAG, "pef_cLs(Peakflow cL sec): " + String.valueOf(resultsFvc.getPef_cLs() * 60 / (float) 100));
 
             if(numBlows <6) {
                 handlerWaitandStartFvc.post(runWaitandStartFvc); // the thing here is that what happen if the data upload doesn't upload?
@@ -297,7 +303,7 @@ public class BlowActivity extends SuperActivity {
             //Log.d("peter", " " + numBlows);
             if(numBlows >=6) {
                 currDevice.stopTest(getApplicationContext());
-                Log.d("done with all 7 tests", "done with all 7 tests");
+                Log.d(TAG, "done with all 7 tests");
                 handlerVisibilityChange.post(runVisibilityChange);
                 handleIntentToTestComplete.post(runIntentToTestComplete); // the thing here is that what happen if the data upload doesn't upload?
             }else {
@@ -308,9 +314,9 @@ public class BlowActivity extends SuperActivity {
         @Override
         public void testStopped(Device device) {
            // numBlowsFvc++;
-            Log.d("Stopped", "Test has been stopped");
+            Log.d(TAG, "Test has been stopped");
             if (numBlows > 6) {
-                Log.d("final stopped", "Test has been stopped last");
+                Log.d(TAG, "Test has been stopped last");
             }else if(value == numBlows){
                 handlerVisibilityChange.post(runVisibilityChange);
                 handlerVisibilityChangeTwoWaitOneSecond.post(runVisibilityChangeTwoWaitOneSecond);
@@ -324,7 +330,7 @@ public class BlowActivity extends SuperActivity {
 
         @Override
         public void softwareUpdateProgress(float progress, Device.UpdateStatus status, String error) {
-            Log.d("hyunrae", "f");
+            //Log.d("hyunrae", "f");
         }
     };
     Handler handlerTextViewNumberChange = new Handler();
@@ -369,7 +375,7 @@ public class BlowActivity extends SuperActivity {
             //deviceManager.disconnect();
 
             mBundleData.setBlowDataArray(blowDeviceResultArray);
-            Log.d("result", mBundleData.getBlowDataArray());
+            Log.d(TAG, "Final results: " + mBundleData.getBlowDataArray());
 
             //Intent intent = new Intent(BlowActivity.this, TestCompleteActivity.class);
             /*
@@ -386,7 +392,7 @@ public class BlowActivity extends SuperActivity {
                 mBundleData.setVarianceExists(var1 ? 1 : 0);
 
                 //if fev is anomalous
-                if (mBundleData.getVarianceExists() == 1) {
+                if (mBundleData.getVarianceExists() == 1 || testingPeriodDay>0) {
 
                     Intent intent = new Intent(BlowActivity.this, QuestionnaireInstructionActivity.class);
                     intent.putExtra("bundle-data", mBundleData);

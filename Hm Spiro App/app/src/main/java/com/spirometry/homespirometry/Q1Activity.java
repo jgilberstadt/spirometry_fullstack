@@ -56,6 +56,7 @@ public class Q1Activity extends SuperActivity {
 
         if (initialAnswer.getText().toString().equals(("Yes"))) {
             mBundleData.setQuestionStates(0, 1);
+            mBundleData.setSymptomsExist(1);
             Intent intent = new Intent(Q1Activity.this, Q1SubActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             startActivity(intent);

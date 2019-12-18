@@ -133,7 +133,7 @@ public class LoginActivity extends SuperActivity {
                                 newBundleData.setMinNRange(Float.valueOf(minMaxRanges[0]));
                                 mBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
                                 newBundleData.setMaxNRange(Float.valueOf(minMaxRanges[1]));
-                                Log.d(TAG, "range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
+                                Log.d(TAG, "normal range: " + minMaxRanges[0] + ", " + minMaxRanges[1]);
                             }
 
                             // set patient id and mode
@@ -183,7 +183,7 @@ public class LoginActivity extends SuperActivity {
 
     private void showWrongPasswordToast(EditText patientIdView) {
         Toast.makeText(getApplicationContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
-        Log.d("a", "wrong");
+        Log.d(TAG, "wrong");
         correctPasswordCheck++;
         if(correctPasswordCheck >=4){
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -219,11 +219,11 @@ public class LoginActivity extends SuperActivity {
                 Log.d(TAG, "confirmSurvey Response: " + response);
                 if (response.equals("true")) {
                     // database contains survey
-                    Log.d("exists", "YES");
+                    Log.d(TAG, "exists YES");
                     File file = new File(selectedFilePath, file_name);
                     file.delete();
                 } else {
-                    Log.d("exists", "NO");
+                    Log.d(TAG, "exists NO");
 
                     // database does not contain survey
                     new Thread(new Runnable() {

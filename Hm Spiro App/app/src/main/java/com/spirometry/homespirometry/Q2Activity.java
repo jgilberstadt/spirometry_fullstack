@@ -55,6 +55,7 @@ public class Q2Activity extends SuperActivity {
         RadioButton initialAnswer = (RadioButton)findViewById(initialRadioGroup.getCheckedRadioButtonId());
         if (initialAnswer.getText().toString().equals(("Yes"))) {
             mBundleData.setQuestionStates(1, 1);
+            mBundleData.setSymptomsExist(1);
             Intent intent = new Intent(Q2Activity.this, Q2SubActivity.class);
             intent.putExtra("bundle-data", mBundleData);
             startActivity(intent);

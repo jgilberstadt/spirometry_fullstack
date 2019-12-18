@@ -43,6 +43,8 @@ public class ApplicationChooseActivity extends SuperActivity {
     String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     int[] hours = {12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
+    int testingPeriodDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setContentView must be called before super.onCreate to set the title bar correctly in the super class
@@ -52,6 +54,13 @@ public class ApplicationChooseActivity extends SuperActivity {
         Log.d(TAG,"mode:"+newBundleData.getMode());
         timeKeepingText = (TextView) findViewById(R.id.timeKeepingText);
         dateTimeRepresent = (TextView) findViewById(R.id.dateTimeRepresent);
+
+        // check testing period day as well
+        SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
+        testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+
+        Log.d(TAG,  "testingPeriodDay"+testingPeriodDay);
+
         //alert patient about their mode
         modeAlert();
 
@@ -158,8 +167,11 @@ public class ApplicationChooseActivity extends SuperActivity {
             } else if(mode == 2){
                 alertDialog.setTitle(getString(R.string.transfer_mode_title));
             }
-            else if(mode == 3){
+            else if(mode == 3 && testingPeriodDay == 0){
                 alertDialog.setMessage(getString(R.string.surveillnce_mode_instruction));
+            }
+            else if(mode == 3 && testingPeriodDay > 0){
+                alertDialog.setMessage(getString(R.string.persistent_tests_instruction));
             }
         }
 

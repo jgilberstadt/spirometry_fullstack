@@ -94,7 +94,7 @@ public class PulseConnectingActivity extends SuperActivity {
             is.close();
             // authenticate with the key
             boolean isPass = iHealthDevicesManager.getInstance().sdkAuthWithLicense(buffer);
-            Log.i(TAG, "isPass:    " + isPass);
+            Log.d(TAG, "isPass:    " + isPass);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
@@ -114,10 +114,10 @@ public class PulseConnectingActivity extends SuperActivity {
                     // Permission granted
                     // Start discovery for device. PO3 is the device type of a pulse oximeter.
                     iHealthDevicesManager.getInstance().startDiscovery(DiscoveryTypeEnum.PO3);
-                    Log.i(TAG, "Request Permission Pass");
+                    Log.d(TAG, "Request Permission Pass");
                 } else {
                     // Alert the user that this application requires the location permission to perform the scan.
-                    Log.i(TAG, "Request Permission Fail");
+                    Log.d(TAG, "Request Permission Fail");
                 }
             }
         }
@@ -128,7 +128,7 @@ public class PulseConnectingActivity extends SuperActivity {
         @Override
         // Once we get a mac from scanning, then try conecting to that device.
         public void onScanDevice(String mac, String deviceType, int rssi, Map manufactorData) {
-            Log.i(TAG, "onScanDevice - mac:" + mac + " - deviceType:" + deviceType + " - rssi:" + rssi + " -manufactorData:" + manufactorData);
+            Log.d(TAG, "onScanDevice - mac:" + mac + " - deviceType:" + deviceType + " - rssi:" + rssi + " -manufactorData:" + manufactorData);
             Bundle bundle = new Bundle();
             bundle.putString("mac", mac);
             bundle.putString("type", deviceType);
@@ -150,7 +150,7 @@ public class PulseConnectingActivity extends SuperActivity {
         @Override
         // Callback for when the device is detected to connect or disconnect
         public void onDeviceConnectionStateChange(String mac, String deviceType, int status, int errorID, Map manufactorData) {
-            Log.e(TAG, "mac:" + mac + " deviceType:" + deviceType + " status:" + status + " errorid:" + errorID + " -manufactorData:" + manufactorData);
+            Log.d(TAG, "mac:" + mac + " deviceType:" + deviceType + " status:" + status + " errorid:" + errorID + " -manufactorData:" + manufactorData);
             Bundle bundle = new Bundle();
             bundle.putString("mac", mac);
             bundle.putString("type", deviceType);

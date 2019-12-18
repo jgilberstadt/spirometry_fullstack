@@ -158,8 +158,8 @@ public class SpirometerConnectingActivity extends SuperActivity {
     DeviceManagerCallback deviceManagerCallback = new DeviceManagerCallback() {
         @Override
         public void deviceDiscovered(DeviceInfo deviceInfo) {
-            Log.d("hyunrae", deviceInfo.getSerialNumber());
-            Log.d("hyunrae", deviceInfo.getAddress());
+            Log.d(TAG, deviceInfo.getSerialNumber());
+            Log.d(TAG, deviceInfo.getAddress());
                     //I did this so that you don't reconnect with different device
                     /*if(deviceInfo.getAddress().matches("00:26:33:CD:28:EB") || deviceInfo.getAddress().matches("00:26:33:CD:28:F6")) {
                    //     localInfo = "success";
@@ -199,7 +199,7 @@ public class SpirometerConnectingActivity extends SuperActivity {
         public void deviceDisconnected(Device device) {
             currDevice = null;
             //deviceManager.startDiscovery(SpirometerConnectingActivity.this);
-            Log.d(TAG, "deviceDisconnected");
+            Log.d(TAG, "Device Disconnected");
             progressBar.setVisibility(View.INVISIBLE);
             tvConnecting.setVisibility(View.INVISIBLE);
 
@@ -270,7 +270,7 @@ public class SpirometerConnectingActivity extends SuperActivity {
             new Handler().postDelayed(new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "no connection");
+            Log.d(TAG, "No Connection");
             deviceManager.stopDiscovery();
            if(localInfo == true){
                 Log.d(TAG, "the device is connected, nothing to show");

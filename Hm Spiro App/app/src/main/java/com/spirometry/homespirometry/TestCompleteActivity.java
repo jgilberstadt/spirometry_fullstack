@@ -54,10 +54,10 @@ public class TestCompleteActivity extends SuperActivity {
 
     String[][] arraya; //6 data storing 4 String Values; +-
     private NewParcelable mBundleData;
-    private static final String TAG = BlowActivity.class.getSimpleName();
+    private static final String TAG = TestCompleteActivity.class.getSimpleName();
     TextView nextAppointment;
     TextView varianceAndSymptoms;
-    TextView varianceAndNoSymptoms_day4;
+    //TextView varianceAndNoSymptoms_day4;
     TextView varianceAndNoSymptoms_day3;
     TextView varianceAndNoSymptoms_day2;
     TextView varianceAndNoSymptoms_day1;
@@ -95,64 +95,71 @@ public class TestCompleteActivity extends SuperActivity {
         mBundleData.setVarianceExists(1);
         mBundleData.setSymptomsExist(0);
         */
+
+        SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
+        int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+
         // should handle the case of normal test vs. repeated test
         if(mBundleData.getMode()==2 || mBundleData.getMode() == 3){
-            if (mBundleData.getVarianceExists()==1) {
+            if (mBundleData.getVarianceExists()==1 || testingPeriodDay>0) {
                 if (mBundleData.getSymptomsExist()==1) {
                     varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                     varianceAndSymptoms.setVisibility(View.VISIBLE);
 
                     createFile("yesVarianceYesSymptoms", true);
                 } else {
-                    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-                    int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
 
-                    Log.d("testingPeriodDay", String.valueOf(testingPeriodDay));
+                    Log.d(TAG, "testingPeriodDay" + String.valueOf(testingPeriodDay));
 
                     varianceAndNoSymptoms_day1 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day1);
                     varianceAndNoSymptoms_day2 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day2);
                     varianceAndNoSymptoms_day3 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day3);
-                    varianceAndNoSymptoms_day4 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day4);
+                    //varianceAndNoSymptoms_day4 = (TextView) findViewById(R.id.varianceAndNoSymptoms_day4);
 
                     switch(testingPeriodDay) {
                         case 0:
                             varianceAndNoSymptoms_day1.setVisibility(View.VISIBLE);
                             varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
                             varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
-                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            //varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
                             break;
                         case 1:
                             varianceAndNoSymptoms_day2.setVisibility(View.VISIBLE);
                             varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
                             varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
-                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            //varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
                             break;
                         case 2:
                             varianceAndNoSymptoms_day3.setVisibility(View.VISIBLE);
                             varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
                             varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
-                            varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
+                            //varianceAndNoSymptoms_day4.setVisibility(View.INVISIBLE);
                             break;
+                            /*
                         case 3:
                             varianceAndNoSymptoms_day4.setVisibility(View.VISIBLE);
                             varianceAndNoSymptoms_day1.setVisibility(View.INVISIBLE);
                             varianceAndNoSymptoms_day2.setVisibility(View.INVISIBLE);
                             varianceAndNoSymptoms_day3.setVisibility(View.INVISIBLE);
                             break;
+                            */
                     }
 
-                    //TODO: set notifications for the next 4 days here
+                    //TODO: set notifications for the next 3 days here
                     // get value from shared preference
 
 
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    if(testingPeriodDay<3) {
+                    if(testingPeriodDay<2) {
                         editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
                         editor.apply();
                         startSurveyAlarm();
                     }else{
                         editor.putInt(getString(R.string.testingPeriodDay), 0);
                         editor.apply();
+                        nextAppointment = (TextView) findViewById(R.id.nextAppointment);
+                        nextAppointment.setVisibility(View.VISIBLE);
+
                     }
                     createFile("yesVarianceNoSymptoms", true);
                 }
@@ -192,11 +199,11 @@ public class TestCompleteActivity extends SuperActivity {
                 //If the equality is true, then do the first one (number before colon)
                 //if the equality is not right, then do the second one (number after the colon)
 
-                Log.d("minutes", Integer.toString(minutes));
+                Log.d(TAG, "minutes: " + Integer.toString(minutes));
 
                 SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
                 String formattedDate = df.format(weekAddedCal.getTime());
-                Log.d(TAG, " dddd" + formattedDate);
+                Log.d(TAG, "formatted Date: " + formattedDate);
                 dateRepresent.setText(formattedDate);
 
                 SimpleDateFormat formatHour = new SimpleDateFormat("hh:mm");
@@ -532,7 +539,7 @@ public class TestCompleteActivity extends SuperActivity {
         //final String file_name = param + "_" + getManufacturerSerialNumber() + "_" + sdf.format(currentTime);
         final String file_name = param + "_" + mBundleData.getPatientId() + "_" + sdf.format(currentTime);
 
-        Log.d("upload_filename pos 1", file_name);
+        Log.d(TAG, "upload_filename " + file_name);
 
         file = new File(file_path, file_name);
 
@@ -585,7 +592,7 @@ public class TestCompleteActivity extends SuperActivity {
 
                 String each_blow = blow_arr[i];
                 String[] params = each_blow.split(" ");
-                Log.d("fev1:", params[1]);
+                Log.d(TAG, "fev1:" + params[1]);
                 line += params[1];
 
                 line += "!";
@@ -638,7 +645,7 @@ public class TestCompleteActivity extends SuperActivity {
 
 
     public int sendFile(String selectedFilePath, String file_name, String php_address) {
-        Log.d("hyunrae", selectedFilePath);
+        Log.d(TAG, "Local file path:" + selectedFilePath);
 
         int serverResponseCode = 0;
         HttpURLConnection connection;
@@ -652,7 +659,7 @@ public class TestCompleteActivity extends SuperActivity {
         int maxBufferSize = 1 * 1024 * 1024;
         File selectedFile = new File(selectedFilePath, file_name);
 
-        Log.d("final path:", selectedFile.getPath());
+        //Log.d("final path:", selectedFile.getPath());
 
         if (!selectedFile.isFile()) {
             return 0;
@@ -683,7 +690,7 @@ public class TestCompleteActivity extends SuperActivity {
                 bytesAvailable = fileInputStream.available();
 
                 //See how large buffer do we allocate for the file
-                Log.d("Buffer size", Integer.toString(bytesAvailable));
+                Log.d(TAG, "Buffer size" + Integer.toString(bytesAvailable));
 
                 //selecting the buffer size as minimum of available bytes or 1 MB
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -719,11 +726,11 @@ public class TestCompleteActivity extends SuperActivity {
                     responseMsg.append(inputLine);
                 }
 
-                Log.d("hyunrae", responseMsg.toString());
+                Log.d(TAG, responseMsg.toString());
 
                 //response code of 200 indicates the server status OK
                 if (serverResponseCode == 200 && isConnectedViaWifi()) {
-                    Log.d("Upload Debug", "File Upload completed.\n\n You can see the uploaded file here: \n\n");
+                    Log.d(TAG, "Upload Debug " + "File Upload completed.\n\n You can see the uploaded file here: \n\n");
                     //TODO: check and delete only if this isn't an unenrolled baseline survey
 //                    selectedFile.delete();
                 } else {
@@ -752,7 +759,7 @@ public class TestCompleteActivity extends SuperActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("hyunrae", Integer.toString(serverResponseCode));
+            Log.d(TAG, Integer.toString(serverResponseCode));
             return serverResponseCode;
         }
     }
@@ -863,11 +870,11 @@ public class TestCompleteActivity extends SuperActivity {
                     Log.d(TAG, "confirmSurvey Response: " + response);
                     if (response.equals("true")) {
                         // database contains survey
-                        Log.d("exists", "YES");
+                        Log.d(TAG, "exists YES");
                         File file = new File(selectedFilePath, file_name);
                         file.delete();
                     } else {
-                        Log.d("exists", "NO");
+                        Log.d(TAG, "exists NO");
 
                         // database does not contain survey
                         new Thread(new Runnable() {

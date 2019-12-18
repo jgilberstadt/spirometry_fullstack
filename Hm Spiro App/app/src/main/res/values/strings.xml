@@ -28,11 +28,10 @@
     <string name="test_complete">Thank you. \n \n Please continue daily testing before 12PM. \n \n Please Contact (314) 747-0497 for assistance if needed.</string>
 
     <string name="you_will_be_contacted">Testing and Questionnaire Complete. \n \n Your Enrolling Center will contact you for follow up instructions. Please contact your Enrolling Center if you do not hear back within 4 hours.</string>
-    <string name="repeat_for_4_days">Please repeat all tests and questionnaire between 6am and noon for the next 4 days.</string>
     <string name="repeat_for_3_days">Please repeat all tests and questionnaire between 6am and noon for the next 3 days.</string>
     <string name="repeat_for_2_days">Please repeat all tests and questionnaire between 6am and noon for the next 2 days.</string>
     <string name="repeat_for_1_day">Please repeat all tests and questionnaire between 6am and noon for tomorrow.</string>
-
+    <string name="test_complete_last_day">Thank you. \n \n Please Contact (314) 747-0497 for assistance if needed.</string>
 
 
     <string name="title_activity_po3">PO3</string>
@@ -74,6 +73,7 @@
     <string name="presurveillnce_mode_instruction">Please test daily before 12PM </string>
     <string name="transfer_mode_title">You are transferred to Surveillance Mode</string>
     <string name="transfer_mode_message">Tests are now scheduled on Monday Mornings</string>
+    <string name="persistent_tests_instruction">Please do your persistent tests</string>
     <string-array name="patient_ages">
         <item>5</item>
         <item>9</item>
