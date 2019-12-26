@@ -44,6 +44,7 @@ public class ApplicationChooseActivity extends SuperActivity {
     int[] hours = {12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
     int testingPeriodDay;
+    int persistent_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class ApplicationChooseActivity extends SuperActivity {
         // check testing period day as well
         SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
         testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+        persistent_flag = sharedPref.getInt("flag", 0);
 
         Log.d(TAG,  "testingPeriodDay"+testingPeriodDay);
 
@@ -167,10 +169,10 @@ public class ApplicationChooseActivity extends SuperActivity {
             } else if(mode == 2){
                 alertDialog.setTitle(getString(R.string.transfer_mode_title));
             }
-            else if(mode == 3 && testingPeriodDay == 0){
+            else if(mode == 3 && persistent_flag == 0){
                 alertDialog.setMessage(getString(R.string.surveillnce_mode_instruction));
             }
-            else if(mode == 3 && testingPeriodDay > 0){
+            else if(mode == 3 && persistent_flag != 0){
                 alertDialog.setMessage(getString(R.string.persistent_tests_instruction));
             }
         }

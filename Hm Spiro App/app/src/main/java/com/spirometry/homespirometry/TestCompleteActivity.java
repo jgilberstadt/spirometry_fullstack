@@ -99,9 +99,11 @@ public class TestCompleteActivity extends SuperActivity {
         SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
         int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
 
+        //SharedPreferences sharedPref_flag = this.getSharedPreferences("persistent_tests_flag", Context.MODE_PRIVATE);
+
         // should handle the case of normal test vs. repeated test
         if(mBundleData.getMode()==2 || mBundleData.getMode() == 3){
-            if (mBundleData.getVarianceExists()==1 || testingPeriodDay>0) {
+            if ((mBundleData.getVarianceExists()==1 && testingPeriodDay == 0 && sharedPref.getInt("flag",0)==0) || testingPeriodDay>0) {
                 if (mBundleData.getSymptomsExist()==1) {
                     varianceAndSymptoms = (TextView) findViewById(R.id.varianceAndSymptoms);
                     varianceAndSymptoms.setVisibility(View.VISIBLE);
@@ -148,28 +150,44 @@ public class TestCompleteActivity extends SuperActivity {
                     //TODO: set notifications for the next 3 days here
                     // get value from shared preference
 
+                    /*
+                    SharedPreferences.Editor flag_editor = sharedPref_flag.edit();
+                    flag_editor.putInt()
+                    */
+
 
                     SharedPreferences.Editor editor = sharedPref.edit();
                     if(testingPeriodDay<2) {
                         editor.putInt(getString(R.string.testingPeriodDay), testingPeriodDay + 1);
+                        editor.putInt("flag", 1);
                         editor.apply();
                         startSurveyAlarm();
-                    }else{
+                    }else {
                         editor.putInt(getString(R.string.testingPeriodDay), 0);
+                        editor.putInt("flag", 1);
                         editor.apply();
+                        /*
                         nextAppointment = (TextView) findViewById(R.id.nextAppointment);
                         nextAppointment.setVisibility(View.VISIBLE);
+                        */
 
                     }
                     createFile("yesVarianceNoSymptoms", true);
                 }
-            } else {
-                nextAppointment = (TextView) findViewById(R.id.nextAppointment);
+            }
+            else {
+                // clean the flag for persistent tests
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("flag", 0);
+                editor.apply();
+                nextAppointment = (TextView) findViewById(R.id.nextAppointment_after_persistent);
                 nextAppointment.setVisibility(View.VISIBLE);
+                /*
                 dateRepresent = (TextView) findViewById(R.id.dateRepresent);
                 timeRepresent = (TextView) findViewById(R.id.timeRepresent);
                 dateButton = (Button) findViewById(R.id.dateButton);
                 changeAppointment = (Button) findViewById(R.id.changeAppointment);
+
 
                 //Get Test Finished Time
                 final Calendar getTestFinsihedTime = Calendar.getInstance();
@@ -296,11 +314,14 @@ public class TestCompleteActivity extends SuperActivity {
                         }
                         //  timePicker.
 
-              /*  maxDate.add(Calendar.DAY_OF_YEAR, +5);
+                */
+
+               /*  maxDate.add(Calendar.DAY_OF_YEAR, +5);
                 long fiveDaysAhead = maxDate.getTimeInMillis();
                 datePicker.setMaxDate(fiveDaysAhead); */
 
-                        dialog.findViewById(R.id.confirmBtn).setOnClickListener(new View.OnClickListener() {
+               /*
+               dialog.findViewById(R.id.confirmBtn).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
@@ -339,7 +360,7 @@ public class TestCompleteActivity extends SuperActivity {
                                 Date myDate = new Date(temp);
                                 Log.d(TAG, "getDefaults " + "Date" + myDate);
                                 Toast.makeText(getApplicationContext(), "saved" + myDate, Toast.LENGTH_SHORT).show();
-
+            */
 
                                 //gives object that can edit to this file
             /*            SharedPreferences.Editor editor = sharedP.edit();
@@ -357,7 +378,7 @@ public class TestCompleteActivity extends SuperActivity {
 
 //                        Toast.makeText(getApplicationContext(), "saved" + myDate, Toast.LENGTH_SHORT).show();
                                 //   Log.d(TAG, "savedDate" + )
-
+                /*
                                 dialog.dismiss();
                             }
                         });
@@ -404,7 +425,7 @@ public class TestCompleteActivity extends SuperActivity {
                         TestCompleteActivity.this.startActivity(intent);
                         finish();
                     }
-                });
+                });*/
                 createFile("noVariance", false);
             }
         }
@@ -577,7 +598,7 @@ public class TestCompleteActivity extends SuperActivity {
             line += sdf.format(currentTime);
             line += "!";
             if(mBundleData.getVarianceExists()==1) {
-                SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
                 final int testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
                 line = line + "1!" + Integer.toString(testingPeriodDay);
             }

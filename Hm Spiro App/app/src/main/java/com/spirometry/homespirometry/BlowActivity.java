@@ -68,6 +68,7 @@ public class BlowActivity extends SuperActivity {
     int value = numBlows + 1;
     private int messageNumber = 7;
     int testingPeriodDay;
+    int persistent_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class BlowActivity extends SuperActivity {
         // check testing period day as well
         SharedPreferences sharedPref = this.getSharedPreferences("persistent_tests", Context.MODE_PRIVATE);
         testingPeriodDay = sharedPref.getInt(getString(R.string.testingPeriodDay),0);
+        persistent_flag = sharedPref.getInt("flag", 0);
 
         //set screen always ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -392,7 +394,7 @@ public class BlowActivity extends SuperActivity {
                 mBundleData.setVarianceExists(var1 ? 1 : 0);
 
                 //if fev is anomalous
-                if (mBundleData.getVarianceExists() == 1 || testingPeriodDay>0) {
+                if (mBundleData.getVarianceExists() == 1 || persistent_flag != 0) {
 
                     Intent intent = new Intent(BlowActivity.this, QuestionnaireInstructionActivity.class);
                     intent.putExtra("bundle-data", mBundleData);

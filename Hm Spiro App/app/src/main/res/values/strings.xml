@@ -31,7 +31,7 @@
     <string name="repeat_for_3_days">Please repeat all tests and questionnaire between 6am and noon for the next 3 days.</string>
     <string name="repeat_for_2_days">Please repeat all tests and questionnaire between 6am and noon for the next 2 days.</string>
     <string name="repeat_for_1_day">Please repeat all tests and questionnaire between 6am and noon for tomorrow.</string>
-    <string name="test_complete_last_day">Thank you. \n \n Please Contact (314) 747-0497 for assistance if needed.</string>
+    <string name="test_complete_last_day">Thank you. \n \n Please continue testing on the following Monday. \n \n Please Contact (314) 747-0497 for assistance if needed.</string>
 
 
     <string name="title_activity_po3">PO3</string>
