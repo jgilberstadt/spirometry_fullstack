@@ -12,7 +12,7 @@ import numpy as np
 import psycopg2
 from datetime import datetime, timedelta, date
 
-class ConversionReport(BasicReport):
+class SurveillanceReport(BasicReport):
 	def __init__(self, imei_num):
 		BasicReport.__init__(self, db_config_path='credentials/database.ini', 
 			workbook_path='Report_Templates/Report template - R6.xlsx', report_type=0)
@@ -170,4 +170,4 @@ class ConversionReport(BasicReport):
 			
 	# If everything is taken care by the above two methods, we can just save the xlsx in this method
 	def generateReport(self):
-		self.wb.save(filename = self.imei_num+"_Conversion_Report_10wks_"+".xlsx")
+		self.wb.save(filename = self.imei_num+"_Surveillance_Report"+".xlsx")
