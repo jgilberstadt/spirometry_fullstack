@@ -21,7 +21,7 @@ class SurveillanceReport(BasicReport):
 		# e.g. graph objects, replaced values queried from DB
 		self.imei_num = imei_num
 		#self.current_month = current_month
-		self.ws = self.wb['Report Datasheet (Conv 10 wks)']
+		self.ws = self.wb['Report Datasheet (V+AMI-P+)']
 
 	# Plot the graphs and place them in the spreedsheet
 	def plotGraph(self):
@@ -66,7 +66,7 @@ class SurveillanceReport(BasicReport):
 		# self.ws['E3'] = report_date.strftime("%m/%d/%y")
 
 		plt.legend(loc='best')
-		plotName = self.imei_num+"_monthly_Report_"+str(self.current_month)+".png"
+		plotName = self.imei_num+"_Surveillance_Report_"+str(self.current_month)+".png"
 		plt.savefig(plotName)
 		img = openpyxl.drawing.Image(plotName)
 		img.anchor(self.ws.cell('P1'))
